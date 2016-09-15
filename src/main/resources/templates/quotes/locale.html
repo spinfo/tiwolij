@@ -1,0 +1,59 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='Quote Locale')"></head>
+
+<body id="backend" class="edit locales">
+	<div id="wrapper">
+		<div th:replace="../elements/navbar"></div>
+		<div id="inner">
+			<form th:action="@{/tiwolij/quotes/locales/edit}" th:object="${locale}" method="post">
+				<input th:disabled="${view}" type="hidden" th:field="*{id}" />
+				<table id="edit">
+					<tr>
+						<td>Quote</td>
+						<td>
+							<select th:disabled="${view}" th:field="*{quote}">
+								<option th:each="quote : ${quotes}" th:value="${quote.id}" th:text="${quote.work.author.slug} + ' - ' + ${quote.work.slug} + ' - #' + ${quote.id}" />
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Language</td>
+						<td>
+							<input th:disabled="${view}" type="text" th:field="*{language}" />
+						</td>
+					</tr>
+					<tr>
+						<td>Content</td>
+						<td>
+							<textarea th:field="*{corpus}" />
+						</td>
+					</tr>
+					<tr>
+						<td>Weblink</td>
+						<td>
+							<input th:disabled="${view}" type="text" th:field="*{href}" />
+						</td>
+					</tr>
+					<tr>
+						<td>Link-Meta</td>
+						<td>
+							<input th:disabled="${view}" type="text" th:field="*{meta}" />
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+							<input th:unless="${view}" type="submit" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+
+	<div th:replace="../elements/scripts"></div>
+</body>
+
+</html>

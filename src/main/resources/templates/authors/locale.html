@@ -1,0 +1,53 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='Author Locale')"></head>
+
+<body id="backend" class="edit locales">
+	<div id="wrapper">
+		<div th:replace="../elements/navbar"></div>
+		<div id="inner">
+			<form th:action="@{/tiwolij/authors/locales/edit}" th:object="${locale}" method="post">
+				<input th:disabled="${view}" type="hidden" th:field="*{id}" />
+				<table id="edit">
+					<tr>
+						<td>Author</td>
+						<td>
+							<select th:disabled="${view}" th:field="*{author}">
+								<option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.slug}" />
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>Language</td>
+						<td>
+							<input th:disabled="${view}" type="text" th:field="*{language}" />
+						</td>
+					</tr>
+					<tr>
+						<td>Name</td>
+						<td>
+							<input th:disabled="${view}" type="text" th:field="*{name}" />
+						</td>
+					</tr>
+					<tr>
+						<td>Weblink</td>
+						<td>
+							<input th:disabled="${view}" type="text" th:field="*{href}" />
+						</td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td>
+							<input th:unless="${view}" type="submit" />
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+
+	<div th:replace="../elements/scripts"></div>
+</body>
+
+</html>
