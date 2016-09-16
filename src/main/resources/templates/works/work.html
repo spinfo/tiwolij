@@ -7,7 +7,7 @@
 	<div id="wrapper">
 		<div th:replace="../elements/navbar"></div>
 		<div id="inner">
-			<form th:action="@{/tiwolij/works/edit}" th:object="${work}" method="post">
+			<form th:object="${work}" method="post">
 				<input th:disabled="${view}" type="hidden" th:field="*{id}" />
 				<table id="edit">
 					<tr>
@@ -45,10 +45,10 @@
 							<a th:href="@{/tiwolij/works/locales/edit?work=} + ${work.id}">Add Locale</a>
 						</td>
 					</tr>
-					<tr>
+					<tr th:unless="${view}">
 						<td>&nbsp;</td>
 						<td>
-							<input th:unless="${view}" type="submit" />
+							<button type="submit" th:formaction="@{/tiwolij/works/edit}">Save</button>
 						</td>
 					</tr>
 				</table>

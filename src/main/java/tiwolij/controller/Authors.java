@@ -1,9 +1,16 @@
 package tiwolij.controller;
 
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,6 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
+import org.wikidata.wdtk.datamodel.interfaces.MonolingualTextValue;
+import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 
 import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
@@ -21,6 +31,8 @@ import tiwolij.service.AuthorRepository;
 @RequestMapping("/tiwolij/authors")
 public class Authors {
 
+	@Autowired
+	private Environment env;
 	@Autowired
 	private AuthorRepository authors;
 	@Autowired
@@ -74,8 +86,37 @@ public class Authors {
 		return "redirect:/tiwolij/authors/view?id=" + author.getId();
 	}
 
+	@PostMapping("/import")
+	public String postImport(@ModelAttribute Author author) throws Exception {
+		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
+		ItemDocument item = (ItemDocument) data.getEntityDocument(author.getWikidataId());
+
+		if (item.hasStatement("P18")) {
+			String name = item.findStatementStringValue("P18").getString().replace(" ", "_");
+			String md5 = DigestUtils.md5Hex(name);
+			URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/" + md5.substring(0, 1) + "/"
+					+ md5.substring(0, 2) + "/" + name);
+			File file = new File(env.getProperty("tiwolij.imagemirror.dir"),
+					author.getWikidataId() + "." + FilenameUtils.getExtension(name));
+
+			FileUtils.copyURLToFile(url, file);
+			author.setPicture(file.getName());
+		}
+
+		author.setSlug(item.getSiteLinks().get("enwiki").getPageTitle().toLowerCase().replace(" ", "_"));
+		authors.save(author);
+
+		return "redirect:/tiwolij/authors/view?id=" + author.getId();
+	}
+
 	@GetMapping("/delete")
 	public String getDelete(@RequestParam(name = "id") int id) {
+		if (authors.findById(id).getPicture() != null) {
+			String dir = env.getProperty("tiwolij.imagemirror.dir");
+			String img = authors.findById(id).getPicture();
+			new File(dir, img).delete();
+		}
+
 		authors.delete(id);
 		return "redirect:/tiwolij/authors/list";
 	}
@@ -137,6 +178,41 @@ public class Authors {
 
 		locales.save(locale);
 		return "redirect:/tiwolij/authors/view?id=" + locale.getAuthor().getId();
+	}
+
+	@GetMapping("/locales/import")
+	public ModelAndView getLocalesImport(@RequestParam(name = "id") int id) throws Exception {
+		Author author = authors.findById(id);
+		ModelAndView mv = new ModelAndView("authors/localize");
+		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
+		ItemDocument item = (ItemDocument) data.getEntityDocument(author.getWikidataId());
+
+		mv.addObject("author", author);
+		mv.addObject("labels", item.getLabels());
+
+		return mv;
+	}
+
+	@PostMapping("/locales/import")
+	public String postLocalesImport(@RequestParam(name = "id") int id,
+			@RequestParam(name = "labels[]") String[] selection) throws Exception {
+		Author author = authors.findById(id);
+		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
+		ItemDocument item = (ItemDocument) data.getEntityDocument(author.getWikidataId());
+		Map<String, MonolingualTextValue> labels = item.getLabels();
+
+		for (String s : selection) {
+			MonolingualTextValue label = labels.get(s);
+			AuthorLocale locale = new AuthorLocale(author);
+
+			locale.setLanguage(label.getLanguageCode());
+			locale.setName(label.getText());
+			locale.setHref(
+					"https://" + label.getLanguageCode() + ".wikipedia.org/wiki/" + label.getText().replace(" ", "_"));
+			locales.save(locale);
+		}
+
+		return "redirect:/tiwolij/authors/view?id=" + author.getId();
 	}
 
 	@GetMapping("/locales/delete")

@@ -18,7 +18,7 @@ public class Author {
 	private int id;
 
 	@Column(nullable = false)
-	private String wikidata_id;
+	private String wikidataId;
 
 	@Column(nullable = false)
 	private String slug;
@@ -34,8 +34,8 @@ public class Author {
 	public Author() {
 	}
 
-	public Author(String wikidata_id) {
-		this.wikidata_id = wikidata_id;
+	public Author(String wikidataId) {
+		this.setWikidataId(wikidataId);
 	}
 
 	public Object get(String field) {
@@ -54,8 +54,8 @@ public class Author {
 		return id;
 	}
 
-	public String getWikidata_id() {
-		return wikidata_id;
+	public String getWikidataId() {
+		return wikidataId;
 	}
 
 	public String getSlug() {
@@ -78,8 +78,8 @@ public class Author {
 		this.id = id;
 	}
 
-	public void setWikidata_id(String wikidata_id) {
-		this.wikidata_id = wikidata_id;
+	public void setWikidataId(String wikidataId) {
+		this.wikidataId = wikidataId.toUpperCase();
 	}
 
 	public void setSlug(String slug) {

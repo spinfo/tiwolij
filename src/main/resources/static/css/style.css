@@ -14,7 +14,7 @@ a:hover {
 .hidden {
     display: none;
 }
-input:disabled, select:disabled {
+input:disabled, select:disabled, button:disabled {
     background-color: lightgray;
 }
 
@@ -160,7 +160,7 @@ input:disabled, select:disabled {
 #backend table#edit table.locale td:first-child {
     width: 100px;
 }
-#backend.edit input, #backend.edit textarea, #backend.edit select, #backend.edit .locale {
+#backend.edit button, #backend.edit input, #backend.edit textarea, #backend.edit select, #backend.edit .locale {
     box-sizing: border-box;
     border: 2px solid darkgrey;
     padding: 3px;

@@ -7,13 +7,19 @@
 	<div id="wrapper">
 		<div th:replace="../elements/navbar"></div>
 		<div id="inner">
-			<form th:action="@{/tiwolij/authors/edit/}" th:object="${author}" method="post">
+			<form th:object="${author}" method="post">
 				<input th:disabled="${view}" type="hidden" th:field="*{id}" />
 				<table id="edit">
 					<tr>
 						<td>Wikidata ID</td>
 						<td>
-							<input th:disabled="${view}" type="text" th:field="*{wikidata_id}" />
+							<input required="required" th:disabled="${view}" type="text" th:field="*{wikidataId}" />
+						</td>
+					</tr>
+					<tr th:unless="${view} or ${author.id}">
+						<td>&nbsp;</td>
+						<td>
+							<button type="submit" th:formaction="@{/tiwolij/authors/import/}">Import from Wikidata</button>
 						</td>
 					</tr>
 					<tr>
@@ -40,13 +46,14 @@
 					<tr th:if="${author.id}">
 						<td>&nbsp;</td>
 						<td>
-							<a th:href="@{/tiwolij/authors/locales/edit?author=} + ${author.id}">Add Locale</a>
+							<a th:href="@{/tiwolij/authors/locales/edit?author=} + ${author.id}">Add Locale</a> |
+							<a th:href="@{/tiwolij/authors/locales/import?id=} + ${author.id}">Import Locales</a>
 						</td>
 					</tr>
-					<tr>
+					<tr th:unless="${view}">
 						<td>&nbsp;</td>
 						<td>
-							<input th:unless="${view}" type="submit" />
+							<button type="submit" th:formaction="@{/tiwolij/authors/edit/}">Save</button>
 						</td>
 					</tr>
 				</table>
