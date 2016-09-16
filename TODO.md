@@ -18,16 +18,16 @@
 	- zwischen zitaten des tages
 	- zwischen tagen, ggf. vor/nach allen zitaten des tages letzter/nächster tag
 
-## Community Integration
+## [low-prio] Community Integration
 - einen *send in* oder *suggest new quote* button im frontend
 - rattenschwanz moderationsinterface
 - dantenbankfeld *freigeschaltet* (curated oder locked)
 
 ## Import-Funktionalität
 
-### Automatischer Wikidata-Import
-- beim anlegen neuer objekte in der db, wikiartikel/language-links crawl-farmen
-- beim anlegen neuer authoren bilder mirrorn
+### [2review] Automatischer Wikidata-Import
+- [done] beim anlegen neuer objekte in der db, wikiartikel/language-links crawl-farmen
+- [done] beim anlegen neuer autoren bilder mirrorn
 
 ### Import bestehender Daten
 - gdocs spreadsheet soll in die db, umweg über csv sinnvoll

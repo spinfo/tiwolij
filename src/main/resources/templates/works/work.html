@@ -11,6 +11,18 @@
 				<input th:disabled="${view}" type="hidden" th:field="*{id}" />
 				<table id="edit">
 					<tr>
+						<td>Wikidata ID</td>
+						<td>
+							<input th:disabled="${view}" type="text" th:field="*{wikidataId}" />
+						</td>
+					</tr>
+					<tr th:unless="${view} or ${work.id}">
+						<td>&nbsp;</td>
+						<td>
+							<button type="submit" th:formaction="@{/tiwolij/works/import/}">Import from Wikidata</button>
+						</td>
+					</tr>
+					<tr>
 						<td>Author</td>
 						<td>
 							<select th:disabled="${view}" th:field="*{author}">
@@ -42,7 +54,8 @@
 					<tr th:if="${work.id}">
 						<td>&nbsp;</td>
 						<td>
-							<a th:href="@{/tiwolij/works/locales/edit?work=} + ${work.id}">Add Locale</a>
+							<a th:href="@{/tiwolij/works/locales/edit?work=} + ${work.id}">Add Locale</a> |
+							<a th:href="@{/tiwolij/works/locales/import?id=} + ${work.id}">Import Locales</a>
 						</td>
 					</tr>
 					<tr th:unless="${view}">

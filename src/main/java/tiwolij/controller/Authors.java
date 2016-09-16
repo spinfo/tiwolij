@@ -209,6 +209,7 @@ public class Authors {
 			locale.setName(label.getText());
 			locale.setHref(
 					"https://" + label.getLanguageCode() + ".wikipedia.org/wiki/" + label.getText().replace(" ", "_"));
+
 			locales.save(locale);
 		}
 

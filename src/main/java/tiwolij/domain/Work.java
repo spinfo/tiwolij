@@ -26,6 +26,8 @@ public class Work {
 	@Column(nullable = false)
 	private String slug;
 
+	private String wikidataId;
+
 	@OneToMany(mappedBy = "work")
 	private List<Quote> quotes;
 
@@ -35,7 +37,7 @@ public class Work {
 	public Work() {
 	}
 
-	public Work(Author author, String name) {
+	public Work(Author author) {
 		this.author = author;
 	}
 
@@ -63,6 +65,10 @@ public class Work {
 		return slug;
 	}
 
+	public String getWikidataId() {
+		return wikidataId;
+	}
+
 	public List<Quote> getQuotes() {
 		return quotes;
 	}
@@ -81,6 +87,10 @@ public class Work {
 
 	public void setSlug(String slug) {
 		this.slug = slug;
+	}
+
+	public void setWikidataId(String wikidataId) {
+		this.wikidataId = wikidataId.toUpperCase();
 	}
 
 	public void setQuotes(List<Quote> quotes) {

@@ -13,7 +13,7 @@
 					<tr>
 						<td>Wikidata ID</td>
 						<td>
-							<input required="required" th:disabled="${view}" type="text" th:field="*{wikidataId}" />
+							<input th:disabled="${view}" type="text" th:field="*{wikidataId}" />
 						</td>
 					</tr>
 					<tr th:unless="${view} or ${author.id}">

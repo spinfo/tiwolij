@@ -2,6 +2,7 @@ package tiwolij.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,7 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
+import org.wikidata.wdtk.datamodel.interfaces.MonolingualTextValue;
+import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 
+import tiwolij.domain.Author;
 import tiwolij.domain.Work;
 import tiwolij.domain.WorkLocale;
 import tiwolij.service.AuthorRepository;
@@ -89,6 +94,25 @@ public class Works {
 		return "redirect:/tiwolij/works/view?id=" + work.getId();
 	}
 
+	@PostMapping("/import")
+	public String postImport(@ModelAttribute Work work) throws Exception {
+		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
+		ItemDocument item = (ItemDocument) data.getEntityDocument(work.getWikidataId());
+
+		if (item.hasStatement("P50")) {
+			String id = item.findStatementItemIdValue("P50").getId();
+			Author author = authors.findOneByWikidataId(id);
+
+			if (author != null)
+				work.setAuthor(author);
+		}
+
+		work.setSlug(item.getSiteLinks().get("enwiki").getPageTitle().toLowerCase().replace(" ", "_"));
+		works.save(work);
+
+		return "redirect:/tiwolij/works/view?id=" + work.getId();
+	}
+
 	@GetMapping("/delete")
 	public String getDelete(@RequestParam(name = "id") int id) {
 		works.delete(id);
@@ -153,6 +177,43 @@ public class Works {
 
 		locales.save(locale);
 		return "redirect:/tiwolij/works/view?id=" + locale.getWork().getId();
+	}
+
+	@GetMapping("/locales/import")
+
+	public ModelAndView getLocalesImport(@RequestParam(name = "id") int id) throws Exception {
+		Work work = works.findById(id);
+		ModelAndView mv = new ModelAndView("works/localize");
+		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
+		ItemDocument item = (ItemDocument) data.getEntityDocument(work.getWikidataId());
+
+		mv.addObject("work", work);
+		mv.addObject("labels", item.getLabels());
+
+		return mv;
+	}
+
+	@PostMapping("/locales/import")
+	public String postLocalesImport(@RequestParam(name = "id") int id,
+			@RequestParam(name = "labels[]") String[] selection) throws Exception {
+		Work work = works.findById(id);
+		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
+		ItemDocument item = (ItemDocument) data.getEntityDocument(work.getWikidataId());
+		Map<String, MonolingualTextValue> labels = item.getLabels();
+
+		for (String s : selection) {
+			MonolingualTextValue label = labels.get(s);
+			WorkLocale locale = new WorkLocale(work);
+
+			locale.setLanguage(label.getLanguageCode());
+			locale.setName(label.getText());
+			locale.setHref(
+					"https://" + label.getLanguageCode() + ".wikipedia.org/wiki/" + label.getText().replace(" ", "_"));
+
+			locales.save(locale);
+		}
+
+		return "redirect:/tiwolij/works/view?id=" + work.getId();
 	}
 
 	@GetMapping("/locales/delete")
