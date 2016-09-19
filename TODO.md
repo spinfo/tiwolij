@@ -1,6 +1,6 @@
 # ToDo List
 
-## [done] Datanbanken-Anpassungen
+## [done] Datenbanken-Anpassungen
 - [done] *volumes* soll *works* heißen
 - [done] *citings* soll *quotes* heißen
 - [done] volltextlink teils mit metadaten: seitenangabe
@@ -8,6 +8,7 @@
 	- mehrere wiki-urls
 	- namen von autoren
 	- namen von werken
+- [feature suggestion] direkt-switch zwischen zitaten, wenn es direkte übersetzungen gibt (beispiel: balzac, 1. januar, "eugénie grandet")
 
 ## Interface Updates
 - eine *home*-seite, mit links zu:
