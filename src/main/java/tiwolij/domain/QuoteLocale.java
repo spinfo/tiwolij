@@ -1,5 +1,7 @@
 package tiwolij.domain;
 
+import java.sql.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,25 +12,28 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "quotes_locales")
-public class QuoteLocale {
+public class QuoteLocale extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	protected Integer id;
 
 	@ManyToOne
 	@JoinColumn(name = "quote_id", nullable = false)
-	private Quote quote;
+	protected Quote quote;
 
 	@Column(nullable = false)
-	private String language;
+	protected String language;
 
 	@Column(nullable = false)
-	private String corpus;
+	protected Date schedule;
 
-	private String href;
+	@Column(nullable = false)
+	protected String corpus;
 
-	private String meta;
+	protected String href;
+
+	protected String meta;
 
 	public QuoteLocale() {
 	}
@@ -37,19 +42,7 @@ public class QuoteLocale {
 		this.quote = quote;
 	}
 
-	public Object get(String field) {
-		Object result = null;
-
-		try {
-			result = this.getClass().getDeclaredField(field).get(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -59,6 +52,10 @@ public class QuoteLocale {
 
 	public String getLanguage() {
 		return language;
+	}
+
+	public Date getSchedule() {
+		return schedule;
 	}
 
 	public String getCorpus() {
@@ -73,28 +70,39 @@ public class QuoteLocale {
 		return meta;
 	}
 
-	public void setId(int id) {
+	public QuoteLocale setId(Integer id) {
 		this.id = id;
+		return this;
 	}
 
-	public void setQuote(Quote quote) {
+	public QuoteLocale setQuote(Quote quote) {
 		this.quote = quote;
+		return this;
 	}
 
-	public void setLanguage(String language) {
+	public QuoteLocale setLanguage(String language) {
 		this.language = language;
+		return this;
 	}
 
-	public void setCorpus(String corpus) {
+	public QuoteLocale setSchedule(Date schedule) {
+		this.schedule = schedule;
+		return this;
+	}
+
+	public QuoteLocale setCorpus(String corpus) {
 		this.corpus = corpus;
+		return this;
 	}
 
-	public void setHref(String href) {
+	public QuoteLocale setHref(String href) {
 		this.href = href;
+		return this;
 	}
 
-	public void setMeta(String meta) {
+	public QuoteLocale setMeta(String meta) {
 		this.meta = meta;
+		return this;
 	}
 
 }

@@ -1,0 +1,53 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='All Authors')" />
+
+<body>
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">All Authors</div>
+					<table th:unless="${#lists.isEmpty(authors)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th>ID <a th:href="@{/tiwolij/authors/list?order=id}"><span class="caret" /></a></th>
+								<th>Wikidata ID <a th:href="@{/tiwolij/authors/list?order=wikidataId}"><span class="caret" /></a></th>
+								<th>Slug <a th:href="@{/tiwolij/authors/list?order=slug}"><span class="caret" /></a></th>
+								<th>Name(s)</th>
+								<th class="text-center">Image</th>
+								<th class="text-center">Works</th>
+								<th class="text-center">Quotes</th>
+								<th class="text-right">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="author : ${authors}">
+								<th th:text="'#' + ${author.id}" />
+								<td><a th:unless="${#strings.isEmpty(author.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + author.wikidataId}" th:text="${'Q' + author.wikidataId}" /></td>
+								<td><a th:href="@{/tiwolij/authors/view?id=} + ${author.id}" th:text="${author.slug}" /></td>
+								<td class="child-enum"><div th:each="locale : ${author.locales}" th:text="${locale.name} + ' (' + ${locale.language} + ')'" /></td>
+								<td class="text-center"><a th:unless="${#lists.isEmpty(author.image)}" target="_blank" th:href="@{/image?id=} + ${author.id}">View</a></td>
+								<td class="text-center"><a th:href="@{/tiwolij/works/list?author=} + ${author.id}">List</a></td>
+								<td class="text-center"><a th:href="@{/tiwolij/quotes/list?author=} + ${author.id}">List</a></td>
+								<td class="text-right">
+									<a th:href="@{/tiwolij/authors/view?id=} + ${author.id}" role="button" class="btn btn-sm btn-default">View</a>
+									<a th:href="@{/tiwolij/authors/edit?id=} + ${author.id}" role="button" class="btn btn-sm btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/authors/delete?id=} + ${author.id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${#lists.isEmpty(authors)}" class="panel-body">
+						<p class="text-danger">Move along, nothing to see here.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>

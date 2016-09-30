@@ -1,14 +1,18 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='Administrative Interface')"></head>
+<head th:replace="../elements/header (title='Administration')" />
 
-<body id="backend" class="list locales">
-	<div id="wrapper">
-		<div th:replace="../elements/navbar"></div>
+<body>
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<!-- content -->
+			</div>
+		</section>
 	</div>
-
-	<div th:replace="../elements/scripts"></div>
+	<footer th:replace="../elements/footer" />
 </body>
 
 </html>

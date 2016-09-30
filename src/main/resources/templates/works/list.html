@@ -1,0 +1,51 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='All Works')" />
+
+<body>
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">All Works</div>
+					<table th:unless="${#lists.isEmpty(works)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th>ID <a th:href="@{/tiwolij/works/list?order=id}"><span class="caret" /></a></th>
+								<th>Wikidata ID <a th:href="@{/tiwolij/works/list?order=wikidataId}"><span class="caret" /></a></th>
+								<th>Author <a th:href="@{/tiwolij/works/list?order=author}"><span class="caret" /></a></th>
+								<th>Slug <a th:href="@{/tiwolij/works/list?order=slug}"><span class="caret" /></a></th>
+								<th>Name(s)</th>
+								<th class="text-center">Quotes</th>
+								<th class="text-right">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="work : ${works}">
+								<th th:text="'#' + ${work.id}" />
+								<td><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + work.wikidataId}" th:text="${'Q' + work.wikidataId}" /></td>
+								<td><a th:href="@{/tiwolij/authors/view?id=} + ${work.author.id}" th:text="${work.author.slug}" /></td>
+								<td><a th:href="@{/tiwolij/works/view?id=} + ${work.id}" th:text="${work.slug}" /></td>
+								<td class="child-enum"><div th:each="locale : ${work.locales}" th:text="${locale.name} + ' (' + ${locale.language} + ')'" /></td>
+								<td class="text-center"><a th:href="@{/tiwolij/quotes/list?workId=} + ${work.id}">List</a></td>
+								<td class="text-right">
+									<a th:href="@{/tiwolij/works/view?id=} + ${work.id}" role="button" class="btn btn-sm btn-default">View</a>
+									<a th:href="@{/tiwolij/works/edit?id=} + ${work.id}" role="button" class="btn btn-sm btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/works/delete?id=} + ${work.id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${#lists.isEmpty(works)}" class="panel-body">
+						<p class="text-danger">Move along, nothing to see here.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>

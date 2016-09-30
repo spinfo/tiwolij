@@ -1,23 +1,44 @@
-<div th:fragment="navbar" id="navbar">
-	<h1>TiwoliJ Administrative Interface</h1>
-	<nav>
-		<div class="nav authors">
-			<span class="navhead">Authors:</span>
-			<a href="/tiwolij/authors/list" title="List all Authors">List all</a>,
-			<a href="/tiwolij/authors/edit" title="Add new Author">Add new</a>,
-			<a href="/tiwolij/authors/locales" title="Author Localizations">Locales</a>
+<nav th:fragment="navbar" th:with="uri=${#httpServletRequest.requestURI},path=${#httpServletRequest.getContextPath()}" class="navbar navbar-inverse">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/tiwolij/">TiwoliJ Administration</a>
 		</div>
-		<div class="nav works">
-			<span class="navhead">Works:</span>
-			<a href="/tiwolij/works/list" title="List all Works">List all</a>,
-			<a href="/tiwolij/works/edit" title="Add new Work">Add new</a>,
-			<a href="/tiwolij/works/locales" title="Work Localizations">Locales</a>
+		<div id="navbar-collapse" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				<li th:classappend="${uri.startsWith(path + '/tiwolij/authors')} ? 'active'" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Authors <span class="caret" /></a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/tiwolij/authors/list}">List all Authors</a></li>
+						<li><a th:href="@{/tiwolij/authors/create}">Create new Author</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a th:href="@{/tiwolij/authors/locales/list}">List Author Locales</a></li>
+					</ul>
+				</li>
+				<li th:classappend="${uri.startsWith(path + '/tiwolij/works')} ? 'active'" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret" /></a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/tiwolij/works/list}">List all Works</a></li>
+						<li><a th:href="@{/tiwolij/works/create}">Create new Work</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a th:href="@{/tiwolij/works/locales/list}">List Work Locales</a></li>
+					</ul>
+				</li>
+				<li th:classappend="${uri.startsWith(path + '/tiwolij/quotes')} ? 'active'" class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quotes <span class="caret" /></a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/tiwolij/quotes/list}">List all Quotes</a></li>
+						<li><a th:href="@{/tiwolij/quotes/create}">Create new Quote</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a th:href="@{/tiwolij/quotes/locales/list}">List Quote Locales</a></li>
+					</ul>
+				</li>
+			</ul>
 		</div>
-		<div class="nav quotes">
-			<span class="navhead">Quotes:</span>
-			<a href="/tiwolij/quotes/list" title="List all Quotes">List all</a>,
-			<a href="/tiwolij/quotes/edit" title="Add new Quote">Add new</a>,
-			<a href="/tiwolij/quotes/locales" title="Quote Localizations">Locales</a>
-		</div>
-	</nav>
-</div>
+	</div>
+</nav>

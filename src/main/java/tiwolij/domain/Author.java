@@ -1,69 +1,61 @@
 package tiwolij.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "authors")
-public class Author {
+public class Author extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	protected Integer id;
 
 	@Column(nullable = false)
-	private String wikidataId;
+	protected String slug;
 
-	@Column(nullable = false)
-	private String slug;
+	protected Integer wikidataId = null;
 
-	private String picture;
+	@Lob
+	protected byte[] image;
+
+	protected String imageAttribution = "Unspecified";
 
 	@OneToMany(mappedBy = "author")
-	private List<Work> works;
+	protected List<Work> works = new ArrayList<Work>();
 
 	@OneToMany(mappedBy = "author")
-	private List<AuthorLocale> locales;
+	protected List<AuthorLocale> locales = new ArrayList<AuthorLocale>();
 
 	public Author() {
 	}
 
-	public Author(String wikidataId) {
-		this.setWikidataId(wikidataId);
-	}
-
-	public Object get(String field) {
-		Object result = null;
-
-		try {
-			result = this.getClass().getDeclaredField(field).get(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public int getId() {
+	public Integer getId() {
 		return id;
-	}
-
-	public String getWikidataId() {
-		return wikidataId;
 	}
 
 	public String getSlug() {
 		return slug;
 	}
 
-	public String getPicture() {
-		return picture;
+	public Integer getWikidataId() {
+		return wikidataId;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public String getImageAttribution() {
+		return imageAttribution;
 	}
 
 	public List<Work> getWorks() {
@@ -74,28 +66,39 @@ public class Author {
 		return locales;
 	}
 
-	public void setId(int id) {
+	public Author setId(Integer id) {
 		this.id = id;
+		return this;
 	}
 
-	public void setWikidataId(String wikidataId) {
-		this.wikidataId = wikidataId.toUpperCase();
-	}
-
-	public void setSlug(String slug) {
+	public Author setSlug(String slug) {
 		this.slug = slug;
+		return this;
 	}
 
-	public void setPicture(String picture) {
-		this.picture = picture;
+	public Author setWikidataId(Integer wikidataId) {
+		this.wikidataId = wikidataId;
+		return this;
 	}
 
-	public void setWorks(List<Work> works) {
+	public Author setImage(byte[] image) {
+		this.image = image;
+		return this;
+	}
+
+	public Author setImageAttribution(String imageAttribution) {
+		this.imageAttribution = imageAttribution;
+		return this;
+	}
+
+	public Author setWorks(List<Work> works) {
 		this.works = works;
+		return this;
 	}
 
-	public void setLocales(List<AuthorLocale> locales) {
+	public Author setLocales(List<AuthorLocale> locales) {
 		this.locales = locales;
+		return this;
 	}
 
 }

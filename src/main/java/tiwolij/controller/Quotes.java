@@ -13,155 +13,86 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import tiwolij.domain.Quote;
-import tiwolij.domain.QuoteLocale;
 import tiwolij.domain.Work;
-import tiwolij.service.AuthorRepository;
-import tiwolij.service.QuoteLocaleRepository;
-import tiwolij.service.QuoteRepository;
-import tiwolij.service.WorkRepository;
+import tiwolij.service.quote.QuoteService;
+import tiwolij.service.work.WorkService;
 
 @Controller
 @RequestMapping("/tiwolij/quotes")
 public class Quotes {
 
 	@Autowired
-	private AuthorRepository authors;
+	private WorkService works;
+
 	@Autowired
-	private WorkRepository works;
-	@Autowired
-	private QuoteRepository quotes;
-	@Autowired
-	private QuoteLocaleRepository locales;
+	private QuoteService quotes;
 
 	@GetMapping({ "", "/" })
-	public String getRoot() {
-		return "redirect:/tiwolij/quotes/list";
+	public String root() {
+		return "redirect:/tiwolij/authors/list";
 	}
 
 	@GetMapping("/list")
-	public ModelAndView getList(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "author", defaultValue = "0") int author,
-			@RequestParam(name = "work", defaultValue = "0") int work) throws Exception {
+	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
+			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId,
+			@RequestParam(name = "workId", defaultValue = "0") Integer workId) throws Exception {
+		ModelAndView mv = new ModelAndView("quotes/list");
 		List<Quote> list = new ArrayList<Quote>();
 
-		if (author != 0) {
-			for (Work w : works.findByAuthor(authors.findById(author)))
-				list.addAll(quotes.findByWork(works.findById(w.getId())));
-		} else if (work != 0) {
-			list = quotes.findByWork(works.findById(work));
+		if (authorId != 0) {
+			for (Work w : works.getWorksByAuthor(authorId))
+				list.addAll(quotes.getQuotesByWork(w.getId()));
+		} else if (workId != 0) {
+			list = quotes.getQuotesByWork(workId);
 		} else {
-			list = quotes.findAll();
+			list = quotes.getQuotes();
 		}
 
 		list.sort((x, y) -> x.get(order).toString().compareTo(y.get(order).toString()));
-		return new ModelAndView("quotes/quotes").addObject("quotes", list);
-	}
-
-	@GetMapping("/view")
-	public ModelAndView getView(@RequestParam(name = "id") int id) {
-		ModelAndView mv = new ModelAndView("quotes/quote");
-
-		mv.addObject("quote", quotes.findById(id));
-		mv.addObject("works", works.findAll());
-		mv.addObject("view", true);
+		mv.addObject("quotes", list);
 		return mv;
 	}
 
+	@GetMapping("/view")
+	public ModelAndView view(@RequestParam(name = "id") Integer id) {
+		ModelAndView mv = new ModelAndView("quotes/view");
+
+		mv.addObject("quote", quotes.getQuote(id));
+		return mv;
+	}
+
+	@GetMapping("/create")
+	public ModelAndView create() {
+		ModelAndView mv = new ModelAndView("quotes/create");
+
+		mv.addObject("quote", new Quote());
+		mv.addObject("works", works.getWorks());
+		return mv;
+	}
+
+	@PostMapping("/create")
+	public String create(@ModelAttribute Quote quote) throws Exception {
+		return "redirect:/tiwolij/authors/view?id=" + quotes.setQuote(quote).getId();
+	}
+
 	@GetMapping("/edit")
-	public ModelAndView getEdit(@RequestParam(name = "id", defaultValue = "0") int id) {
-		ModelAndView mv = new ModelAndView("quotes/quote");
+	public ModelAndView edit(@RequestParam(name = "id") Integer id) {
+		ModelAndView mv = new ModelAndView("quotes/edit");
 
-		if (id == 0) {
-			mv.addObject("quote", new Quote());
-		} else {
-			mv.addObject("quote", quotes.findById(id));
-		}
-
-		mv.addObject("works", works.findAll());
+		mv.addObject("quote", quotes.getQuote(id));
+		mv.addObject("works", works.getWorks());
 		return mv;
 	}
 
 	@PostMapping("/edit")
-	public String postEdit(@ModelAttribute Quote quote, @RequestParam(name = "id", defaultValue = "0") int id) {
-
-		if (quotes.exists(id)) {
-			quote.setId(id);
-			quote.setLocales(quotes.findById(id).getLocales());
-		}
-
-		quotes.save(quote);
-		return "redirect:/tiwolij/quotes/view?id=" + quote.getId();
+	public String edit(@ModelAttribute Quote quote) throws Exception {
+		return "redirect:/tiwolij/quotes/view?id=" + quotes.setQuote(quote).getId();
 	}
 
 	@GetMapping("/delete")
-	public String getDelete(@RequestParam(name = "id") int id) {
-		quotes.delete(id);
+	public String delete(@RequestParam(name = "id") Integer id) {
+		quotes.delQuote(id);
 		return "redirect:/tiwolij/quotes/list";
-	}
-
-	@GetMapping({ "/locales", "/locales/" })
-	public String getLocalesRoot() {
-		return "redirect:/tiwolij/quotes/locales/list";
-	}
-
-	@GetMapping("/locales/list")
-	public ModelAndView getLocalesList(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "id", defaultValue = "0") int id) throws Exception {
-		List<QuoteLocale> list = new ArrayList<QuoteLocale>();
-
-		if (id == 0) {
-			list = locales.findAll();
-		} else {
-			list = locales.findByQuote(quotes.findById(id));
-		}
-
-		list.sort((x, y) -> x.get(order).toString().compareTo(y.get(order).toString()));
-		return new ModelAndView("quotes/locales").addObject("locales", list);
-	}
-
-	@GetMapping("/locales/view")
-	public ModelAndView getLocalesView(@RequestParam(name = "id") int id) {
-		ModelAndView mv = new ModelAndView("quotes/locale");
-
-		mv.addObject("locale", locales.findById(id));
-		mv.addObject("quotes", quotes.findAll());
-		mv.addObject("view", true);
-		return mv;
-	}
-
-	@GetMapping("/locales/edit")
-	public ModelAndView getLocalesEdit(@RequestParam(name = "id", defaultValue = "0") int id,
-			@RequestParam(name = "quote", defaultValue = "0") int quote) {
-		ModelAndView mv = new ModelAndView("quotes/locale");
-
-		if (id > 0) {
-			mv.addObject("locale", locales.findById(id));
-		} else if (quote > 0) {
-			mv.addObject("locale", new QuoteLocale(quotes.findById(quote)));
-		} else {
-			mv.addObject("locale", new QuoteLocale());
-		}
-
-		mv.addObject("quotes", quotes.findAll());
-		return mv;
-	}
-
-	@PostMapping("/locales/edit")
-	public String postLocalesEdit(@ModelAttribute QuoteLocale locale,
-			@RequestParam(name = "id", defaultValue = "0") int id) {
-
-		if (locales.exists(id)) {
-			locale.setId(id);
-		}
-
-		locales.save(locale);
-		return "redirect:/tiwolij/quotes/view?id=" + locale.getQuote().getId();
-	}
-
-	@GetMapping("/locales/delete")
-	public String getLocalesDelete(@RequestParam(name = "id") int id) {
-		locales.delete(id);
-		return "redirect:/tiwolij/quotes/locales/list";
 	}
 
 }

@@ -7,9 +7,10 @@ DROP TABLE IF EXISTS authors;
 
 CREATE TABLE authors (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
-	`wikidata_id` VARCHAR(15) NOT NULL,
 	`slug` VARCHAR(255) NOT NULL,
-	`picture` VARCHAR(255),
+	`wikidata_id` INTEGER,
+	`image` LONGBLOB,
+	`image_attribution` VARCHAR(255) DEFAULT `Unspecified`,
 	PRIMARY KEY (`id`)
 );
 CREATE TABLE authors_locales (
@@ -26,7 +27,7 @@ CREATE TABLE works (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
 	`author_id` INTEGER NOT NULL,
 	`slug` VARCHAR(255) NOT NULL,
-	`wikidata_id` VARCHAR(15),
+	`wikidata_id` INTEGER,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `FK_WORKS_AUTHOR` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -43,7 +44,6 @@ CREATE TABLE works_locales (
 CREATE TABLE quotes (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
 	`work_id` INTEGER NOT NULL,
-	`schedule` DATE NOT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `FK_QUOTES_WORK` FOREIGN KEY (`work_id`) REFERENCES `works` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -51,6 +51,7 @@ CREATE TABLE quotes_locales (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
 	`quote_id` INTEGER NOT NULL,
 	`language` VARCHAR(5) NOT NULL,
+	`schedule` DATE NOT NULL,
 	`corpus` VARCHAR(4095) NOT NULL,
 	`href` VARCHAR(255),
 	`meta` VARCHAR(255),

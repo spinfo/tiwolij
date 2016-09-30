@@ -10,23 +10,23 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "works_locales")
-public class WorkLocale {
+public class WorkLocale extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	protected Integer id;
 
 	@ManyToOne
 	@JoinColumn(name = "work_id", nullable = false)
-	private Work work;
+	protected Work work;
 
 	@Column(nullable = false)
-	private String language;
+	protected String language;
 
 	@Column(nullable = false)
-	private String name;
+	protected String name;
 
-	private String href;
+	protected String href;
 
 	public WorkLocale() {
 	}
@@ -35,19 +35,7 @@ public class WorkLocale {
 		this.work = work;
 	}
 
-	public Object get(String field) {
-		Object result = null;
-
-		try {
-			result = this.getClass().getDeclaredField(field).get(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -67,24 +55,29 @@ public class WorkLocale {
 		return href;
 	}
 
-	public void setId(int id) {
+	public WorkLocale setId(Integer id) {
 		this.id = id;
+		return this;
 	}
 
-	public void setWork(Work work) {
+	public WorkLocale setWork(Work work) {
 		this.work = work;
+		return this;
 	}
 
-	public void setLanguage(String language) {
+	public WorkLocale setLanguage(String language) {
 		this.language = language;
+		return this;
 	}
 
-	public void setName(String name) {
+	public WorkLocale setName(String name) {
 		this.name = name;
+		return this;
 	}
 
-	public void setHref(String href) {
+	public WorkLocale setHref(String href) {
 		this.href = href;
+		return this;
 	}
 
 }

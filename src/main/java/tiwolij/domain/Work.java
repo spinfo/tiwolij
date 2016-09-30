@@ -13,26 +13,26 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "works")
-public class Work {
+public class Work extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	protected Integer id;
 
 	@ManyToOne
 	@JoinColumn(name = "author_id", nullable = false)
-	private Author author;
+	protected Author author;
 
 	@Column(nullable = false)
-	private String slug;
+	protected String slug;
 
-	private String wikidataId;
-
-	@OneToMany(mappedBy = "work")
-	private List<Quote> quotes;
+	protected Integer wikidataId;
 
 	@OneToMany(mappedBy = "work")
-	private List<WorkLocale> locales;
+	protected List<Quote> quotes;
+
+	@OneToMany(mappedBy = "work")
+	protected List<WorkLocale> locales;
 
 	public Work() {
 	}
@@ -41,19 +41,7 @@ public class Work {
 		this.author = author;
 	}
 
-	public Object get(String field) {
-		Object result = null;
-
-		try {
-			result = this.getClass().getDeclaredField(field).get(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -65,7 +53,7 @@ public class Work {
 		return slug;
 	}
 
-	public String getWikidataId() {
+	public Integer getWikidataId() {
 		return wikidataId;
 	}
 
@@ -77,28 +65,34 @@ public class Work {
 		return locales;
 	}
 
-	public void setId(int id) {
+	public Work setId(Integer id) {
 		this.id = id;
+		return this;
 	}
 
-	public void setAuthor(Author author) {
+	public Work setAuthor(Author author) {
 		this.author = author;
+		return this;
 	}
 
-	public void setSlug(String slug) {
+	public Work setSlug(String slug) {
 		this.slug = slug;
+		return this;
 	}
 
-	public void setWikidataId(String wikidataId) {
-		this.wikidataId = wikidataId.toUpperCase();
+	public Work setWikidataId(Integer wikidataId) {
+		this.wikidataId = wikidataId;
+		return this;
 	}
 
-	public void setQuotes(List<Quote> quotes) {
+	public Work setQuotes(List<Quote> quotes) {
 		this.quotes = quotes;
+		return this;
 	}
 
-	public void setLocales(List<WorkLocale> locales) {
+	public Work setLocales(List<WorkLocale> locales) {
 		this.locales = locales;
+		return this;
 	}
 
 }

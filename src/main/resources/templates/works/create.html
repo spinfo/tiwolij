@@ -1,0 +1,50 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='Create Work')" />
+
+<body>
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Create Work</div>
+					<form th:object="${work}" class="form-horizontal" method="post">
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="wikidataId" class="col-sm-2 control-label">WikidataId</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">Q</div>
+										<input th:field="*{wikidataId}" type="number" class="form-control" placeholder="334370" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="language" class="col-sm-2 control-label">Author</label>
+								<div class="col-sm-10">
+									<select th:field="*{author}" class="form-control">
+										<option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.slug}" />
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="slug" class="col-sm-2 control-label">Slug</label>
+								<div class="col-sm-10">
+									<input th:field="*{slug}" type="text" class="form-control" placeholder="Discipline_and_Punish" />
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer text-right">
+							<button th:formaction="@{/tiwolij/works/create}" type="submit" class="btn btn-sm btn-success">Create Work</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>

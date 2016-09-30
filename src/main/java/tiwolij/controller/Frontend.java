@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import tiwolij.service.QuoteRepository;
+import tiwolij.service.quote.QuoteService;
 
 @Controller
 @RequestMapping({ "", "/" })
 public class Frontend {
 
 	@Autowired
-	private QuoteRepository quotes;
+	private QuoteService quotes;
 
 	@GetMapping({ "", "/" })
 	public String getRoot() {
@@ -23,7 +23,7 @@ public class Frontend {
 
 	@GetMapping("/view")
 	public ModelAndView getView(@RequestParam(name = "id", defaultValue = "0") int id) {
-		return new ModelAndView("frontend").addObject("quote", quotes.findById(id));
+		return new ModelAndView("frontend").addObject("quote", quotes.getQuote(id));
 	}
 
 }

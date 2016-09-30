@@ -1,9 +1,7 @@
 package tiwolij.domain;
 
-import java.sql.Date;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,21 +12,18 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "quotes")
-public class Quote {
+public class Quote extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	protected Integer id;
 
 	@ManyToOne
 	@JoinColumn(name = "work_id", nullable = false)
-	private Work work;
-
-	@Column(nullable = false)
-	private Date schedule;
+	protected Work work;
 
 	@OneToMany(mappedBy = "quote")
-	private List<QuoteLocale> locales;
+	protected List<QuoteLocale> locales;
 
 	public Quote() {
 	}
@@ -37,19 +32,7 @@ public class Quote {
 		this.work = work;
 	}
 
-	public Object get(String field) {
-		Object result = null;
-
-		try {
-			result = this.getClass().getDeclaredField(field).get(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -57,27 +40,23 @@ public class Quote {
 		return work;
 	}
 
-	public Date getSchedule() {
-		return schedule;
-	}
-
 	public List<QuoteLocale> getLocales() {
 		return locales;
 	}
 
-	public void setId(int id) {
+	public Quote setId(Integer id) {
 		this.id = id;
+		return this;
 	}
 
-	public void setWork(Work work) {
+	public Quote setWork(Work work) {
 		this.work = work;
+		return this;
 	}
 
-	public void setSchedule(Date schedule) {
-		this.schedule = schedule;
-	}
-
-	public void setLocales(List<QuoteLocale> locales) {
+	public Quote setLocales(List<QuoteLocale> locales) {
 		this.locales = locales;
+		return this;
 	}
+
 }

@@ -10,41 +10,29 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "authors_locales")
-public class AuthorLocale {
+public class AuthorLocale extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	private int id;
+	protected int id;
 
 	@ManyToOne
 	@JoinColumn(name = "author_id", nullable = false)
-	private Author author;
+	protected Author author;
 
 	@Column(nullable = false)
-	private String language;
+	protected String language;
 
 	@Column(nullable = false)
-	private String name;
+	protected String name;
 
-	private String href;
+	protected String href;
 
 	public AuthorLocale() {
 	}
 
 	public AuthorLocale(Author author) {
 		this.author = author;
-	}
-
-	public Object get(String field) {
-		Object result = null;
-
-		try {
-			result = this.getClass().getDeclaredField(field).get(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
 	}
 
 	public int getId() {
