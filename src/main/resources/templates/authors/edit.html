@@ -44,7 +44,7 @@
 							<input th:field="*{id}" type="hidden" />
 							<input th:field="*{wikidataId}" type="hidden" />
 							<button th:formaction="@{/tiwolij/authors/edit}" type="submit" class="btn btn-sm btn-success">Edit Author</button>
-							<a th:href="@{/tiwolij/authors/delete?authorId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author</a>
+							<a th:href="@{/tiwolij/authors/delete(authorId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author</a>
 						</div>
 					</form>
 				</div>

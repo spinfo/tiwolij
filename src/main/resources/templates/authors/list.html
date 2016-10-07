@@ -29,13 +29,13 @@
 								<td><a th:unless="${#strings.isEmpty(author.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + author.wikidataId}" th:text="${'Q' + author.wikidataId}" /></td>
 								<td th:text="${author.slug}" />
 								<td class="child-enum"><div th:each="locale : ${author.locales}" th:text="${locale.name + ' (' + locale.language + ')'}" /></td>
-								<td class="text-center"><a th:unless="${#lists.isEmpty(author.image)}" target="_blank" th:href="@{/image?id=} + ${author.id}">View</a></td>
-								<td class="text-center"><a th:href="@{/tiwolij/works/list?authorId=} + ${author.id}">List</a></td>
-								<td class="text-center"><a th:href="@{/tiwolij/quotes/list?authorId=} + ${author.id}">List</a></td>
+								<td class="text-center"><a th:unless="${#lists.isEmpty(author.image)}" target="_blank" th:href="@{/image(id=${author.id})}">View</a></td>
+								<td class="text-center"><a th:href="@{/tiwolij/works/list(authorId=${author.id})}">List</a></td>
+								<td class="text-center"><a th:href="@{/tiwolij/quotes/list(authorId=${author.id})}">List</a></td>
 								<td class="text-right">
-									<a th:href="@{/tiwolij/authors/view?authorId=} + ${author.id}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/authors/edit?authorId=} + ${author.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/authors/delete?authorId=} + ${author.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:href="@{/tiwolij/authors/view(authorId=${author.id})}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/authors/edit(authorId=${author.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/authors/delete(authorId=${author.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
 								</td>
 							</tr>
 						</tbody>

@@ -26,14 +26,14 @@
 							<tr th:each="work : ${works}">
 								<th th:text="'#' + ${work.id}" />
 								<td><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + work.wikidataId}" th:text="${'Q' + work.wikidataId}" /></td>
-								<td><a th:href="@{/tiwolij/authors/view?authorId=} + ${work.author.id}" th:text="${work.author.slug}" /></td>
+								<td><a th:href="@{/tiwolij/authors/view(authorId=${work.author.id})}" th:text="${work.author.slug}" /></td>
 								<td th:text="${work.slug}" />
 								<td class="child-enum"><div th:each="locale : ${work.locales}" th:text="${locale.name + ' (' + locale.language + ')'}" /></td>
-								<td class="text-center"><a th:href="@{/tiwolij/quotes/list?workId=} + ${work.id}">List</a></td>
+								<td class="text-center"><a th:href="@{/tiwolij/quotes/list(workId=${work.id})}">List</a></td>
 								<td class="text-right">
-									<a th:href="@{/tiwolij/works/view?workId=} + ${work.id}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/works/edit?workId=} + ${work.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/works/delete?workId=} + ${work.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/works/edit(workId=${work.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
 								</td>
 							</tr>
 						</tbody>

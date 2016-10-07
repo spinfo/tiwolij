@@ -30,7 +30,7 @@
 								<label class="col-sm-2 control-label">Image</label>
 								<div class="col-sm-10">
 									<p class="form-control-static">
-										<a th:href="@{/image?id=} + *{id}" target="_blank">View</a>
+										<a th:href="@{/image(id=*{id})}" target="_blank">View</a>
 									</p>
 								</div>
 							</div>
@@ -42,8 +42,8 @@
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<a th:href="@{/tiwolij/authors/edit?authorId=} + *{id}" role="button" class="btn btn-sm btn-primary">Edit Author</a>
-							<a th:href="@{/tiwolij/authors/delete?authorId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author</a>
+							<a th:href="@{/tiwolij/authors/edit(authorId=*{id})}" role="button" class="btn btn-sm btn-primary">Edit Author</a>
+							<a th:href="@{/tiwolij/authors/delete(authorId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author</a>
 						</div>
 					</form>
 					<div th:if="${#strings.isEmpty(author)}" class="panel-body">
@@ -73,9 +73,9 @@
 								<td th:text="${locale.name}" />
 								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:href="${locale.href}" target="_blank">View</a></td>
 								<td class="text-right">
-									<a th:href="@{/tiwolij/authors/locales/view?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/authors/locales/edit?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/authors/locales/delete?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:href="@{/tiwolij/authors/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/authors/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/authors/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
 								</td>
 							</tr>
 						</tbody>
@@ -84,8 +84,8 @@
 						<p class="text-danger">Move along, nothing to see here.</p>
 					</div>
 					<div class="panel-footer text-right">
-						<a th:unless="${#strings.isEmpty(author.wikidataId)}" th:href="@{/tiwolij/authors/locales/import?authorId=} + ${author.id}" role="button" class="btn btn-sm btn-primary">Import Locales</a>
-						<a th:href="@{/tiwolij/authors/locales/create?authorId=} + ${author.id}" role="button" class="btn btn-sm btn-success">Add Locale</a>
+						<a th:unless="${#strings.isEmpty(author.wikidataId)}" th:href="@{/tiwolij/authors/locales/import(authorId=${author.id})}" role="button" class="btn btn-sm btn-primary">Import Locales</a>
+						<a th:href="@{/tiwolij/authors/locales/create(authorId=${author.id})}" role="button" class="btn btn-sm btn-success">Add Locale</a>
 					</div>
 				</div>
 			</div>
@@ -109,9 +109,9 @@
 								<td><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + work.wikidataId}" th:text="${'Q' + work.wikidataId}" /></td>
 								<td th:text="${work.slug}" />
 								<td class="text-right">
-									<a th:href="@{/tiwolij/works/view?workId=} + ${work.id}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/works/edit?workId=} + ${work.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/works/delete?workId=} + ${work.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/works/edit(workId=${work.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
 								</td>
 							</tr>
 						</tbody>
@@ -120,7 +120,7 @@
 						<p class="text-danger">Move along, nothing to see here.</p>
 					</div>
 					<div class="panel-footer text-right">
-						<a th:href="@{/tiwolij/works/create?authorId=} + ${author.id}" role="button" class="btn btn-sm btn-success">Add Work</a>
+						<a th:href="@{/tiwolij/works/create(authorId=${author.id})}" role="button" class="btn btn-sm btn-success">Add Work</a>
 					</div>
 				</div>
 			</div>

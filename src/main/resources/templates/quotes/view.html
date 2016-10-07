@@ -16,7 +16,7 @@
 								<label class="col-sm-2 control-label">Work</label>
 								<div class="col-sm-10">
 									<p class="form-control-static">
-										<a th:href="@{/tiwolij/works/view?workId=} + ${quote.work.id}" th:text="${quote.work.slug}" />
+										<a th:href="@{/tiwolij/works/view(workId=${quote.work.id})}" th:text="${quote.work.slug}" />
 									</p>
 								</div>
 							</div>
@@ -28,8 +28,8 @@
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<a th:href="@{/tiwolij/quotes/edit?quoteId=} + *{id}" role="button" class="btn btn-sm btn-primary">Edit Quote</a>
-							<a th:href="@{/tiwolij/quotes/delete?quoteId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote</a>
+							<a th:href="@{/tiwolij/quotes/edit(quoteId=*{id})}" role="button" class="btn btn-sm btn-primary">Edit Quote</a>
+							<a th:href="@{/tiwolij/quotes/delete(quoteId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote</a>
 						</div>
 					</form>
 					<div th:if="${#strings.isEmpty(quote)}" class="panel-body">
@@ -63,9 +63,9 @@
 								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:href="${locale.href}" target="_blank">View</a></td>
 								<td th:text="${locale.meta}" />
 								<td class="text-right">
-									<a th:href="@{/tiwolij/quotes/locales/view?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/quotes/locales/edit?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/quotes/locales/delete?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:href="@{/tiwolij/quotes/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/quotes/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/quotes/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
 								</td>
 							</tr>
 						</tbody>
@@ -75,7 +75,7 @@
 						<p class="text-danger">Move along, nothing to see here.</p>
 					</div>
 					<div class="panel-footer text-right">
-						<a th:href="@{/tiwolij/quotes/locales/create?quoteId=} + ${quote.id}" role="button" class="btn btn-sm btn-success">Add Locale</a>
+						<a th:href="@{/tiwolij/quotes/locales/create(quoteId=${quote.id})}" role="button" class="btn btn-sm btn-success">Add Locale</a>
 					</div>
 				</div>
 			</div>

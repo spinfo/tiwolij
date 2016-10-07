@@ -24,14 +24,14 @@
 						<tbody>
 							<tr th:each="locale : ${locales}">
 								<th th:text="'#' + ${locale.id}" />
-								<td><a th:href="@{/tiwolij/authors/view?authorId=} + ${locale.author.id}" th:text="${locale.author.slug}" /></td>
+								<td><a th:href="@{/tiwolij/authors/view(authorId=${locale.author.id})}" th:text="${locale.author.slug}" /></td>
 								<td th:text="${locale.language}" />
 								<td th:text="${locale.name}" />
 								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:href="${locale.href}" target="_blank">View</a></td>
 								<td class="text-right">
-									<a th:href="@{/tiwolij/authors/locales/view?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/authors/locales/edit?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/authors/locales/delete?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:href="@{/tiwolij/authors/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/authors/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/authors/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
 								</td>
 							</tr>
 						</tbody>

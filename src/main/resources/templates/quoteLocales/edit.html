@@ -54,7 +54,7 @@
 						<div class="panel-footer text-right">
 							<input th:field="*{id}" type="hidden" />
 							<button th:formaction="@{/tiwolij/quotes/locales/edit}" type="submit" class="btn btn-sm btn-success">Edit Quote Locale</button>
-							<a th:href="@{/tiwolij/quotes/locales/delete?localeId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote Locale</a>
+							<a th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote Locale</a>
 						</div>
 					</form>
 				</div>

@@ -16,7 +16,7 @@
 								<label class="col-sm-2 control-label">Quote</label>
 								<div class="col-sm-10">
 									<p class="form-control-static">
-										<a th:text="${locale.quote.work.author.slug + '_' + locale.quote.work.slug + '_' + locale.quote.id}" th:href="@{/tiwolij/quotes/view?quoteId=} + ${locale.quote.id}" />
+										<a th:text="${locale.quote.work.author.slug + '_' + locale.quote.work.slug + '_' + locale.quote.id}" th:href="@{/tiwolij/quotes/view(quoteId=${locale.quote.id})}" />
 									</p>
 								</div>
 							</div>
@@ -54,8 +54,9 @@
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<a th:href="@{/tiwolij/quotes/locales/edit?localeId=} + *{id}" role="button" class="btn btn-sm btn-primary">Edit Quote Locale</a>
-							<a th:href="@{/tiwolij/quotes/locales/delete?localeId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote Locale</a>
+							<a th:href="@{/view(lang=*{language},id=*{id})}" target="_blank" role="button" class="btn btn-sm btn-default">Preview Quote</a>
+							<a th:href="@{/tiwolij/quotes/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary">Edit Quote Locale</a>
+							<a th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote Locale</a>
 						</div>
 					</form>
 				</div>

@@ -42,7 +42,7 @@
 						<div class="panel-footer text-right">
 							<input th:field="*{id}" type="hidden" />
 							<button th:formaction="@{/tiwolij/authors/locales/edit}" type="submit" class="btn btn-sm btn-success">Edit Author Locale</button>
-							<a th:href="@{/tiwolij/authors/locales/delete?localeId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author Locale</a>
+							<a th:href="@{/tiwolij/authors/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author Locale</a>
 						</div>
 					</form>
 					</div>
