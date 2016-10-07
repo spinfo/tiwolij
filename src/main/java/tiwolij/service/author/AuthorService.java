@@ -24,6 +24,8 @@ public interface AuthorService {
 
 	public AuthorLocale getLocale(Integer localeId);
 
+	public AuthorLocale getLocaleByLang(Integer authorId, String language);
+
 	public List<AuthorLocale> getLocales();
 
 	public List<AuthorLocale> getLocalesByAuthor(Integer authorId);

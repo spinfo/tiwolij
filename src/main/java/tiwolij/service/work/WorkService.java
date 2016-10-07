@@ -12,7 +12,7 @@ public interface WorkService {
 	 */
 
 	public Long getCount();
-	
+
 	public Work getWork(Integer workId);
 
 	public Work getWorkByWikidata(Integer wikidataId);
@@ -22,8 +22,10 @@ public interface WorkService {
 	public List<Work> getWorksByAuthor(Integer authorId);
 
 	public Long getLocaleCount();
-	
+
 	public WorkLocale getLocale(Integer localeId);
+
+	public WorkLocale getLocaleByLang(Integer workId, String language);
 
 	public List<WorkLocale> getLocales();
 

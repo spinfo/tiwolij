@@ -63,6 +63,17 @@ public class QuoteServiceImpl implements QuoteService {
 	}
 
 	@Override
+	public QuoteLocale getLocaleByLang(Integer quoteId, String language) {
+		Assert.notNull(quoteId);
+		Assert.notNull(language);
+	
+		if (!hasLocale(quoteId, language))
+			return null;
+		
+		return locales.findOneByQuoteIdAndLanguage(quoteId, language);
+	}
+	
+	@Override
 	public List<QuoteLocale> getLocales() {
 		return locales.findAll();
 	}
@@ -71,7 +82,7 @@ public class QuoteServiceImpl implements QuoteService {
 	public List<QuoteLocale> getLocalesByQuote(Integer quoteId) {
 		Assert.notNull(quoteId);
 
-		return locales.findAll();
+		return locales.findAllByQuoteId(quoteId);
 	}
 
 	/*

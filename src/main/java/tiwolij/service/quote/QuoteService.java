@@ -22,6 +22,8 @@ public interface QuoteService {
 	public Long getLocaleCount();
 
 	public QuoteLocale getLocale(Integer localeId);
+	
+	public QuoteLocale getLocaleByLang(Integer quoteId, String language);
 
 	public List<QuoteLocale> getLocales();
 

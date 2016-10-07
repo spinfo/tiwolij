@@ -84,6 +84,17 @@ public class WorkServiceImpl implements WorkService {
 	}
 
 	@Override
+	public WorkLocale getLocaleByLang(Integer workId, String language) {
+		Assert.notNull(workId);
+		Assert.notNull(language);
+
+		if (!hasLocale(workId, language))
+			return null;
+
+		return locales.findOneByWorkIdAndLanguage(workId, language);
+	}
+
+	@Override
 	public List<WorkLocale> getLocales() {
 		return locales.findAll();
 	}

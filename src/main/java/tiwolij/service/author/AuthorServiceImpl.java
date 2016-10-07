@@ -80,6 +80,17 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 
 	@Override
+	public AuthorLocale getLocaleByLang(Integer authorId, String language) {
+		Assert.notNull(authorId);
+		Assert.notNull(language);
+
+		if (!hasLocale(authorId, language))
+			return null;
+
+		return locales.findOneByAuthorIdAndLanguage(authorId, language);
+	}
+
+	@Override
 	public List<AuthorLocale> getLocales() {
 		return locales.findAll();
 	}
