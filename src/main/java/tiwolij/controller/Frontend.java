@@ -26,7 +26,7 @@ public class Frontend {
 
 	@Autowired
 	private Environment env;
-	
+
 	@Autowired
 	private AuthorService authors;
 
@@ -51,7 +51,7 @@ public class Frontend {
 
 		if (language.isEmpty())
 			return new ModelAndView("redirect:/view?lang=" + locale.getLanguage() + "&id=" + quoteId);
-		
+
 		Quote quote = quotes.getQuote(quoteId);
 		QuoteLocale quoteLocale = quotes.getLocaleByLang(quoteId, language);
 
@@ -60,7 +60,7 @@ public class Frontend {
 
 		Author author = work.getAuthor();
 		AuthorLocale authorLocale = authors.getLocaleByLang(author.getId(), language);
-		
+
 		mv.addObject("author", authorLocale);
 		mv.addObject("work", workLocale);
 		mv.addObject("quote", quoteLocale);

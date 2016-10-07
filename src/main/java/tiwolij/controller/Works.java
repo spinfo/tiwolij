@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
 
 import tiwolij.domain.Work;
 import tiwolij.service.author.AuthorService;
@@ -75,9 +76,10 @@ public class Works {
 
 	@PostMapping("/import")
 	public String imp0rt(@ModelAttribute Work work) throws Exception {
-		if (work.getWikidataId() != null)
-			work = works.importWork(work.getWikidataId());
+		if (work.getWikidataId() == null)
+			throw new NoSuchEntityErrorException("No Wikidata ID given");
 
+		work = works.importWork(work.getWikidataId());
 		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 

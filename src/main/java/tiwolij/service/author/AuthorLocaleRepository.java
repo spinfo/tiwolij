@@ -11,7 +11,7 @@ public interface AuthorLocaleRepository extends CrudRepository<AuthorLocale, Int
 	public AuthorLocale findOneById(Integer localeId);
 
 	public AuthorLocale findOneByAuthorIdAndLanguage(Integer authorId, String language);
-	
+
 	public List<AuthorLocale> findAll();
 
 	public List<AuthorLocale> findAllByAuthorId(Integer authorId);

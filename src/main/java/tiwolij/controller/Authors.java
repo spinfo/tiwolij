@@ -65,7 +65,7 @@ public class Authors {
 		if (author.getWikidataId() == null)
 			throw new NoSuchEntityErrorException("No Wikidata ID given");
 
-		authors.setAuthor(authors.importAuthor(author.getWikidataId()));
+		author = authors.importAuthor(author.getWikidataId());
 		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 
