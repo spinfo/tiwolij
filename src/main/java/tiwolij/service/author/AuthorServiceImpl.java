@@ -214,6 +214,7 @@ public class AuthorServiceImpl implements AuthorService {
 	public AuthorLocale importLocale(Integer authorId, String language) throws Exception {
 		Assert.notNull(authorId);
 		Assert.notNull(language);
+		Assert.isTrue(!hasLocale(authorId, language));
 
 		Author author = getAuthor(authorId);
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();

@@ -185,6 +185,7 @@ public class WorkServiceImpl implements WorkService {
 	public WorkLocale importLocale(Integer workId, String language) throws Exception {
 		Assert.notNull(workId);
 		Assert.notNull(language);
+		Assert.isTrue(!hasLocale(workId, language));
 
 		Work work = getWork(workId);
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
