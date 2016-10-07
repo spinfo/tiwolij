@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import tiwolij.domain.Quote;
 import tiwolij.domain.QuoteLocale;
 import tiwolij.service.quote.QuoteService;
 
@@ -78,8 +79,10 @@ public class QuoteLocales {
 
 	@GetMapping("/delete")
 	public String delete(@RequestParam(name = "localeId") Integer localeId) {
+		Quote quote = quotes.getLocale(localeId).getQuote();
+		
 		quotes.delLocale(localeId);
-		return "redirect:/tiwolij/quotes/locales/list";
+		return "redirect:/tiwolij/quotes/view?quoteId=" + quote.getId();
 	}
 
 }

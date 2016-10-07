@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import tiwolij.domain.Work;
 import tiwolij.domain.WorkLocale;
 import tiwolij.service.work.WorkService;
 
@@ -64,7 +65,7 @@ public class WorkLocales {
 	@GetMapping("/import")
 	public String imp0rt(@RequestParam(name = "workId") Integer workId) throws Exception {
 		works.importLocales(workId);
-		return "redirect:/tiwolij/works/view?authorId=" + workId;
+		return "redirect:/tiwolij/works/view?workId=" + workId;
 	}
 
 	@GetMapping("/edit")
@@ -84,8 +85,10 @@ public class WorkLocales {
 
 	@GetMapping("/delete")
 	public String delete(@RequestParam(name = "localeId") Integer localeId) {
+		Work work = works.getLocale(localeId).getWork();
+
 		works.delLocale(localeId);
-		return "redirect:/tiwolij/works/locales/list";
+		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 
 }

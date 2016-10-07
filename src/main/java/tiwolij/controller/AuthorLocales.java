@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
 import tiwolij.service.author.AuthorService;
 
@@ -87,8 +88,10 @@ public class AuthorLocales {
 
 	@GetMapping("/delete")
 	public String delete(@RequestParam(name = "localeId") Integer localeId) {
+		Author author = authors.getLocale(localeId).getAuthor();
+		
 		authors.delLocale(localeId);
-		return "redirect:/tiwolij/authors/locales/list";
+		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 
 }

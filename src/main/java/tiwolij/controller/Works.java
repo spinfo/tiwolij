@@ -1,5 +1,6 @@
 package tiwolij.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +32,18 @@ public class Works {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order) {
+	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
+			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
 		ModelAndView mv = new ModelAndView("works/list");
-		List<Work> list = works.getWorks();
-		list.sort((x, y) -> x.compareNaturalBy(y, order));
+		List<Work> list = new ArrayList<Work>();
 
+		if (authorId != 0) {
+			list = works.getWorksByAuthor(authorId);
+		} else {
+			list = works.getWorks();
+		}
+
+		list.sort((x, y) -> x.compareNaturalBy(y, order));
 		mv.addObject("works", list);
 		return mv;
 	}
