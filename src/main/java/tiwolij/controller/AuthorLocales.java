@@ -28,28 +28,29 @@ public class AuthorLocales {
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) throws Exception {
+			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
 		ModelAndView mv = new ModelAndView("authorLocales/list");
 		List<AuthorLocale> list = (authors.hasAuthor(authorId)) ? authors.getLocalesByAuthor(authorId)
 				: authors.getLocales();
-		list.sort((x, y) -> x.get(order).toString().compareTo(y.get(order).toString()));
+		list.sort((x, y) -> x.compareNaturalBy(y, order));
 
 		mv.addObject("locales", list);
 		return mv;
 	}
 
 	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "id") int id) {
+	public ModelAndView view(@RequestParam(name = "localeId") Integer localeId) {
 		ModelAndView mv = new ModelAndView("authorLocales/view");
 
-		mv.addObject("locale", authors.getLocale(id));
+		mv.addObject("locale", authors.getLocale(localeId));
 		return mv;
 	}
 
 	@GetMapping("/create")
 	public ModelAndView create(@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
 		ModelAndView mv = new ModelAndView("authorLocales/create");
-		AuthorLocale locale = (authors.hasAuthor(authorId)) ? new AuthorLocale(authors.getAuthor(authorId)) : new AuthorLocale();
+		AuthorLocale locale = (authors.hasAuthor(authorId)) ? new AuthorLocale(authors.getAuthor(authorId))
+				: new AuthorLocale();
 
 		mv.addObject("locale", locale);
 		mv.addObject("authors", authors.getAuthors());
@@ -59,14 +60,21 @@ public class AuthorLocales {
 	@PostMapping("/create")
 	public String create(@ModelAttribute AuthorLocale locale) {
 		authors.setLocale(locale);
-		return "redirect:/tiwolij/authors/locales/view?id=" + locale.getId();
+		return "redirect:/tiwolij/authors/locales/view?localeId=" + locale.getId();
+	}
+
+	@GetMapping("/import")
+	public String imp0rt(@RequestParam(name = "authorId") Integer authorId) throws Exception {
+		authors.importLocales(authorId);
+
+		return "redirect:/tiwolij/authors/view?authorId=" + authorId;
 	}
 
 	@GetMapping("/edit")
-	public ModelAndView edit(@RequestParam(name = "id") int id) {
+	public ModelAndView edit(@RequestParam(name = "localeId") Integer localeId) {
 		ModelAndView mv = new ModelAndView("authorLocales/edit");
 
-		mv.addObject("locale", authors.getLocale(id));
+		mv.addObject("locale", authors.getLocale(localeId));
 		mv.addObject("authors", authors.getAuthors());
 		return mv;
 	}
@@ -74,12 +82,12 @@ public class AuthorLocales {
 	@PostMapping("/edit")
 	public String edit(@ModelAttribute AuthorLocale locale) {
 		authors.setLocale(locale);
-		return "redirect:/tiwolij/authors/locales/view?id=" + locale.getId();
+		return "redirect:/tiwolij/authors/locales/view?localeId=" + locale.getId();
 	}
 
 	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "id") int id) {
-		authors.delLocale(id);
+	public String delete(@RequestParam(name = "localeId") Integer localeId) {
+		authors.delLocale(localeId);
 		return "redirect:/tiwolij/authors/locales/list";
 	}
 

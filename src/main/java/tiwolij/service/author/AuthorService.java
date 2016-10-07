@@ -12,16 +12,20 @@ public interface AuthorService {
 	 * GETTERS
 	 */
 
+	public Long getCount();
+
 	public Author getAuthor(Integer authorId);
-	
+
 	public Author getAuthorByWikidata(Integer wikidataId);
-	
+
 	public List<Author> getAuthors();
-	
+
+	public Long getLocaleCount();
+
 	public AuthorLocale getLocale(Integer localeId);
-	
+
 	public List<AuthorLocale> getLocales();
-	
+
 	public List<AuthorLocale> getLocalesByAuthor(Integer authorId);
 
 	/*
@@ -45,7 +49,7 @@ public interface AuthorService {
 	 */
 
 	public Boolean hasAuthor(Integer authorId);
-	
+
 	public Boolean hasLocale(Integer authorId, String language);
 
 	/*
@@ -53,11 +57,13 @@ public interface AuthorService {
 	 */
 
 	public Author importAuthor(Integer wikidataId) throws Exception;
-	
+
 	public Author importImage(Integer authorId, URL url) throws Exception;
 
+	public Author importImageAttribution(Integer authorId, String image) throws Exception;
+
 	public AuthorLocale importLocale(Integer authorId, String language) throws Exception;
-	
-	public void importLocales(Integer authorId) throws Exception;
+
+	public List<AuthorLocale> importLocales(Integer authorId) throws Exception;
 
 }

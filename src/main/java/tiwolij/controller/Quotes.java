@@ -29,13 +29,13 @@ public class Quotes {
 
 	@GetMapping({ "", "/" })
 	public String root() {
-		return "redirect:/tiwolij/authors/list";
+		return "redirect:/tiwolij/quotes/list";
 	}
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
 			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId,
-			@RequestParam(name = "workId", defaultValue = "0") Integer workId) throws Exception {
+			@RequestParam(name = "workId", defaultValue = "0") Integer workId) {
 		ModelAndView mv = new ModelAndView("quotes/list");
 		List<Quote> list = new ArrayList<Quote>();
 
@@ -48,50 +48,52 @@ public class Quotes {
 			list = quotes.getQuotes();
 		}
 
-		list.sort((x, y) -> x.get(order).toString().compareTo(y.get(order).toString()));
+		list.sort((x, y) -> x.compareNaturalBy(y, order));
 		mv.addObject("quotes", list);
 		return mv;
 	}
 
 	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "id") Integer id) {
+	public ModelAndView view(@RequestParam(name = "quoteId") Integer quoteId) {
 		ModelAndView mv = new ModelAndView("quotes/view");
 
-		mv.addObject("quote", quotes.getQuote(id));
+		mv.addObject("quote", quotes.getQuote(quoteId));
 		return mv;
 	}
 
 	@GetMapping("/create")
-	public ModelAndView create() {
+	public ModelAndView create(@RequestParam(name = "workId", defaultValue = "0") Integer workId) {
 		ModelAndView mv = new ModelAndView("quotes/create");
+		Quote quote = (works.hasWork(workId)) ? new Quote(works.getWork(workId)) : new Quote();
 
-		mv.addObject("quote", new Quote());
+		mv.addObject("quote", quote);
 		mv.addObject("works", works.getWorks());
 		return mv;
 	}
 
 	@PostMapping("/create")
 	public String create(@ModelAttribute Quote quote) throws Exception {
-		return "redirect:/tiwolij/authors/view?id=" + quotes.setQuote(quote).getId();
+		quote = quotes.setQuote(quote);
+		return "redirect:/tiwolij/quotes/view?quoteId=" + quote.getId();
 	}
 
 	@GetMapping("/edit")
-	public ModelAndView edit(@RequestParam(name = "id") Integer id) {
+	public ModelAndView edit(@RequestParam(name = "quoteId") Integer quoteId) {
 		ModelAndView mv = new ModelAndView("quotes/edit");
 
-		mv.addObject("quote", quotes.getQuote(id));
+		mv.addObject("quote", quotes.getQuote(quoteId));
 		mv.addObject("works", works.getWorks());
 		return mv;
 	}
 
 	@PostMapping("/edit")
 	public String edit(@ModelAttribute Quote quote) throws Exception {
-		return "redirect:/tiwolij/quotes/view?id=" + quotes.setQuote(quote).getId();
+		return "redirect:/tiwolij/quotes/view?quoteId=" + quotes.setQuote(quote).getId();
 	}
 
 	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "id") Integer id) {
-		quotes.delQuote(id);
+	public String delete(@RequestParam(name = "quoteId") Integer quoteId) {
+		quotes.delQuote(quoteId);
 		return "redirect:/tiwolij/quotes/list";
 	}
 

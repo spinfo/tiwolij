@@ -9,42 +9,41 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="${'View Author #' + author.id}" class="panel-heading"></div>
+					<div th:text="${'View Author #' + author.id}" class="panel-heading" />
 					<form th:unless="${#strings.isEmpty(author)}" th:object="${author}">
 						<div class="panel-body form-horizontal">
 							<div th:unless="${#strings.isEmpty(author.wikidataId)}" class="form-group">
-								<label class="col-sm-2 control-label">WikidataId</label>
+								<label class="col-sm-2 control-label">Wikidata ID</label>
 								<div class="col-sm-10">
 									<p class="form-control-static">
-										<a th:text="${'Q' + author.wikidataId}" th:href="${'https://www.wikidata.org/wiki/Q' + author.wikidataId}" target="_blank" />
+										<a th:text="'Q' + *{wikidataId}" th:href="@{https://www.wikidata.org/wiki/Q} + *{wikidataId}" target="_blank" />
 									</p>
 								</div>
 							</div>
 							<div class="form-group">
 								<label class="col-sm-2 control-label">Slug</label>
 								<div class="col-sm-10">
-									<p th:text="${author.slug}" class="form-control-static" />
+									<p th:text="*{slug}" class="form-control-static" />
 								</div>
 							</div>
-							<div class="form-group">
-								<label class="col-sm-2 control-label">image</label>
+							<div th:unless="${#lists.isEmpty(author.image)}" class="form-group">
+								<label class="col-sm-2 control-label">Image</label>
 								<div class="col-sm-10">
 									<p class="form-control-static">
-										<a th:unless="${#lists.isEmpty(author.image)}" th:href="@{/image?id=} + ${author.id}" target="_blank">View</a>
-										<span th:if="${#lists.isEmpty(author.image)}" th:remove="tag">None</span>
+										<a th:href="@{/image?id=} + *{id}" target="_blank">View</a>
 									</p>
 								</div>
 							</div>
-							<div class="form-group">
+							<div th:unless="${#lists.isEmpty(author.image)}" class="form-group">
 								<label class="col-sm-2 control-label">Image Attribution</label>
 								<div class="col-sm-10">
-									<p th:text="${author.imageAttribution}" class="form-control-static" />
+									<p th:text="*{imageAttribution}" class="form-control-static" />
 								</div>
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<a th:href="@{/tiwolij/authors/edit?id=} + *{id}" role="button" class="btn btn-sm btn-primary">Edit Author</a>
-							<a th:href="@{/tiwolij/authors/delete?id=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author</a>
+							<a th:href="@{/tiwolij/authors/edit?authorId=} + *{id}" role="button" class="btn btn-sm btn-primary">Edit Author</a>
+							<a th:href="@{/tiwolij/authors/delete?authorId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author</a>
 						</div>
 					</form>
 					<div th:if="${#strings.isEmpty(author)}" class="panel-body">
@@ -57,22 +56,35 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">Author Locales</div>
-					<div th:unless="${#lists.isEmpty(author.locales)}" class="panel-body form-horizontal">
-						<div th:each="locale : ${author.locales}" class="form-group">
-							<label th:text="${locale.language}" class="col-sm-2 control-label" />
-							<div class="col-sm-10">
-								<p class="form-control-static">
-									<a th:text="${locale.name}" th:href="${locale.href}" target="_blank" />
-									<a th:href="@{/tiwolij/authors/locales/edit?id=} + ${locale.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/authors/locales/delete?id=} + ${locale.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
-								</p>
-							</div>
-						</div>
-					</div>
+					<table th:unless="${#lists.isEmpty(author.locales)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Language</th>
+								<th>Name</th>
+								<th class="text-center">Link</th>
+								<th class="text-right">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="locale : ${author.locales}">
+								<th th:text="'#' + ${locale.id}" />
+								<td th:text="${locale.language}" />
+								<td th:text="${locale.name}" />
+								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:href="${locale.href}" target="_blank">View</a></td>
+								<td class="text-right">
+									<a th:href="@{/tiwolij/authors/locales/view?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/authors/locales/edit?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/authors/locales/delete?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 					<div th:if="${#lists.isEmpty(author.locales)}" class="panel-body">
 						<p class="text-danger">Move along, nothing to see here.</p>
 					</div>
 					<div class="panel-footer text-right">
+						<a th:unless="${#strings.isEmpty(author.wikidataId)}" th:href="@{/tiwolij/authors/locales/import?authorId=} + ${author.id}" role="button" class="btn btn-sm btn-primary">Import Locales</a>
 						<a th:href="@{/tiwolij/authors/locales/create?authorId=} + ${author.id}" role="button" class="btn btn-sm btn-success">Add Locale</a>
 					</div>
 				</div>
@@ -82,9 +94,28 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">Authors Works</div>
-					<div th:unless="${#lists.isEmpty(author.works)}" class="panel-body">
-						TODO
-					</div>
+					<table th:unless="${#lists.isEmpty(author.works)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Wikidata ID</th>
+								<th>Slug</th>
+								<th class="text-right">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="work : ${author.works}">
+								<th th:text="'#' + ${work.id}" />
+								<td><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + work.wikidataId}" th:text="${'Q' + work.wikidataId}" /></td>
+								<td th:text="${work.slug}" />
+								<td class="text-right">
+									<a th:href="@{/tiwolij/works/view?workId=} + ${work.id}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/works/edit?workId=} + ${work.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/works/delete?workId=} + ${work.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 					<div th:if="${#lists.isEmpty(author.works)}" class="panel-body">
 						<p class="text-danger">Move along, nothing to see here.</p>
 					</div>

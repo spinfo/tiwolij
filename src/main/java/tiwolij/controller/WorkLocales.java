@@ -28,27 +28,27 @@ public class WorkLocales {
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "id", defaultValue = "0") int id) throws Exception {
+			@RequestParam(name = "id", defaultValue = "0") Integer workId) {
 		ModelAndView mv = new ModelAndView("workLocales/list");
-		List<WorkLocale> list = (works.hasWork(id)) ? works.getLocalesByWork(id) : works.getLocales();
-		list.sort((x, y) -> x.get(order).toString().compareTo(y.get(order).toString()));
+		List<WorkLocale> list = (works.hasWork(workId)) ? works.getLocalesByWork(workId) : works.getLocales();
+		list.sort((x, y) -> x.compareNaturalBy(y, order));
 
 		mv.addObject("locales", list);
 		return mv;
 	}
 
 	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "id") int id) {
+	public ModelAndView view(@RequestParam(name = "localeId") Integer localeId) {
 		ModelAndView mv = new ModelAndView("workLocales/view");
 
-		mv.addObject("locale", works.getLocale(id));
+		mv.addObject("locale", works.getLocale(localeId));
 		return mv;
 	}
 
 	@GetMapping("/create")
-	public ModelAndView create(@RequestParam(name = "id", defaultValue = "0") int id) {
+	public ModelAndView create(@RequestParam(name = "workId", defaultValue = "0") Integer workId) {
 		ModelAndView mv = new ModelAndView("workLocales/create");
-		WorkLocale locale = (works.hasWork(id)) ? new WorkLocale(works.getWork(id)) : new WorkLocale();
+		WorkLocale locale = (works.hasWork(workId)) ? new WorkLocale(works.getWork(workId)) : new WorkLocale();
 
 		mv.addObject("locale", locale);
 		mv.addObject("works", works.getWorks());
@@ -58,26 +58,33 @@ public class WorkLocales {
 	@PostMapping("/create")
 	public String create(@ModelAttribute WorkLocale locale) {
 		works.setLocale(locale);
-		return "redirect:/tiwolij/works/locales/view?id=" + locale.getId();
+		return "redirect:/tiwolij/works/locales/view?localeId=" + locale.getId();
+	}
+
+	@GetMapping("/import")
+	public String imp0rt(@RequestParam(name = "workId") Integer workId) throws Exception {
+		works.importLocales(workId);
+		return "redirect:/tiwolij/works/view?authorId=" + workId;
 	}
 
 	@GetMapping("/edit")
-	public ModelAndView edit(@RequestParam(name = "id") int id) {
+	public ModelAndView edit(@RequestParam(name = "localeId") Integer localeId) {
 		ModelAndView mv = new ModelAndView("workLocales/edit");
 
-		mv.addObject("locale", works.getLocale(id));
+		mv.addObject("locale", works.getLocale(localeId));
+		mv.addObject("works", works.getWorks());
 		return mv;
 	}
 
 	@PostMapping("/edit")
 	public String edit(@ModelAttribute WorkLocale locale) {
 		works.setLocale(locale);
-		return "redirect:/tiwolij/works/locales/view?id=" + locale.getId();
+		return "redirect:/tiwolij/works/locales/view?localeId=" + locale.getId();
 	}
 
 	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "id") int id) {
-		works.delLocale(id);
+	public String delete(@RequestParam(name = "localeId") Integer localeId) {
+		works.delLocale(localeId);
 		return "redirect:/tiwolij/works/locales/list";
 	}
 

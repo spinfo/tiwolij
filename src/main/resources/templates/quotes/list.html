@@ -1,0 +1,47 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='All Quotes')" />
+
+<body>
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">All Quotes</div>
+					<table th:unless="${#lists.isEmpty(quotes)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th>ID <a th:href="@{/tiwolij/quotes/list?order=id}"><span class="caret" /></a></th>
+								<th>Author <a th:href="@{/tiwolij/quotes/list?order=author}"><span class="caret" /></a></th>
+								<th>Work <a th:href="@{/tiwolij/quotes/list?order=work}"><span class="caret" /></a></th>
+								<th>Locale(s)</th>
+								<th class="text-right">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="quote : ${quotes}">
+								<th th:text="'#' + ${quote.id}" />
+								<td><a th:href="@{/tiwolij/authors/view?authorId=} + ${quote.work.author.id}" th:text="${quote.work.author.slug}" /></td>
+								<td><a th:href="@{/tiwolij/works/view?workId=} + ${quote.work.id}" th:text="${quote.work.slug}" /></td>
+								<td class="child-enum"><div th:each="locale : ${quote.locales}" th:text="${#strings.abbreviate(locale.corpus, 50) + ' (' + locale.language + ')'}" /></td>
+								<td class="text-right">
+									<a th:href="@{/tiwolij/quotes/view?quoteId=} + ${quote.id}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/quotes/edit?quoteId=} + ${quote.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/quotes/delete?quoteId=} + ${quote.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${#lists.isEmpty(quotes)}" class="panel-body">
+						<p class="text-danger">Move along, nothing to see here.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>

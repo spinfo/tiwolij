@@ -14,9 +14,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
 import org.wikidata.wdtk.datamodel.interfaces.MonolingualTextValue;
+import org.wikidata.wdtk.datamodel.interfaces.Value;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 
 import tiwolij.domain.Author;
@@ -43,10 +44,15 @@ public class AuthorServiceImpl implements AuthorService {
 	 */
 
 	@Override
+	public Long getCount() {
+		return authors.count();
+	}
+
+	@Override
 	public Author getAuthor(Integer authorId) {
 		Assert.notNull(authorId);
 
-		return authors.findOne(authorId);
+		return authors.findOneById(authorId);
 	}
 
 	@Override
@@ -62,10 +68,15 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 
 	@Override
+	public Long getLocaleCount() {
+		return locales.count();
+	}
+
+	@Override
 	public AuthorLocale getLocale(Integer localeId) {
 		Assert.notNull(localeId);
 
-		return locales.findOne(localeId);
+		return locales.findOneById(localeId);
 	}
 
 	@Override
@@ -94,7 +105,7 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public AuthorLocale setLocale(AuthorLocale locale) {
 		Assert.notNull(locale);
-		
+
 		return locales.save(locale);
 	}
 
@@ -112,7 +123,7 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public void delLocale(Integer localeId) {
 		Assert.notNull(localeId);
-		
+
 		locales.delete(localeId);
 	}
 
@@ -150,29 +161,14 @@ public class AuthorServiceImpl implements AuthorService {
 		author = authors.save(author);
 
 		if (item.hasStatement("P18")) {
-			String name = item.findStatementStringValue("P18").getString().replace(" ", "_");
-			String md5 = DigestUtils.md5Hex(name);
+			Value value = item.findStatementGroup("P18").getStatements().get(0).getValue();
+			String image = value.toString().replaceAll("^\"|\"$", "").replace(" ", "_");
+			String md5 = DigestUtils.md5Hex(image);
 			String dir = md5.substring(0, 1) + "/" + md5.substring(0, 2) + "/";
-			URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/" + dir + name);
+			URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/" + dir + image);
 
 			author = importImage(author.getId(), url);
-
-			// TODO: weiter testen ob imageAttribution Import funtioniert
-
-			URL commons = new URL("https://tools.wmflabs.org/magnus-toolserver/commonsapi.php?image=" + name);
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document document = builder.parse(commons.openStream());
-
-			if (document.getElementsByTagName("attribute_author").getLength() > 0) {
-				NodeList attribution = document.getElementsByTagName("author");
-				NodeList licenses = document.getElementsByTagName("license");
-
-				for (Integer i = 0; i < attribution.getLength(); i++)
-					System.out.println(attribution.item(i).getTextContent());
-
-				for (Integer i = 0; i < licenses.getLength(); i++)
-					System.out.println(licenses.item(i).getTextContent());
-			}
+			author = importImageAttribution(author.getId(), image);
 		}
 
 		importLocales(author.getId());
@@ -187,6 +183,29 @@ public class AuthorServiceImpl implements AuthorService {
 
 		Author author = getAuthor(authorId);
 		author.setImage(IOUtils.toByteArray(url.openStream()));
+
+		return authors.save(author);
+	}
+
+	@Override
+	public Author importImageAttribution(Integer authorId, String image) throws Exception {
+		Assert.notNull(authorId);
+		Assert.notNull(image);
+
+		URL commons = new URL(env.getProperty("tiwolij.wikimediaapi") + image);
+		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document document = builder.parse(commons.openStream());
+
+		Node creatorNode = document.getElementsByTagName("Artist").item(0);
+		Node licenseNode = document.getElementsByTagName("LicenseShortName").item(0);
+
+		String creator = (creatorNode == null) ? "Unknown Artist"
+				: creatorNode.getAttributes().getNamedItem("value").getNodeValue().replaceAll("\\<[^>]*>", "");
+		String license = (licenseNode == null) ? "Unspecified License"
+				: licenseNode.getAttributes().getNamedItem("value").getNodeValue().replaceAll("\\<[^>]*>", "");
+
+		Author author = getAuthor(authorId);
+		author.setImageAttribution(creator + " (" + license + ")");
 
 		return authors.save(author);
 	}
@@ -211,11 +230,18 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 
 	@Override
-	public void importLocales(Integer authorId) throws Exception {
+	public List<AuthorLocale> importLocales(Integer authorId) {
 		Assert.notNull(authorId);
 
-		for (String language : env.getProperty("tiwolij.localizations").split(", "))
-			importLocale(authorId, language);
+		for (String language : env.getProperty("tiwolij.localizations").split(", ")) {
+			try {
+				importLocale(authorId, language);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return locales.findAllByAuthorId(authorId);
 	}
 
 }

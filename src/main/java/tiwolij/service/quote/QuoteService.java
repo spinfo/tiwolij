@@ -11,11 +11,15 @@ public interface QuoteService {
 	 * GETTERS
 	 */
 
+	public Long getCount();
+
 	public Quote getQuote(Integer quoteId);
 
 	public List<Quote> getQuotes();
 
 	public List<Quote> getQuotesByWork(Integer workId);
+
+	public Long getLocaleCount();
 
 	public QuoteLocale getLocale(Integer localeId);
 

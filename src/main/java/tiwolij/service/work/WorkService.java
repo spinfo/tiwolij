@@ -11,6 +11,8 @@ public interface WorkService {
 	 * GETTERS
 	 */
 
+	public Long getCount();
+	
 	public Work getWork(Integer workId);
 
 	public Work getWorkByWikidata(Integer wikidataId);
@@ -19,6 +21,8 @@ public interface WorkService {
 
 	public List<Work> getWorksByAuthor(Integer authorId);
 
+	public Long getLocaleCount();
+	
 	public WorkLocale getLocale(Integer localeId);
 
 	public List<WorkLocale> getLocales();
@@ -57,6 +61,6 @@ public interface WorkService {
 
 	public WorkLocale importLocale(Integer workId, String language) throws Exception;
 
-	public void importLocales(Integer workId) throws Exception;
+	public List<WorkLocale> importLocales(Integer workId) throws Exception;
 
 }

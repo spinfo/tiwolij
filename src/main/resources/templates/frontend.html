@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='Quote of the Day')"></head>
+<head th:replace="../elements/header (title='Quote of the Day')" />
 
 <body id="frontend">
 	<!--[if lt IE 8]>
@@ -14,11 +14,11 @@
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<div><h1 th:text="${'tiwoli Quote of the Day (' + citing.date + #dates.format(#dates.createNow(), 'yyyy') + ')'}"></h1></div>
+				<div><h1 th:text="${'tiwoli Quote of the Day (' + citing.date + #dates.format(#dates.createNow(), 'yyyy') + ')'}" /></div>
 			</div>
 			<div id="data">
-				<div><img th:src="${citing.volume.author.pict}" th:alt="${citing.volume.author.name}"></img></div>
-				<div><p th:utext="${citing.corpus}"></p></div>
+				<div><img th:src="${citing.volume.author.pict}" th:alt="${citing.volume.author.name}" /></div>
+				<div><p th:utext="${citing.corpus}" /></div>
 			</div>
 			<div id="meta">
 				<div><a target="_blank" th:href="${citing.volume.author.href}" th:text="${citing.volume.author.name}"></a></div>

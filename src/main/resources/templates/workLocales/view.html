@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='View Author Locale')" />
+<head th:replace="../elements/header (title='View Work Locale')" />
 
 <body>
 	<div class="container">
@@ -9,14 +9,14 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="${'View Author Locale #' + locale.id}" class="panel-heading" />
+					<div th:text="${'View Work Locale #' + locale.id}" class="panel-heading" />
 					<form th:object="${locale}">
 						<div class="panel-body form-horizontal">
 							<div class="form-group">
-								<label class="col-sm-2 control-label">Author</label>
+								<label class="col-sm-2 control-label">Work</label>
 								<div class="col-sm-10">
 									<p class="form-control-static">
-										<a th:text="${locale.author.slug}" th:href="@{/tiwolij/authors/view?authorId=} + ${locale.author.id}" />
+										<a th:text="${locale.work.slug}" th:href="@{/tiwolij/works/view?workId=} + ${locale.work.id}" />
 									</p>
 								</div>
 							</div>
@@ -42,8 +42,8 @@
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<a th:href="@{/tiwolij/authors/locales/edit?localeId=} + *{id}" role="button" class="btn btn-sm btn-primary">Edit Author Locale</a>
-							<a th:href="@{/tiwolij/authors/locales/delete?localeId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author Locale</a>
+							<a th:href="@{/tiwolij/works/locales/edit?localeId=} + *{id}" role="button" class="btn btn-sm btn-primary">Edit Work Locale</a>
+							<a th:href="@{/tiwolij/works/locales/delete?localeId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Work Locale</a>
 						</div>
 					</form>
 				</div>

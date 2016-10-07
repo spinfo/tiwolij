@@ -27,6 +27,11 @@ public class QuoteServiceImpl implements QuoteService {
 	 */
 
 	@Override
+	public Long getCount() {
+		return quotes.count();
+	}
+	
+	@Override
 	public Quote getQuote(Integer quoteId) {
 		Assert.notNull(quoteId);
 
@@ -45,6 +50,11 @@ public class QuoteServiceImpl implements QuoteService {
 		return quotes.findAllByWorkId(workId);
 	}
 
+	@Override
+	public Long getLocaleCount() {
+		return locales.count();
+	}
+	
 	@Override
 	public QuoteLocale getLocale(Integer localeId) {
 		Assert.notNull(localeId);

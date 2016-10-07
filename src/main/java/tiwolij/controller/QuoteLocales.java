@@ -28,27 +28,27 @@ public class QuoteLocales {
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "id", defaultValue = "0") int id) throws Exception {
+			@RequestParam(name = "quoteId", defaultValue = "0") Integer quoteId) throws Exception {
 		ModelAndView mv = new ModelAndView("quoteLocales/list");
-		List<QuoteLocale> list = (quotes.hasQuote(id)) ? quotes.getLocalesByQuote(id) : quotes.getLocales();
-		list.sort((x, y) -> x.get(order).toString().compareTo(y.get(order).toString()));
+		List<QuoteLocale> list = (quotes.hasQuote(quoteId)) ? quotes.getLocalesByQuote(quoteId) : quotes.getLocales();
+		list.sort((x, y) -> x.compareNaturalBy(y, order));
 
 		mv.addObject("locales", list);
 		return mv;
 	}
 
 	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "id") int id) {
+	public ModelAndView view(@RequestParam(name = "localeId") Integer localeId) {
 		ModelAndView mv = new ModelAndView("quoteLocales/view");
 
-		mv.addObject("locale", quotes.getLocale(id));
+		mv.addObject("locale", quotes.getLocale(localeId));
 		return mv;
 	}
 
 	@GetMapping("/create")
-	public ModelAndView create(@RequestParam(name = "id", defaultValue = "0") int id) {
+	public ModelAndView create(@RequestParam(name = "quoteId", defaultValue = "0") Integer quoteId) {
 		ModelAndView mv = new ModelAndView("quoteLocales/create");
-		QuoteLocale locale = (quotes.hasQuote(id)) ? new QuoteLocale(quotes.getQuote(id)) : new QuoteLocale();
+		QuoteLocale locale = (quotes.hasQuote(quoteId)) ? new QuoteLocale(quotes.getQuote(quoteId)) : new QuoteLocale();
 
 		mv.addObject("locale", locale);
 		mv.addObject("quotes", quotes.getQuotes());
@@ -58,26 +58,27 @@ public class QuoteLocales {
 	@PostMapping("/create")
 	public String create(@ModelAttribute QuoteLocale locale) {
 		quotes.setLocale(locale);
-		return "redirect:/tiwolij/quotes/locales/view?id=" + locale.getId();
+		return "redirect:/tiwolij/quotes/locales/view?localeId=" + locale.getId();
 	}
 
 	@GetMapping("/edit")
-	public ModelAndView edit(@RequestParam(name = "id") int id) {
+	public ModelAndView edit(@RequestParam(name = "localeId") Integer localeId) {
 		ModelAndView mv = new ModelAndView("quoteLocales/edit");
 
-		mv.addObject("locale", quotes.getLocale(id));
+		mv.addObject("locale", quotes.getLocale(localeId));
+		mv.addObject("quotes", quotes.getQuotes());
 		return mv;
 	}
 
 	@PostMapping("/edit")
 	public String edit(@ModelAttribute QuoteLocale locale) {
 		quotes.setLocale(locale);
-		return "redirect:/tiwolij/quotes/locales/view?id=" + locale.getId();
+		return "redirect:/tiwolij/quotes/locales/view?localeId=" + locale.getId();
 	}
 
 	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "id") int id) {
-		quotes.delLocale(id);
+	public String delete(@RequestParam(name = "localeId") Integer localeId) {
+		quotes.delLocale(localeId);
 		return "redirect:/tiwolij/quotes/locales/list";
 	}
 

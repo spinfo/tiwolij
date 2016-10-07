@@ -10,7 +10,7 @@ CREATE TABLE authors (
 	`slug` VARCHAR(255) NOT NULL,
 	`wikidata_id` INTEGER,
 	`image` LONGBLOB,
-	`image_attribution` VARCHAR(255) DEFAULT `Unspecified`,
+	`image_attribution` VARCHAR(255) DEFAULT 'Unspecified',
 	PRIMARY KEY (`id`)
 );
 CREATE TABLE authors_locales (

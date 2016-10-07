@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
 
 import tiwolij.domain.Author;
 import tiwolij.service.author.AuthorService;
@@ -28,20 +29,20 @@ public class Authors {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order) throws Exception {
+	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order) {
 		ModelAndView mv = new ModelAndView("authors/list");
 		List<Author> list = authors.getAuthors();
-		list.sort((x, y) -> x.get(order).toString().compareTo(y.get(order).toString()));
+		list.sort((x, y) -> x.compareNaturalBy(y, order));
 
 		mv.addObject("authors", list);
 		return mv;
 	}
 
 	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "id") Integer id) {
+	public ModelAndView view(@RequestParam(name = "authorId") Integer authorId) {
 		ModelAndView mv = new ModelAndView("authors/view");
 
-		mv.addObject("author", authors.getAuthor(id));
+		mv.addObject("author", authors.getAuthor(authorId));
 		return mv;
 	}
 
@@ -54,18 +55,25 @@ public class Authors {
 	}
 
 	@PostMapping("/create")
-	public String create(@ModelAttribute Author author) throws Exception {
-		author = (author.getWikidataId() != null) ? authors.importAuthor(author.getWikidataId())
-				: authors.setAuthor(author);
+	public String create(@ModelAttribute Author author) {
+		author = authors.setAuthor(author);
+		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
+	}
 
-		return "redirect:/tiwolij/authors/view?id=" + author.getId();
+	@PostMapping("/import")
+	public String imp0rt(@ModelAttribute Author author) throws Exception {
+		if (author.getWikidataId() == null)
+			throw new NoSuchEntityErrorException("No Wikidata ID given");
+
+		authors.setAuthor(authors.importAuthor(author.getWikidataId()));
+		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 
 	@GetMapping("/edit")
-	public ModelAndView edit(@RequestParam(name = "id") Integer id) {
+	public ModelAndView edit(@RequestParam(name = "authorId") Integer authorId) {
 		ModelAndView mv = new ModelAndView("authors/edit");
 
-		mv.addObject("author", authors.getAuthor(id).setImage(new byte[0]));
+		mv.addObject("author", authors.getAuthor(authorId).setImage(new byte[0]));
 		return mv;
 	}
 
@@ -76,12 +84,12 @@ public class Authors {
 				: author.setImage(authors.getAuthor(author.getId()).getImage());
 
 		authors.setAuthor(author);
-		return "redirect:/tiwolij/authors/view?id=" + author.getId();
+		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 
 	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "id") Integer id) {
-		authors.delAuthor(id);
+	public String delete(@RequestParam(name = "authorId") Integer authorId) {
+		authors.delAuthor(authorId);
 		return "redirect:/tiwolij/authors/list";
 	}
 

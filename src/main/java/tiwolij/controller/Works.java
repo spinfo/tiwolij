@@ -31,20 +31,20 @@ public class Works {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order) throws Exception {
+	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order) {
 		ModelAndView mv = new ModelAndView("works/list");
 		List<Work> list = works.getWorks();
-		list.sort((x, y) -> x.get(order).toString().compareTo(y.get(order).toString()));
+		list.sort((x, y) -> x.compareNaturalBy(y, order));
 
 		mv.addObject("works", list);
 		return mv;
 	}
 
 	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "id") Integer id) {
+	public ModelAndView view(@RequestParam(name = "workId") Integer workId) {
 		ModelAndView mv = new ModelAndView("works/view");
 
-		mv.addObject("work", works.getWork(id));
+		mv.addObject("work", works.getWork(workId));
 		return mv;
 	}
 
@@ -59,17 +59,25 @@ public class Works {
 	}
 
 	@PostMapping("/create")
-	public String create(@ModelAttribute Work work) throws Exception {
-		work = (work.getWikidataId() != null) ? works.importWork(work.getWikidataId()) : works.setWork(work);
+	public String create(@ModelAttribute Work work) {
+		work = works.setWork(work);
 
-		return "redirect:/tiwolij/works/view?id=" + work.getId();
+		return "redirect:/tiwolij/works/view?workId=" + work.getId();
+	}
+
+	@PostMapping("/import")
+	public String imp0rt(@ModelAttribute Work work) throws Exception {
+		if (work.getWikidataId() != null)
+			work = works.importWork(work.getWikidataId());
+
+		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 
 	@GetMapping("/edit")
-	public ModelAndView edit(@RequestParam(name = "id") Integer id) {
+	public ModelAndView edit(@RequestParam(name = "workId") Integer workId) {
 		ModelAndView mv = new ModelAndView("works/edit");
 
-		mv.addObject("work", works.getWork(id));
+		mv.addObject("work", works.getWork(workId));
 		mv.addObject("authors", authors.getAuthors());
 		return mv;
 	}
@@ -77,12 +85,12 @@ public class Works {
 	@PostMapping("/edit")
 	public String edit(@ModelAttribute Work work) throws Exception {
 		work = works.setWork(work);
-		return "redirect:/tiwolij/works/view?id=" + work.getId();
+		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 
 	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "id") Integer id) {
-		works.delWork(id);
+	public String delete(@RequestParam(name = "workId") Integer workId) {
+		works.delWork(workId);
 		return "redirect:/tiwolij/works/list";
 	}
 

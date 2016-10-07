@@ -7,8 +7,86 @@
 	<div class="container">
 		<nav th:replace="../elements/navbar" />
 		<section class="row">
-			<div class="col-md-12">
-				<!-- content -->
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">Authors Summary</div>
+					<div class="panel-body form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-8 control-label">Authors</label>
+							<div class="col-sm-4">
+								<p class="form-control-static">
+									<a th:href="@{/tiwolij/authors/list}" th:text="${authors}" />
+								</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-8 control-label">Author Locales</label>
+							<div class="col-sm-4">
+								<p class="form-control-static">
+									<a th:href="@{/tiwolij/authors/locales/list}" th:text="${authorLocales}" />
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer text-right">
+						<a th:href="@{/tiwolij/authors/create}" role="button" class="btn btn-sm btn-success">Add Author</a>
+						<a th:href="@{/tiwolij/authors/locales/create}" role="button" class="btn btn-sm btn-success">Add Author Locale</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">Works Summary</div>
+					<div class="panel-body form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-8 control-label">Works</label>
+							<div class="col-sm-4">
+								<p class="form-control-static">
+									<a th:href="@{/tiwolij/works/list}" th:text="${works}" />
+								</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-8 control-label">Work Locales</label>
+							<div class="col-sm-4">
+								<p class="form-control-static">
+									<a th:href="@{/tiwolij/works/locales/list}" th:text="${workLocales}" />
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer text-right">
+						<a th:href="@{/tiwolij/works/create}" role="button" class="btn btn-sm btn-success">Add Work</a>
+						<a th:href="@{/tiwolij/works/locales/create}" role="button" class="btn btn-sm btn-success">Add Work Locale</a>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">Quotes Summary</div>
+					<div class="panel-body form-horizontal">
+						<div class="form-group">
+							<label class="col-sm-8 control-label">Quotes</label>
+							<div class="col-sm-4">
+								<p class="form-control-static">
+									<a th:href="@{/tiwolij/quotes/list}" th:text="${quotes}" />
+								</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-8 control-label">Quote Locales</label>
+							<div class="col-sm-4">
+								<p class="form-control-static">
+									<a th:href="@{/tiwolij/quotes/locales/list}" th:text="${quoteLocales}" />
+								</p>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer text-right">
+						<a th:href="@{/tiwolij/quotes/create}" role="button" class="btn btn-sm btn-success">Add Quote</a>
+						<a th:href="@{/tiwolij/quotes/locales/create}" role="button" class="btn btn-sm btn-success">Add Quote Locale</a>
+					</div>
+				</div>
 			</div>
 		</section>
 	</div>

@@ -1,0 +1,87 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='View Quote')" />
+
+<body>
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="${'View Quote #' + quote.id}" class="panel-heading" />
+					<form th:unless="${#strings.isEmpty(quote)}" th:object="${quote}">
+						<div class="panel-body form-horizontal">
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Work</label>
+								<div class="col-sm-10">
+									<p class="form-control-static">
+										<a th:href="@{/tiwolij/works/view?workId=} + ${quote.work.id}" th:text="${quote.work.slug}" />
+									</p>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-2 control-label">Slug</label>
+								<div class="col-sm-10">
+									<p th:text="${quote.work.author.slug + '_' + quote.work.slug + '_' + quote.id}" class="form-control-static" />
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer text-right">
+							<a th:href="@{/tiwolij/quotes/edit?quoteId=} + *{id}" role="button" class="btn btn-sm btn-primary">Edit Quote</a>
+							<a th:href="@{/tiwolij/quotes/delete?quoteId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote</a>
+						</div>
+					</form>
+					<div th:if="${#strings.isEmpty(quote)}" class="panel-body">
+						<p class="text-danger">Move along, nothing to see here.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">Quote Locales</div>
+					<table th:unless="${#lists.isEmpty(quote.locales)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Language</th>
+								<th>Schedule</th>
+								<th>Corpus</th>
+								<th class="text-center">Link</th>
+								<th>Meta</th>
+								<th class="text-right">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="locale : ${quote.locales}">
+								<th th:text="'#' + ${locale.id}" />
+								<td th:text="${locale.language}" />
+								<td th:text="${locale.schedule}" />
+								<td th:text="${#strings.abbreviate(locale.corpus, 50)}" />
+								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:href="${locale.href}" target="_blank">View</a></td>
+								<td th:text="${locale.meta}" />
+								<td class="text-right">
+									<a th:href="@{/tiwolij/quotes/locales/view?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-default">View</a>
+									<a th:href="@{/tiwolij/quotes/locales/edit?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-primary">Edit</a>
+									<a th:href="@{/tiwolij/quotes/locales/delete?localeId=} + ${locale.id}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<div th:if="${#lists.isEmpty(quote.locales)}" class="panel-body">
+						<p class="text-danger">Move along, nothing to see here.</p>
+					</div>
+					<div class="panel-footer text-right">
+						<a th:href="@{/tiwolij/quotes/locales/create?quoteId=} + ${quote.id}" role="button" class="btn btn-sm btn-success">Add Locale</a>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>

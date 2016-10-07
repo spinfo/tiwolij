@@ -1,0 +1,67 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='Edit Quote Locale')" />
+
+<body>
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="${'Edit Quote Locale #' + locale.id}" class="panel-heading" />
+					<form th:object="${locale}" class="form-horizontal" method="post">
+						<div class="panel-body">
+							<div class="form-group">
+								<label for="language" class="col-sm-2 control-label">Quote</label>
+								<div class="col-sm-10">
+									<select th:field="*{quote}" class="form-control">
+										<option th:each="quote : ${quotes}" th:value="${quote.id}" th:text="${quote.work.author.slug + '_' + quote.work.slug + '_' + quote.id}" />
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="language" class="col-sm-2 control-label">Language</label>
+								<div class="col-sm-10">
+									<input th:field="*{language}" type="text" class="form-control" placeholder="de" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="schedule" class="col-sm-2 control-label">Schedule</label>
+								<div class="col-sm-10">
+									<input th:field="*{schedule}" type="date" class="form-control" placeholder="1838-04-14" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="corpus" class="col-sm-2 control-label">Corpus</label>
+								<div class="col-sm-10">
+									<textarea th:field="*{corpus}" class="form-control" rows="5" placeholder="&lt;b&gt;Heute, d. 14. April&lt;/b&gt; 1838, morgens um 6 Uhr, ward meine liebe Frau Elisabeth, geb. Kr&ouml;ger, mit Gottes gn&auml;diger Hilfe aufs gl&uuml;cklichste von einem T&ouml;chterchen entbunden, welches in der hl. Taufe den Namen Clara empfangen soll." />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="href" class="col-sm-2 control-label">Link</label>
+								<div class="col-sm-10">
+									<input th:field="*{href}" type="url" class="form-control" placeholder="http://d-nb.info/970666128" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="meta" class="col-sm-2 control-label">Meta</label>
+								<div class="col-sm-10">
+									<input th:field="*{meta}" type="text" class="form-control" placeholder="Seite 56" />
+								</div>
+							</div>
+						</div>
+						<div class="panel-footer text-right">
+							<input th:field="*{id}" type="hidden" />
+							<button th:formaction="@{/tiwolij/quotes/locales/edit}" type="submit" class="btn btn-sm btn-success">Edit Quote Locale</button>
+							<a th:href="@{/tiwolij/quotes/locales/delete?localeId=} + *{id}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote Locale</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>

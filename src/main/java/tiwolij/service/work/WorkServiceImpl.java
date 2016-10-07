@@ -10,6 +10,7 @@ import org.springframework.util.Assert;
 import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
 import org.wikidata.wdtk.datamodel.interfaces.MonolingualTextValue;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
+import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
 
 import tiwolij.domain.Author;
 import tiwolij.domain.Work;
@@ -40,6 +41,11 @@ public class WorkServiceImpl implements WorkService {
 	 */
 
 	@Override
+	public Long getCount() {
+		return works.count();
+	}
+
+	@Override
 	public Work getWork(Integer workId) {
 		Assert.notNull(workId);
 
@@ -63,6 +69,11 @@ public class WorkServiceImpl implements WorkService {
 		Assert.notNull(authorId);
 
 		return works.findAllByAuthorId(authorId);
+	}
+
+	@Override
+	public Long getLocaleCount() {
+		return locales.count();
 	}
 
 	@Override
@@ -150,18 +161,22 @@ public class WorkServiceImpl implements WorkService {
 
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + wikidataId);
-		
+
 		Work work = new Work();
+		work.setWikidataId(wikidataId);
 		work.setSlug(item.getLabels().get("en").getText().replace(" ", "_"));
-		work = works.save(work);
 
 		if (item.hasStatement("P50")) {
-			Integer id = Integer.parseInt(item.findStatementItemIdValue("P50").getId().substring(1));
-			Author author = authors.getAuthorByWikidata(id) != null ? authors.getAuthorByWikidata(id)
+			Integer id = Integer.parseInt(item.findStatementItemIdValue("P50").getId().replaceFirst("^Q", ""));
+			Author author = (authors.getAuthorByWikidata(id) != null) ? authors.getAuthorByWikidata(id)
 					: authors.importAuthor(id);
 
 			work = works.save(work.setAuthor(author));
+		} else {
+			throw new NoSuchEntityErrorException("No Author found in Wikidata");
 		}
+
+		importLocales(work.getId());
 
 		return work;
 	}
@@ -186,11 +201,18 @@ public class WorkServiceImpl implements WorkService {
 	}
 
 	@Override
-	public void importLocales(Integer workId) throws Exception {
+	public List<WorkLocale> importLocales(Integer workId) {
 		Assert.notNull(workId);
 
-		for (String language : env.getProperty("tiwolij.localizations").split(", "))
-			importLocale(workId, language);
+		for (String language : env.getProperty("tiwolij.localizations").split(", ")) {
+			try {
+				importLocale(workId, language);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		return getLocalesByWork(workId);
 	}
 
 }
