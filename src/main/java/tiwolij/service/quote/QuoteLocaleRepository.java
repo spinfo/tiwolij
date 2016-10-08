@@ -10,6 +10,8 @@ public interface QuoteLocaleRepository extends CrudRepository<QuoteLocale, Integ
 
 	public QuoteLocale findOneById(Integer localeId);
 
+	public QuoteLocale findOneBySchedule(String schedule);
+	
 	public QuoteLocale findOneByQuoteIdAndLanguage(Integer quoteId, String language);
 	
 	public List<QuoteLocale> findAll();

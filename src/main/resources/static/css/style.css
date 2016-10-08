@@ -4,7 +4,7 @@
 #frontend #inner {
     margin: auto;
     width: 920px;
-    max-width: calc(100vw - 40px);
+    max-width: calc(100vw - 15px);
     padding: 20px;
     background-color: lightgrey;
 }
@@ -23,9 +23,11 @@
     margin: 20px 0;
 }
 #frontend #data> *:first-child {
+	flex-basis: 0;
     flex-grow: 1;
 }
 #frontend #data> *:last-child {
+	flex-basis: 0;
     flex-grow: 2;
 }
 #frontend #data img {

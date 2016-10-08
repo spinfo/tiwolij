@@ -1,7 +1,5 @@
 package tiwolij.domain;
 
-import java.sql.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,9 +24,9 @@ public class QuoteLocale extends BaseEntity {
 	protected String language;
 
 	@Column(nullable = false)
-	protected Date schedule;
+	protected String schedule;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "TEXT")
 	protected String corpus;
 
 	protected String href;
@@ -54,7 +52,7 @@ public class QuoteLocale extends BaseEntity {
 		return language;
 	}
 
-	public Date getSchedule() {
+	public String getSchedule() {
 		return schedule;
 	}
 
@@ -85,7 +83,7 @@ public class QuoteLocale extends BaseEntity {
 		return this;
 	}
 
-	public QuoteLocale setSchedule(Date schedule) {
+	public QuoteLocale setSchedule(String schedule) {
 		this.schedule = schedule;
 		return this;
 	}

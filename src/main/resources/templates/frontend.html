@@ -14,7 +14,7 @@
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<div><h1 th:text="${'tiwoli Quote of the Day (' + quote.schedule + ')'}" /></div>
+				<div><h1 th:text="${'tiwoli Quote of the Day (' + quote.schedule + '-' + #dates.format(#dates.createNow(), 'yyyy') + ')'}" /></div>
 			</div>
 			<div id="data">
 				<div><img th:src="@{/image(id=${image})}" th:alt="${author.name}" /></div>
