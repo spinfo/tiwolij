@@ -162,6 +162,7 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public Author importAuthor(Integer wikidataId) throws Exception {
 		Assert.notNull(wikidataId);
+		Assert.isNull(authors.findOneByWikidataId(wikidataId));
 
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + wikidataId);

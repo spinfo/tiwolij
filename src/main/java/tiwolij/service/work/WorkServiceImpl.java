@@ -169,6 +169,7 @@ public class WorkServiceImpl implements WorkService {
 	@Override
 	public Work importWork(Integer wikidataId) throws Exception {
 		Assert.notNull(wikidataId);
+		Assert.isNull(works.findOneByWikidataId(wikidataId));
 
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + wikidataId);
