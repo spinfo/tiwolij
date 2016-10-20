@@ -1,9 +1,9 @@
 package tiwolij.controller;
 
+import java.time.LocalDate;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +23,6 @@ import tiwolij.service.work.WorkService;
 @Controller
 @RequestMapping({ "", "/" })
 public class Frontend {
-
-	@Autowired
-	private Environment env;
-
 	@Autowired
 	private AuthorService authors;
 
@@ -43,14 +39,17 @@ public class Frontend {
 
 	@GetMapping("/view")
 	public ModelAndView view(Locale locale, @RequestParam(name = "id", defaultValue = "0") Integer quoteId,
-			@RequestParam(name = "lang", defaultValue = "") String language) {
-		ModelAndView mv = new ModelAndView("frontend");
+			@RequestParam(name = "lang", defaultValue = "") String language) throws Exception {
+		ModelAndView mv = new ModelAndView("frontend/view");
 
-		if (quoteId == 0)
-			return new ModelAndView("redirect:/");
-
+		LocalDate now = LocalDate.now();
+		String schedule = now.getDayOfMonth() + "-" + now.getMonthValue();
+		
 		if (language.isEmpty())
-			return new ModelAndView("redirect:/view?lang=" + locale.getLanguage() + "&id=" + quoteId);
+			language = locale.getLanguage();
+		
+		if (quoteId == 0)
+			quoteId = quotes.getLocaleByScheduleAndLang(schedule, language).getQuote().getId();
 
 		Quote quote = quotes.getQuote(quoteId);
 		QuoteLocale quoteLocale = quotes.getLocaleByLang(quoteId, language);
@@ -61,10 +60,16 @@ public class Frontend {
 		Author author = work.getAuthor();
 		AuthorLocale authorLocale = authors.getLocaleByLang(author.getId(), language);
 
+		QuoteLocale nextLocale = quotes.getLocaleNextByScheduleAndLang(quoteLocale.getSchedule(), language);
+		QuoteLocale prevLocale = quotes.getLocalePrevByScheduleAndLang(quoteLocale.getSchedule(), language);
+
+		mv.addObject("lang", language);
 		mv.addObject("author", authorLocale);
 		mv.addObject("work", workLocale);
 		mv.addObject("quote", quoteLocale);
 		mv.addObject("image", author.getId());
+		mv.addObject("next", nextLocale.getQuote());
+		mv.addObject("prev", prevLocale.getQuote());
 		return mv;
 	}
 

@@ -3,17 +3,25 @@
 }
 #frontend #inner {
     margin: auto;
-    width: 920px;
-    max-width: calc(100vw - 15px);
+    width: 900px;
+    max-width: 100vw;
     padding: 20px;
     background-color: lightgrey;
 }
 #frontend #head {
+    display: flex;
+    flex-flow: column;
+	justify-content: space-around;
+    align-content: stretch;
     text-align: center;
+	background-color: darkgrey;
 }
-#frontend #head h1 {
-    background-color: darkgrey;
+#frontend #head> *:nth-child(even)> * {
     margin: 0;
+}
+#frontend #head> *:nth-child(odd)> * {
+	display: block;
+    margin: 10px 0;
 }
 #frontend #data {
     display: flex;
@@ -52,11 +60,14 @@
 #frontend #meta> * {
     padding: 10px 0;
 }
-@media screen and (min-width: 960px) {
+@media screen and (min-width: 900px) {
     #frontend #inner {
         margin-top: 50px;
         margin-bottom: 50px;
     }
+	#frontend #head {
+		flex-flow: row;
+	}
     #frontend #data {
         flex-flow: row;
         text-align: inherit;
@@ -76,4 +87,10 @@ body {
 
 .child-enum > :not(:last-child)::after {
 	content: ',';
+}
+
+form textarea[required]:invalid, form input[required]:invalid {
+	border-color: #8a6d3b;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	background-color: #fcf8e3;
 }

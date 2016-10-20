@@ -1,0 +1,39 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='Quote of the Day')" />
+
+<body id="frontend">
+	<!--[if lt IE 8]>
+		<p class="browserupgrade">
+			You are using an <strong>outdated</strong> browser.
+			Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+		</p>
+	<![endif]-->
+
+	<div id="wrapper">
+		<div id="inner">
+			<div id="head">
+				<div><a th:href="@{/view(lang=${lang}, id=${prev.id})}">&laquo; Last</a></div>
+				<div><h1 th:text="${'Quote of the Day (' + quote.schedule + '-' + #dates.format(#dates.createNow(), 'yyyy') + ')'}" /></div>
+				<div><a th:href="@{/view(lang=${lang}, id=${next.id})}">Next &raquo;</a></div>
+			</div>
+			<div id="data">
+				<div><img th:src="@{/image(id=${image})}" th:alt="${author.name}" /></div>
+				<div><p th:utext="${quote.corpus}" /></div>
+			</div>
+			<div id="meta">
+				<div><a target="_blank" th:href="${author.href}" th:text="${author.name}"></a></div>
+				<div><a target="_blank" th:href="${work.href}" th:text="${work.name}"></a></div>
+				<div>
+					<a target="_blank" th:href="${quote.href}">Fulltext</a>
+					<span th:unless="${#strings.isEmpty(quote.meta)}" th:text="${'(' + quote.meta + ')'}" />
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="../elements/footer"></div>
+</body>
+
+</html>
