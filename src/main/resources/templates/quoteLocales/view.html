@@ -54,7 +54,7 @@
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<a th:href="@{/view(lang=*{language},id=*{id})}" target="_blank" role="button" class="btn btn-sm btn-default">Preview Quote</a>
+							<a th:href="@{/view(id=${locale.quote.id}, lang=*{language})}" target="_blank" role="button" class="btn btn-sm btn-default">Preview Quote</a>
 							<a th:href="@{/tiwolij/quotes/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary">Edit Quote Locale</a>
 							<a th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote Locale</a>
 						</div>
