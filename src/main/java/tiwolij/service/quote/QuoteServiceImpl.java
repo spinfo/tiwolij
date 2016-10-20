@@ -134,6 +134,14 @@ public class QuoteServiceImpl implements QuoteService {
 		return locales.findAllByQuoteId(quoteId);
 	}
 
+	@Override
+	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language) {
+		Assert.notNull(schedule);
+		Assert.notNull(language);
+
+		return locales.findAllByScheduleAndLanguage(schedule, language);
+	}
+
 	/*
 	 * SETTERS
 	 */
