@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import tiwolij.domain.Quote;
 import tiwolij.service.author.AuthorService;
 import tiwolij.service.quote.QuoteService;
 import tiwolij.service.work.WorkService;
