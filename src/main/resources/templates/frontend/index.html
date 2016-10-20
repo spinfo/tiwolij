@@ -1,0 +1,33 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='Home')" />
+
+<body id="frontend">
+	<!--[if lt IE 8]>
+		<p class="browserupgrade">
+			You are using an <strong>outdated</strong> browser.
+			Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+		</p>
+	<![endif]-->
+
+	<div id="wrapper">
+		<div id="inner">
+			<div id="head">
+				<h1>tiwoli - Today in World Literature</h1>
+			</div>
+			<div id="data">
+				<!-- TODO -->
+			</div>
+			<div id="meta">
+				<div><a th:href="@{/}">Home</a></div>
+				<div><a th:href="@{/random}">Random Quote</a></div>
+				<div><a th:href="@{/about}">About Tiwoli</a></div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="../elements/footer"></div>
+</body>
+
+</html>

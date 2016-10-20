@@ -16,10 +16,10 @@
     text-align: center;
 	background-color: darkgrey;
 }
-#frontend #head> *:nth-child(even)> * {
+#frontend #head h1 {
     margin: 0;
 }
-#frontend #head> *:nth-child(odd)> * {
+#frontend #head> div:nth-child(odd)> * {
 	display: block;
     margin: 10px 0;
 }
@@ -30,11 +30,11 @@
     text-align: center;
     margin: 20px 0;
 }
-#frontend #data> *:first-child {
+#frontend #data> div:first-child {
 	flex-basis: 0;
     flex-grow: 1;
 }
-#frontend #data> *:last-child {
+#frontend #data> div:last-child {
 	flex-basis: 0;
     flex-grow: 2;
 }
@@ -49,6 +49,9 @@
     font-size: 120%;
     margin: 0;
     padding-top: 20px;
+}
+#frontend #data ul {
+	list-style-type: square;
 }
 #frontend #meta {
     display: flex;

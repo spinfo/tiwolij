@@ -1,0 +1,41 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title='Todays Quotes')" />
+
+<body id="frontend">
+	<!--[if lt IE 8]>
+		<p class="browserupgrade">
+			You are using an <strong>outdated</strong> browser.
+			Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+		</p>
+	<![endif]-->
+
+	<div id="wrapper">
+		<div id="inner">
+			<div id="head">
+				<h1 th:text="${'Todays Quotes (' + #dates.format(#dates.createNow(), 'dd-MM-yyyy') + ')'}" />
+			</div>
+			<div id="data">
+				<ul th:unless="${#lists.isEmpty(list)}">
+					<li th:each="entry : ${list}">
+						<a target="_blank" th:href="${entry.middle.href}" th:text="${entry.middle.name}" />
+						(<a target="_blank" th:href="${entry.right.href}" th:text="${entry.right.name}" />):
+						<a th:href="@{/view(id=${entry.left.quote.id}, lang=${lang})}" th:utext="${#strings.abbreviate(entry.left.corpus, 50)}" />
+						<a th:unless="${#strings.isEmpty(quote.href)}" target="_blank" th:href="${quote.href}">Source</a>
+						<span th:unless="${#strings.isEmpty(quote.meta)}" th:text="${'(' + quote.meta + ')'}" />
+					</li>
+				</ul>
+			</div>
+			<div id="meta">
+				<div><a th:href="@{/}">Home</a></div>
+				<div><a th:href="@{/random}">Random Quote</a></div>
+				<div><a th:href="@{/about}">About Tiwoli</a></div>
+			</div>
+		</div>
+	</div>
+
+	<div th:replace="../elements/footer"></div>
+</body>
+
+</html>
