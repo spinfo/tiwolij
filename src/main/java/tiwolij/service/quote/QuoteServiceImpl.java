@@ -100,6 +100,7 @@ public class QuoteServiceImpl implements QuoteService {
 	public QuoteLocale getLocaleNextByScheduleAndLang(String schedule, String language, Boolean prev) throws Exception {
 		Assert.notNull(schedule);
 		Assert.notNull(language);
+		Assert.notNull(prev);
 
 		QuoteLocale result = null;
 		Calendar cal = Calendar.getInstance();
