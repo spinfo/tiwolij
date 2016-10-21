@@ -60,5 +60,7 @@ public interface QuoteService {
 	public Boolean hasQuote(Integer quoteId);
 
 	public Boolean hasLocale(Integer quoteId, String language);
+	
+	public Boolean hasLocaleByScheduleAndLang(String schedule, String language);
 
 }

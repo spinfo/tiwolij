@@ -151,8 +151,7 @@ public class AuthorServiceImpl implements AuthorService {
 	public Boolean hasLocale(Integer authorId, String language) {
 		Assert.notNull(authorId);
 
-		return locales.findAllByAuthorId(authorId).stream().filter(o -> o.getLanguage().equals(language)).findFirst()
-				.isPresent();
+		return locales.findOneByAuthorIdAndLanguage(authorId, language) != null;
 	}
 
 	/*

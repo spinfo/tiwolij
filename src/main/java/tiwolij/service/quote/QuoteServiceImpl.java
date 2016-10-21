@@ -187,8 +187,15 @@ public class QuoteServiceImpl implements QuoteService {
 		Assert.notNull(quoteId);
 		Assert.notNull(language);
 
-		return locales.findAllByQuoteId(quoteId).stream().filter(o -> o.getLanguage().equals(language)).findFirst()
-				.isPresent();
+		return locales.findOneByQuoteIdAndLanguage(quoteId, language) != null;
+	}
+
+	@Override
+	public Boolean hasLocaleByScheduleAndLang(String schedule, String language) {
+		Assert.notNull(schedule);
+		Assert.notNull(language);
+
+		return locales.findOneByScheduleAndLanguage(schedule, language) != null;
 	}
 
 }

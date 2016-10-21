@@ -158,8 +158,7 @@ public class WorkServiceImpl implements WorkService {
 		Assert.notNull(workId);
 		Assert.notNull(language);
 
-		return locales.findAllByWorkId(workId).stream().filter(o -> o.getLanguage().equals(language)).findFirst()
-				.isPresent();
+		return locales.findOneByWorkIdAndLanguage(workId, language) != null;
 	}
 
 	/*
