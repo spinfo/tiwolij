@@ -37,8 +37,12 @@ public class Frontend {
 
 	@GetMapping({ "", "/" })
 	public ModelAndView root() {
-		ModelAndView mv = new ModelAndView("frontend/index");
-		return mv;
+		return new ModelAndView("frontend/index");
+	}
+
+	@GetMapping("/about")
+	public ModelAndView about() {
+		return new ModelAndView("frontend/about");
 	}
 
 	@GetMapping("/list")
@@ -110,5 +114,5 @@ public class Frontend {
 		QuoteLocale random = quotes.getLocaleRandomByLang(locale.getLanguage());
 		return "redirect:/view?id=" + random.getQuote().getId() + "&lang=" + locale.getLanguage();
 	}
-	
+
 }

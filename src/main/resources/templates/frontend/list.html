@@ -16,7 +16,7 @@
 			<div id="head">
 				<h1 th:text="${'Todays Quotes (' + #dates.format(#dates.createNow(), 'dd-MM-yyyy') + ')'}" />
 			</div>
-			<div id="data">
+			<div id="list">
 				<ul th:unless="${#lists.isEmpty(list)}">
 					<li th:each="entry : ${list}">
 						<a target="_blank" th:href="${entry.middle.href}" th:text="${entry.middle.name}" />
@@ -26,12 +26,11 @@
 						<span th:unless="${#strings.isEmpty(quote.meta)}" th:text="${'(' + quote.meta + ')'}" />
 					</li>
 				</ul>
+				<div th:if="${#lists.isEmpty(list)}">
+					There are no Quotes to show for Today, sorry!
+				</div>
 			</div>
-			<div id="meta">
-				<div><a th:href="@{/}">Home</a></div>
-				<div><a th:href="@{/random}">Random Quote</a></div>
-				<div><a th:href="@{/about}">About Tiwoli</a></div>
-			</div>
+			<div th:replace="../elements/meta"></div>
 		</div>
 	</div>
 
