@@ -75,17 +75,29 @@ public class Frontend {
 
 	@GetMapping("/view")
 	public ModelAndView view(Locale locale, @RequestParam(name = "id", defaultValue = "0") Integer quoteId,
+			@RequestParam(name = "schedule", defaultValue = "") String schedule,
 			@RequestParam(name = "lang", defaultValue = "") String language) throws Exception {
 		ModelAndView mv = new ModelAndView("frontend/view");
 
-		LocalDate now = LocalDate.now();
-		String schedule = now.getDayOfMonth() + "-" + now.getMonthValue();
+		if (schedule.isEmpty())
+			schedule = LocalDate.now().getDayOfMonth() + "-" + LocalDate.now().getMonthValue();
 
 		if (language.isEmpty())
 			language = locale.getLanguage();
 
-		if (quoteId == 0)
-			quoteId = quotes.getLocaleByScheduleAndLang(schedule, language).getQuote().getId();
+		if (quoteId == 0) {
+			if (quotes.hasLocaleByScheduleAndLang(schedule, language))
+				quoteId = quotes.getLocaleByScheduleAndLang(schedule, language).getQuote().getId();
+			else {
+				QuoteLocale next = quotes.getLocaleNextByScheduleAndLang(schedule, language, false);
+				QuoteLocale prev = quotes.getLocaleNextByScheduleAndLang(schedule, language, true);
+
+				mv.addObject("lang", language);
+				mv.addObject("next", next.getQuote().getId());
+				mv.addObject("prev", prev.getQuote().getId());
+				return mv;
+			}
+		}
 
 		Quote quote = quotes.getQuote(quoteId);
 		QuoteLocale quoteLocale = quotes.getLocaleByQuoteAndLang(quoteId, language);
@@ -103,9 +115,8 @@ public class Frontend {
 		mv.addObject("author", authorLocale);
 		mv.addObject("work", workLocale);
 		mv.addObject("quote", quoteLocale);
-		mv.addObject("image", author.getId());
-		mv.addObject("next", next.getQuote());
-		mv.addObject("prev", prev.getQuote());
+		mv.addObject("next", next.getQuote().getId());
+		mv.addObject("prev", prev.getQuote().getId());
 		return mv;
 	}
 

@@ -16,19 +16,19 @@
 			<div id="head">
 				<h1 th:text="${'Todays Quotes (' + #dates.format(#dates.createNow(), 'dd-MM-yyyy') + ')'}" />
 			</div>
-			<div id="list">
-				<ul th:unless="${#lists.isEmpty(list)}">
+			<div th:unless="${#lists.isEmpty(list)}" id="list">
+				<ul>
 					<li th:each="entry : ${list}">
 						<a target="_blank" th:href="${entry.middle.href}" th:text="${entry.middle.name}" />
 						(<a target="_blank" th:href="${entry.right.href}" th:text="${entry.right.name}" />):
 						<a th:href="@{/view(id=${entry.left.quote.id}, lang=${lang})}" th:utext="${#strings.abbreviate(entry.left.corpus, 50)}" />
-						<a th:unless="${#strings.isEmpty(quote.href)}" target="_blank" th:href="${quote.href}">Source</a>
-						<span th:unless="${#strings.isEmpty(quote.meta)}" th:text="${'(' + quote.meta + ')'}" />
+						<a th:unless="${#strings.isEmpty(entry.left.href)}" target="_blank" th:href="${entry.left.href}">Source</a>
+						<span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="${'(' + entry.left.meta + ')'}" />
 					</li>
 				</ul>
-				<div th:if="${#lists.isEmpty(list)}">
-					There are no Quotes to show for Today, sorry!
-				</div>
+			</div>
+			<div th:if="${#lists.isEmpty(list)}" class="empty">
+				There are no quotes to show for today, sorry!
 			</div>
 			<div th:replace="../elements/meta"></div>
 		</div>

@@ -4,7 +4,7 @@
 
 body {
     padding: 15px 0;
-	background-color: lightgrey;
+    background-color: lightgrey;
 }
 
 /*
@@ -27,10 +27,6 @@ form textarea:invalid, form input:invalid {
 #frontend {
     padding: 0;
 }
-#frontend a {
-	color: black;
-	text-decoration: underline;
-}
 #frontend #inner {
     margin: auto;
     width: 900px;
@@ -49,8 +45,8 @@ form textarea:invalid, form input:invalid {
 }
 #frontend #head h1 {
     margin: 0;
-	order: -1;
-	flex-basis: 100%;
+    order: -1;
+    flex-basis: 100%;
 }
 #frontend #head a {
     margin: 10px;
@@ -65,18 +61,33 @@ form textarea:invalid, form input:invalid {
 #frontend #meta * {
     padding: 10px 0;
 }
+#frontend .empty {
+    padding: 50px 0;
+    text-align: center;
+}
 
 /*
  * FRONTEND / INDEX
  */
 
-#frontend #index {}
+#frontend #index {
+}
+#frontend #index form {
+	padding: 20px 0;
+	text-align: center;
+}
+#frontend #index button, #frontend #index input {
+	height: 30px;
+	border: 2px solid darkgrey;
+	text-align: center;
+}
 
 /*
  * FRONTEND / LIST
  */
 
 #frontend #list ul {
+	margin: 20px 0;
     list-style-type: square;
 }
 
@@ -106,13 +117,11 @@ form textarea:invalid, form input:invalid {
 }
 #frontend #view .corpus .source {
     margin: 20px 0;
-    font-size: 120%;
     text-align: center;
     background-color: darkgrey;
 }
 #frontend #view .corpus p {
     margin: 0;
-    font-size: 120%;
     hyphens: auto;
     text-align: justify;
 }
@@ -121,29 +130,32 @@ form textarea:invalid, form input:invalid {
  * FRONTEND / ABOUT
  */
 
-#frontend #about {}
+#frontend #about p {
+	hyphens: auto;
+	text-align: justify;
+}
 
 /*
  * FRONTEND / MEDIAQUERIES
  */
 
 @media screen and (min-width: 900px) {
-	/* GENERAL */
-	body {
-		background-color: white;
-	}
+    /* GENERAL */
+    body {
+        background-color: white;
+    }
     /* FRONTEND */
     #frontend #inner {
         margin-top: 50px;
         margin-bottom: 50px;
     }
-	#frontend #head {
-		flex-wrap: nowrap;
-	}
-	#frontend #head h1 {
-		order: 0;
-	    flex-basis: auto;
-	}
+    #frontend #head {
+        flex-wrap: nowrap;
+    }
+    #frontend #head h1 {
+        order: 0;
+        flex-basis: auto;
+    }
     #frontend #meta {
         flex-flow: row;
     }

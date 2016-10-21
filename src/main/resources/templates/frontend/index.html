@@ -17,15 +17,11 @@
 				<h1>tiwoli: Today in World Literature</h1>
 			</div>
 			<div id="index">
-				<h3>Welcome to tiwoli!</h3>
-				<p>
-					You should check out the <a th:href="@{/view}" title="Quote of the Day">quote of the day<a>,
-					or You can have a look at the list of <a th:href="@{/list}" title="Todays Quotes">todays quotes</a>.
-				</p>
-				<p>
-					If You like, You can also lookup a specific date and display the respective quotes.
-					To do so, select a date and decide if You want the list of all quotes or just one.
-				</p>
+				<form method="get">
+					<input type="text" name="schedule" placeholder="21-07" maxlength="5" size="5" pattern="^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$" />
+					<button th:formaction="@{/view}" type="submit">View daily Quote</button>
+					<button th:formaction="@{/view}" type="submit">List Quotes</button>
+				</form>
 			</div>
 			<div th:replace="../elements/meta"></div>
 		</div>
