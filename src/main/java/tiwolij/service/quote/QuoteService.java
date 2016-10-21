@@ -23,13 +23,13 @@ public interface QuoteService {
 
 	public QuoteLocale getLocale(Integer localeId);
 
-	public QuoteLocale getLocaleByLang(Integer quoteId, String language);
+	public QuoteLocale getLocaleByQuoteAndLang(Integer quoteId, String language);
 
 	public QuoteLocale getLocaleByScheduleAndLang(String schedule, String language);
 
-	public QuoteLocale getLocaleNextByScheduleAndLang(String schedule, String language) throws Exception;
-
-	public QuoteLocale getLocalePrevByScheduleAndLang(String schedule, String language) throws Exception;
+	public QuoteLocale getLocaleRandomByLang(String language);
+	
+	public QuoteLocale getLocaleNextByScheduleAndLang(String schedule, String language, Boolean prev) throws Exception;
 
 	public List<QuoteLocale> getLocales();
 

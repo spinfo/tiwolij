@@ -3,6 +3,7 @@ package tiwolij.service.quote;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.util.Assert;
 
 import tiwolij.domain.Quote;
 import tiwolij.domain.QuoteLocale;
+import tiwolij.domain.RecordId;
 
 @Component
 @Transactional
@@ -66,7 +68,7 @@ public class QuoteServiceImpl implements QuoteService {
 	}
 
 	@Override
-	public QuoteLocale getLocaleByLang(Integer quoteId, String language) {
+	public QuoteLocale getLocaleByQuoteAndLang(Integer quoteId, String language) {
 		Assert.notNull(quoteId);
 		Assert.notNull(language);
 
@@ -85,26 +87,17 @@ public class QuoteServiceImpl implements QuoteService {
 	}
 
 	@Override
-	public QuoteLocale getLocaleNextByScheduleAndLang(String schedule, String language) throws Exception {
-		Assert.notNull(schedule);
+	public QuoteLocale getLocaleRandomByLang(String language) {
 		Assert.notNull(language);
 
-		QuoteLocale result = null;
-		Calendar cal = Calendar.getInstance();
-		DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+		List<RecordId> list = locales.findAllByLanguage(language);
+		Collections.shuffle(list);
 
-		cal.setTime(format.parse(schedule + "-" + cal.get(Calendar.YEAR)));
-
-		while (result == null) {
-			cal.add(Calendar.DATE, 1);
-			result = locales.findOneByScheduleAndLanguage(format.format(cal.getTime()).substring(0, 5), language);
-		}
-
-		return result;
+		return locales.findOneById(list.get(0).getId());
 	}
 
 	@Override
-	public QuoteLocale getLocalePrevByScheduleAndLang(String schedule, String language) throws Exception {
+	public QuoteLocale getLocaleNextByScheduleAndLang(String schedule, String language, Boolean prev) throws Exception {
 		Assert.notNull(schedule);
 		Assert.notNull(language);
 
@@ -115,7 +108,7 @@ public class QuoteServiceImpl implements QuoteService {
 		cal.setTime(format.parse(schedule + "-" + cal.get(Calendar.YEAR)));
 
 		while (result == null) {
-			cal.add(Calendar.DATE, -1);
+			cal.add(Calendar.DATE, prev ? -1 : +1);
 			result = locales.findOneByScheduleAndLanguage(format.format(cal.getTime()).substring(0, 5), language);
 		}
 

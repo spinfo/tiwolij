@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
+import tiwolij.domain.RecordId;
 import tiwolij.domain.QuoteLocale;
 
 public interface QuoteLocaleRepository extends CrudRepository<QuoteLocale, Integer> {
@@ -21,6 +22,8 @@ public interface QuoteLocaleRepository extends CrudRepository<QuoteLocale, Integ
 	public List<QuoteLocale> findAllByQuoteId(Integer quoteId);
 
 	public List<QuoteLocale> findAllBySchedule(String schedule);
+
+	public List<RecordId> findAllByLanguage(String language);
 
 	public List<QuoteLocale> findAllByScheduleAndLanguage(String schedule, String language);
 

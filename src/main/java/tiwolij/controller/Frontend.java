@@ -84,7 +84,7 @@ public class Frontend {
 			quoteId = quotes.getLocaleByScheduleAndLang(schedule, language).getQuote().getId();
 
 		Quote quote = quotes.getQuote(quoteId);
-		QuoteLocale quoteLocale = quotes.getLocaleByLang(quoteId, language);
+		QuoteLocale quoteLocale = quotes.getLocaleByQuoteAndLang(quoteId, language);
 
 		Work work = quote.getWork();
 		WorkLocale workLocale = works.getLocaleByLang(work.getId(), language);
@@ -92,25 +92,23 @@ public class Frontend {
 		Author author = work.getAuthor();
 		AuthorLocale authorLocale = authors.getLocaleByLang(author.getId(), language);
 
-		QuoteLocale nextLocale = quotes.getLocaleNextByScheduleAndLang(quoteLocale.getSchedule(), language);
-		QuoteLocale prevLocale = quotes.getLocalePrevByScheduleAndLang(quoteLocale.getSchedule(), language);
+		QuoteLocale next = quotes.getLocaleNextByScheduleAndLang(quoteLocale.getSchedule(), language, false);
+		QuoteLocale prev = quotes.getLocaleNextByScheduleAndLang(quoteLocale.getSchedule(), language, true);
 
 		mv.addObject("lang", language);
 		mv.addObject("author", authorLocale);
 		mv.addObject("work", workLocale);
 		mv.addObject("quote", quoteLocale);
 		mv.addObject("image", author.getId());
-		mv.addObject("next", nextLocale.getQuote());
-		mv.addObject("prev", prevLocale.getQuote());
+		mv.addObject("next", next.getQuote());
+		mv.addObject("prev", prev.getQuote());
 		return mv;
 	}
 
 	@GetMapping("/random")
 	public String random(Locale locale) {
-		// TODO: Implement stub
-
-		Quote quote = new Quote();
-		return "redirect:/view?id=" + quote.getId() + "&lang=" + locale.getLanguage();
+		QuoteLocale random = quotes.getLocaleRandomByLang(locale.getLanguage());
+		return "redirect:/view?id=" + random.getQuote().getId() + "&lang=" + locale.getLanguage();
 	}
 	
 }
