@@ -3,10 +3,10 @@ package tiwolij.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +26,7 @@ import tiwolij.service.work.WorkService;
 @Controller
 @RequestMapping({ "", "/" })
 public class Frontend {
+
 	@Autowired
 	private AuthorService authors;
 
@@ -46,15 +47,12 @@ public class Frontend {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(Locale locale, @RequestParam(name = "schedule", defaultValue = "") String schedule,
-			@RequestParam(name = "lang", defaultValue = "") String language) {
+	public ModelAndView list(@RequestParam(name = "schedule", defaultValue = "") String schedule) {
 		ModelAndView mv = new ModelAndView("frontend/list");
+		String language = LocaleContextHolder.getLocale().getLanguage();
 
 		if (schedule.isEmpty())
 			schedule = LocalDate.now().getDayOfMonth() + "-" + LocalDate.now().getMonthValue();
-
-		if (language.isEmpty())
-			language = locale.getLanguage();
 
 		List<QuoteLocale> locales = quotes.getLocalesByScheduleAndLang(schedule, language);
 		List<Triple<QuoteLocale, WorkLocale, AuthorLocale>> list = new ArrayList<Triple<QuoteLocale, WorkLocale, AuthorLocale>>();
@@ -74,16 +72,13 @@ public class Frontend {
 	}
 
 	@GetMapping("/view")
-	public ModelAndView view(Locale locale, @RequestParam(name = "id", defaultValue = "0") Integer quoteId,
-			@RequestParam(name = "schedule", defaultValue = "") String schedule,
-			@RequestParam(name = "lang", defaultValue = "") String language) throws Exception {
+	public ModelAndView view(@RequestParam(name = "id", defaultValue = "0") Integer quoteId,
+			@RequestParam(name = "schedule", defaultValue = "") String schedule) throws Exception {
 		ModelAndView mv = new ModelAndView("frontend/view");
+		String language = LocaleContextHolder.getLocale().getLanguage();
 
 		if (schedule.isEmpty())
 			schedule = LocalDate.now().getDayOfMonth() + "-" + LocalDate.now().getMonthValue();
-
-		if (language.isEmpty())
-			language = locale.getLanguage();
 
 		if (quoteId == 0) {
 			if (quotes.hasLocaleByScheduleAndLang(schedule, language))
@@ -121,9 +116,10 @@ public class Frontend {
 	}
 
 	@GetMapping("/random")
-	public String random(Locale locale) {
-		QuoteLocale random = quotes.getLocaleRandomByLang(locale.getLanguage());
-		return "redirect:/view?id=" + random.getQuote().getId() + "&lang=" + locale.getLanguage();
+	public String random() {
+		String language = LocaleContextHolder.getLocale().getLanguage();
+		QuoteLocale random = quotes.getLocaleRandomByLang(language);
+		return "redirect:/view?id=" + random.getQuote().getId();
 	}
 
 }
