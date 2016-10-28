@@ -1,5 +1,5 @@
 <div th:fragment="meta" id="meta">
-	<a th:href="@{/}">Home</a>
-	<a th:href="@{/random}">Random Quote</a>
-	<a th:href="@{/about}">About Tiwoli</a>
+	<a th:href="@{/}" th:text="#{meta.home}" />
+	<a th:href="@{/about}" th:text="#{meta.about}" />
+	<a th:href="@{/random}" th:text="#{meta.random}" />
 </div>

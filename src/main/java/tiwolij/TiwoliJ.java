@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleResolver;
@@ -66,6 +68,14 @@ public class TiwoliJ extends WebMvcConfigurerAdapter {
 		lci.setIgnoreInvalidLocale(true);
 		lci.setParamName("lang");
 		return lci;
+	}
+
+	@Bean
+	public MessageSource messageSource() {
+		ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
+		ms.setDefaultEncoding("UTF-8");
+		ms.setBasenames("locales/messages");
+		return ms;
 	}
 
 	@Override

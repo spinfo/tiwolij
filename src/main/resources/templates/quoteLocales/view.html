@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='View Quote Locale')" />
+<head th:replace="../elements/header (title=#{locales.quote.view})" />
 
 <body>
 	<div class="container">
@@ -9,11 +9,11 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="${'View Quote Locale #' + locale.id}" class="panel-heading" />
+					<div th:text="#{locales.quote.view} + ${' #' + locale.id}" class="panel-heading" />
 					<form th:object="${locale}">
 						<div class="panel-body form-horizontal">
 							<div class="form-group">
-								<label class="col-sm-2 control-label">Quote</label>
+								<label th:text="#{fields.quote}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p class="form-control-static">
 										<a th:text="${locale.quote.work.author.slug + '_' + locale.quote.work.slug + '_' + locale.quote.id}" th:href="@{/tiwolij/quotes/view(quoteId=${locale.quote.id})}" />
@@ -21,42 +21,42 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-2 control-label">Language</label>
+								<label th:text="#{fields.language}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p th:text="*{language}" class="form-control-static" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-2 control-label">Schedule</label>
+								<label th:text="#{fields.schedule}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p th:text="*{schedule}" class="form-control-static" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="corpus" class="col-sm-2 control-label">Corpus</label>
+								<label th:text="#{fields.corpus}" for="corpus" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p th:text="*{corpus}" class="form-control-static" />
 								</div>
 							</div>
 							<div th:unless="${#strings.isEmpty(locale.href)}" class="form-group">
-								<label class="col-sm-2 control-label">Link</label>
+								<label th:text="#{fields.link}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p class="form-control-static">
-										<a th:href="*{href}" target="_blank">View</a>
+										<a th:text="#{actions.view}" th:href="*{href}" target="_blank" />
 									</p>
 								</div>
 							</div>
 							<div th:unless="${#strings.isEmpty(locale.meta)}" class="form-group">
-								<label class="col-sm-2 control-label">Meta</label>
+								<label th:text="#{fields.meta}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p th:text="*{meta}" class="form-control-static" />
 								</div>
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<a th:href="@{/view(id=${locale.quote.id}, lang=*{language})}" target="_blank" role="button" class="btn btn-sm btn-default">Preview Quote</a>
-							<a th:href="@{/tiwolij/quotes/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary">Edit Quote Locale</a>
-							<a th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Quote Locale</a>
+							<a th:text="#{locales.quote.preview}" th:href="@{/view(id=${locale.quote.id}, lang=*{language})}" target="_blank" role="button" class="btn btn-sm btn-default" />
+							<a th:text="#{locales.quote.edit}" th:href="@{/tiwolij/quotes/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary" />
+							<a th:text="#{locales.quote.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
 						</div>
 					</form>
 				</div>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='View Work Locale')" />
+<head th:replace="../elements/header (title=#{locales.work.view})" />
 
 <body>
 	<div class="container">
@@ -9,11 +9,11 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="${'View Work Locale #' + locale.id}" class="panel-heading" />
+					<div th:text="#{locales.work.view} + ${' #' + locale.id}" class="panel-heading" />
 					<form th:object="${locale}">
 						<div class="panel-body form-horizontal">
 							<div class="form-group">
-								<label class="col-sm-2 control-label">Work</label>
+								<label th:text="#{fields.work}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p class="form-control-static">
 										<a th:text="${locale.work.slug}" th:href="@{/tiwolij/works/view(workId=${locale.work.id})}" />
@@ -21,29 +21,29 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-2 control-label">Language</label>
+								<label th:text="#{fields.language}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p th:text="*{language}" class="form-control-static" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-sm-2 control-label">Name</label>
+								<label th:text="#{fields.name}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p th:text="*{name}" class="form-control-static" />
 								</div>
 							</div>
 							<div th:unless="${#strings.isEmpty(locale.href)}" class="form-group">
-								<label class="col-sm-2 control-label">Link</label>
+								<label th:text="#{fields.link}" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<p class="form-control-static">
-										<a th:href="*{href}" target="_blank">View</a>
+										<a th:text="#{actions.view}" th:href="*{href}" target="_blank" />
 									</p>
 								</div>
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<a th:href="@{/tiwolij/works/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary">Edit Work Locale</a>
-							<a th:href="@{/tiwolij/works/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Work Locale</a>
+							<a th:text="#{locales.work.edit}" th:href="@{/tiwolij/works/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary" />
+							<a th:text="#{locales.work.delete}" th:href="@{/tiwolij/works/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
 						</div>
 					</form>
 				</div>

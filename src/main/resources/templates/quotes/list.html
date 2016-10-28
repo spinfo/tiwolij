@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='All Quotes')" />
+<head th:replace="../elements/header (title=#{quotes.list})" />
 
 <body>
 	<div class="container">
@@ -9,15 +9,15 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">All Quotes</div>
+					<div th:text="#{quotes.list}" class="panel-heading" />
 					<table th:unless="${#lists.isEmpty(quotes)}" class="table table-hover">
 						<thead>
 							<tr>
-								<th>ID <a th:href="@{/tiwolij/quotes/list?order=id}"><span class="caret" /></a></th>
-								<th>Author <a th:href="@{/tiwolij/quotes/list?order=author}"><span class="caret" /></a></th>
-								<th>Work <a th:href="@{/tiwolij/quotes/list?order=work}"><span class="caret" /></a></th>
-								<th>Locale(s)</th>
-								<th class="text-right">Actions</th>
+								<th><span th:text="#{fields.id}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/list?order=id}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.author}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/list?order=author}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.work}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/list?order=work}"><span class="caret" /></a></th>
+								<th th:text="#{fields.locales}" />
+								<th th:text="#{actions}" class="text-right" />
 							</tr>
 						</thead>
 						<tbody>
@@ -27,16 +27,14 @@
 								<td><a th:href="@{/tiwolij/works/view(workId=${quote.work.id})}" th:text="${quote.work.slug}" /></td>
 								<td class="child-enum"><div th:each="locale : ${quote.locales}" th:text="${#strings.abbreviate(locale.corpus, 50) + ' (' + locale.language + ')'}" /></td>
 								<td class="text-right">
-									<a th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/quotes/edit(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/quotes/delete(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default" />
+									<a th:text="#{actions.edit}" th:href="@{/tiwolij/quotes/edit(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-primary" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div th:if="${#lists.isEmpty(quotes)}" class="panel-body">
-						<p class="text-danger">Move along, nothing to see here.</p>
-					</div>
+					<div th:if="${#lists.isEmpty(quotes)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
 				</div>
 			</div>
 		</section>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='All Quote Locales')" />
+<head th:replace="../elements/header (title=#{locales.quote.list})" />
 
 <body>
 	<div class="container">
@@ -9,18 +9,18 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">All Quote Locales</div>
+					<div th:text="#{locales.quote.list}" class="panel-heading" />
 					<table th:unless="${#lists.isEmpty(locales)}" class="table table-hover">
 						<thead>
 							<tr>
-								<th>ID <a th:href="@{/tiwolij/quotes/locales/list?order=id}"><span class="caret" /></a></th>
-								<th>Quote</th>
-								<th>Language <a th:href="@{/tiwolij/quotes/locales/list?order=language}"><span class="caret" /></a></th>
-								<th>Schedule <a th:href="@{/tiwolij/quotes/locales/list?order=schedule}"><span class="caret" /></a></th>
-								<th>Corpus</th>
-								<th class="text-center">Link</th>
-								<th>Meta</th>
-								<th class="text-right">Actions</th>
+								<th><span th:text="#{fields.id}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?order=id}"><span class="caret" /></a></th>
+								<th th:text="#{fields.quote}" />
+								<th><span th:text="#{fields.language}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?order=language}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.schedule}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?order=schedule}"><span class="caret" /></a></th>
+								<th th:text="#{fields.corpus}" />
+								<th th:text="#{fields.link}" class="text-center" />
+								<th th:text="#{fields.meta}" />
+								<th th:text="#{actions}" class="text-right" />
 							</tr>
 						</thead>
 						<tbody>
@@ -30,19 +30,17 @@
 								<td th:text="${locale.language}" />
 								<td th:text="${locale.schedule}" />
 								<td th:text="${#strings.abbreviate(locale.corpus, 50)}" />
-								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:href="${locale.href}" target="_blank">View</a></td>
+								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:text="#{actions.view}" th:href="${locale.href}" target="_blank" /></td>
 								<td th:text="${locale.meta}" />
 								<td class="text-right">
-									<a th:href="@{/tiwolij/quotes/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/quotes/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/quotes/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default" />
+									<a th:text="#{actions.edit}" th:href="@{/tiwolij/quotes/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div th:if="${#lists.isEmpty(locales)}" class="panel-body">
-						<p class="text-danger">Move along, nothing to see here.</p>
-					</div>
+					<div th:if="${#lists.isEmpty(locales)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
 				</div>
 			</div>
 		</section>

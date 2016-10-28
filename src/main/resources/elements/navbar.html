@@ -2,40 +2,49 @@
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
+				<span th:text="#{navbar.toggle}" class="sr-only" />
+				<span class="icon-bar" />
+				<span class="icon-bar" />
+				<span class="icon-bar" />
 			</button>
-			<a class="navbar-brand" href="/tiwolij/">TiwoliJ Administration</a>
+			<a th:href="@{/tiwolij/}" th:text="#{navbar.title}" class="navbar-brand" />
 		</div>
 		<div id="navbar-collapse" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav navbar-right">
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/authors')} ? 'active'" class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Authors <span class="caret" /></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						<span th:text="#{fields.authors}" th:remove="tag" />
+						<span class="caret" />
+					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/authors/list}">List all Authors</a></li>
-						<li><a th:href="@{/tiwolij/authors/create}">Create new Author</a></li>
+						<li><a th:href="@{/tiwolij/authors/list}" th:text="#{navbar.authors.list}" /></li>
+						<li><a th:href="@{/tiwolij/authors/create}" th:text="#{navbar.authors.create}" /></li>
 						<li role="separator" class="divider"></li>
-						<li><a th:href="@{/tiwolij/authors/locales/list}">List Author Locales</a></li>
+						<li><a th:href="@{/tiwolij/authors/locales/list}" th:text="#{navbar.authors.locales}" /></li>
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/works')} ? 'active'" class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Works <span class="caret" /></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						<span th:text="#{fields.works}" th:remove="tag" />
+						<span class="caret" />
+					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/works/list}">List all Works</a></li>
-						<li><a th:href="@{/tiwolij/works/create}">Create new Work</a></li>
+						<li><a th:href="@{/tiwolij/works/list}" th:text="#{navbar.works.list}" /></li>
+						<li><a th:href="@{/tiwolij/works/create}" th:text="#{navbar.works.create}" /></li>
 						<li role="separator" class="divider"></li>
-						<li><a th:href="@{/tiwolij/works/locales/list}">List Work Locales</a></li>
+						<li><a th:href="@{/tiwolij/works/locales/list}" th:text="#{navbar.works.locales}" /></li>
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/quotes')} ? 'active'" class="dropdown">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quotes <span class="caret" /></a>
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						<span th:text="#{fields.quotes}" th:remove="tag" />
+						<span class="caret" />
+					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/quotes/list}">List all Quotes</a></li>
-						<li><a th:href="@{/tiwolij/quotes/create}">Create new Quote</a></li>
+						<li><a th:href="@{/tiwolij/quotes/list}" th:text="#{navbar.quotes.list}" /></li>
+						<li><a th:href="@{/tiwolij/quotes/create}" th:text="#{navbar.quotes.create}" /></li>
 						<li role="separator" class="divider"></li>
-						<li><a th:href="@{/tiwolij/quotes/locales/list}">List Quote Locales</a></li>
+						<li><a th:href="@{/tiwolij/quotes/locales/list}" th:text="#{navbar.quotes.locales}" /></li>
 					</ul>
 				</li>
 			</ul>

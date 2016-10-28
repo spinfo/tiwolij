@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='All Works')" />
+<head th:replace="../elements/header (title=#{works.list})" />
 
 <body>
 	<div class="container">
@@ -9,17 +9,17 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading">All Works</div>
+					<div th:text="#{works.list}" class="panel-heading" />
 					<table th:unless="${#lists.isEmpty(works)}" class="table table-hover">
 						<thead>
 							<tr>
-								<th>ID <a th:href="@{/tiwolij/works/list?order=id}"><span class="caret" /></a></th>
-								<th>Wikidata ID <a th:href="@{/tiwolij/works/list?order=wikidataId}"><span class="caret" /></a></th>
-								<th>Author <a th:href="@{/tiwolij/works/list?order=author}"><span class="caret" /></a></th>
-								<th>Slug <a th:href="@{/tiwolij/works/list?order=slug}"><span class="caret" /></a></th>
-								<th>Name(s)</th>
-								<th class="text-center">Quotes</th>
-								<th class="text-right">Actions</th>
+								<th><span th:text="#{fields.id}" th:remove="tag"/> <a th:href="@{/tiwolij/works/list?order=id}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.Wikidataid}" th:remove="tag"/> <a th:href="@{/tiwolij/works/list?order=wikidataId}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.author}" th:remove="tag"/> <a th:href="@{/tiwolij/works/list?order=author}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.slug}" th:remove="tag"/> <a th:href="@{/tiwolij/works/list?order=slug}"><span class="caret" /></a></th>
+								<th th:text="#{fields.names}" />
+								<th th:text="#{fields.quotes}" class="text-center" />
+								<th th:text="#{actions}" class="text-right" />
 							</tr>
 						</thead>
 						<tbody>
@@ -29,18 +29,16 @@
 								<td><a th:href="@{/tiwolij/authors/view(authorId=${work.author.id})}" th:text="${work.author.slug}" /></td>
 								<td th:text="${work.slug}" />
 								<td class="child-enum"><div th:each="locale : ${work.locales}" th:text="${locale.name + ' (' + locale.language + ')'}" /></td>
-								<td class="text-center"><a th:href="@{/tiwolij/quotes/list(workId=${work.id})}">List</a></td>
+								<td class="text-center"><a th:text="#{actions.list}" th:href="@{/tiwolij/quotes/list(workId=${work.id})}" /></td>
 								<td class="text-right">
-									<a th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default">View</a>
-									<a th:href="@{/tiwolij/works/edit(workId=${work.id})}" role="button" class="btn btn-xs btn-primary">Edit</a>
-									<a th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger" onclick="return confirm('Are You shure?')">Delete</a>
+									<a th:text="#{actions.view}" th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default" />
+									<a th:text="#{actions.edit}" th:href="@{/tiwolij/works/edit(workId=${work.id})}" role="button" class="btn btn-xs btn-primary" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div th:if="${#lists.isEmpty(works)}" class="panel-body">
-						<p class="text-danger">Move along, nothing to see here.</p>
-					</div>
+					<div th:if="${#lists.isEmpty(works)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
 				</div>
 			</div>
 		</section>

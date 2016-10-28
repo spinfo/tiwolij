@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title='Edit Author Locale')" />
+<head th:replace="../elements/header (title=#{locales.author.edit})" />
 
 <body>
 	<div class="container">
@@ -9,11 +9,11 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="${'Edit Author Locale #' + locale.id}" class="panel-heading" />
+					<div th:text="#{locales.author.edit} + ${' #' + locale.id}" class="panel-heading" />
 					<form th:object="${locale}" class="form-horizontal" method="post">
 						<div class="panel-body">
 							<div class="form-group">
-								<label for="language" class="col-sm-2 control-label">Author</label>
+								<label th:text="#{fields.author}" for="author" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<select th:field="*{author}" class="form-control">
 										<option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.slug}" />
@@ -21,19 +21,19 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="language" class="col-sm-2 control-label">Language</label>
+								<label th:text="#{fields.language}" for="language" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<input th:field="*{language}" type="text" class="form-control" placeholder="de" maxlength="2" pattern="^[a-z]{2}$" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="name" class="col-sm-2 control-label">Name</label>
+								<label th:text="#{fields.name}" for="name" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<input th:field="*{name}" type="text" class="form-control" placeholder="Max Scheler" maxlength="255" />
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="href" class="col-sm-2 control-label">Link</label>
+								<label th:text="#{fields.link}" for="href" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<input th:field="*{href}" type="url" class="form-control" placeholder="http://www.maxscheler.com/" maxlength="255" />
 								</div>
@@ -41,8 +41,8 @@
 						</div>
 						<div class="panel-footer text-right">
 							<input th:field="*{id}" type="hidden" />
-							<button th:formaction="@{/tiwolij/authors/locales/edit}" type="submit" class="btn btn-sm btn-success">Edit Author Locale</button>
-							<a th:href="@{/tiwolij/authors/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" onclick="return confirm('Are You shure?')">Delete Author Locale</a>
+							<button th:text="#{locales.author.edit}" th:formaction="@{/tiwolij/authors/locales/edit}" type="submit" class="btn btn-sm btn-success" />
+							<a th:text="#{locales.author.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
 						</div>
 					</form>
 					</div>
