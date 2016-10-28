@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.util.WebUtils;
 
 @SpringBootApplication
 @EnableTransactionManagement
@@ -33,25 +34,28 @@ public class TiwoliJ extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public LocaleResolver localeResolver() {
-		List<Locale> locales = new ArrayList<Locale>();
+		List<Locale> list = new ArrayList<Locale>();
 		Locale standard = new Locale(env.getProperty("tiwolij.defaultlocale"));
 
 		Arrays.asList(env.getProperty("tiwolij.localizations").split(", ")).stream()
-				.forEach(l -> locales.add(new Locale(l)));
+				.forEach(l -> list.add(new Locale(l)));
 
 		SessionLocaleResolver slr = new SessionLocaleResolver() {
 			@Override
 			public Locale resolveLocale(HttpServletRequest request) {
-				String language = request.getHeader("Accept-Language");
-				List<LanguageRange> range = LanguageRange.parse(language);
-				Locale locale = Locale.lookup(range, locales);
+				Locale sessionLocale = (Locale) WebUtils.getSessionAttribute(request, LOCALE_SESSION_ATTRIBUTE_NAME);
+				Locale requestLocale = Locale.lookup(LanguageRange.parse(request.getHeader("Accept-Language")), list);
 
-				if (language.isEmpty() || locale == null)
-					return standard;
+				if (sessionLocale != null)
+					return sessionLocale;
 
-				return locale;
+				if (requestLocale != null)
+					return requestLocale;
+
+				return standard;
 			}
 		};
+
 		slr.setDefaultLocale(standard);
 		return slr;
 	}
