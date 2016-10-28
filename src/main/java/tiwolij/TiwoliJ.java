@@ -1,6 +1,12 @@
 package tiwolij;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
+import java.util.Locale.LanguageRange;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -27,14 +33,33 @@ public class TiwoliJ extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public LocaleResolver localeResolver() {
-		SessionLocaleResolver slr = new SessionLocaleResolver();
-		slr.setDefaultLocale(Locale.ENGLISH);
+		List<Locale> locales = new ArrayList<Locale>();
+		Locale standard = new Locale(env.getProperty("tiwolij.defaultlocale"));
+
+		Arrays.asList(env.getProperty("tiwolij.localizations").split(", ")).stream()
+				.forEach(l -> locales.add(new Locale(l)));
+
+		SessionLocaleResolver slr = new SessionLocaleResolver() {
+			@Override
+			public Locale resolveLocale(HttpServletRequest request) {
+				String language = request.getHeader("Accept-Language");
+				List<LanguageRange> range = LanguageRange.parse(language);
+				Locale locale = Locale.lookup(range, locales);
+
+				if (language.isEmpty() || locale == null)
+					return standard;
+
+				return locale;
+			}
+		};
+		slr.setDefaultLocale(standard);
 		return slr;
 	}
 
 	@Bean
 	public LocaleChangeInterceptor localeChangeInterceptor() {
 		LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+		lci.setIgnoreInvalidLocale(true);
 		lci.setParamName("lang");
 		return lci;
 	}
