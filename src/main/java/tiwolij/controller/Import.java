@@ -54,12 +54,13 @@ public class Import {
 		ModelAndView mv = new ModelAndView("backend/import");
 
 		mv.addObject("formats", env.getProperty("tiwolij.import.format", String[].class));
+		mv.addObject("languages", env.getProperty("tiwolij.localizations", String[].class));
 		return mv;
 	}
 
 	@PostMapping({ "", "/" })
-	public String root(@RequestParam("file") MultipartFile file, @RequestParam("format") String format)
-			throws Exception {
+	public String root(@RequestParam("file") MultipartFile file, @RequestParam("format") String format,
+			@RequestParam(name = "language", defaultValue = "") String language) throws Exception {
 
 		Map<Exception, String> errors = new HashMap<Exception, String>();
 		Map<QuoteLocale, String> imports = new HashMap<QuoteLocale, String>();
@@ -126,7 +127,14 @@ public class Import {
 				quoteLocale.setSchedule(day + "-" + month);
 
 				// language
-				if (values.containsKey("language") && !values.get("language").isEmpty()) {
+				if (!language.isEmpty()) {
+					if (!languages.contains(language))
+						throw new ParseException("Missing language", lineno);
+
+					quoteLocale.setLanguage(language);
+				}
+
+				else if (values.containsKey("language") && !values.get("language").isEmpty()) {
 					if (!languages.contains(values.get("language")))
 						throw new ParseException("Missing language", lineno);
 
@@ -303,6 +311,7 @@ public class Import {
 				imports.put(quoteLocale, line);
 			} catch (Exception e) {
 				System.err.println(e.getClass() + ": " + e.getMessage() + " // " + values);
+				e.printStackTrace();
 				errors.put(e, line);
 			}
 		}
