@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{About})" />
+<head th:replace="../elements/header (title=#{meta.about})" />
 
 <body id="frontend">
 	<!--[if lt IE 8]>
@@ -14,7 +14,7 @@
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<h1>About tiwoli</h1>
+				<h1 th:text="#{meta.about}" />
 			</div>
 			<div id="about">
 				<h3>Autoren</h3>
