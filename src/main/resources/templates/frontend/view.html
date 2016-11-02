@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{Quote of the Day})" />
+<head th:replace="../elements/header (title=#{meta.title})" />
 
 <body id="frontend">
 	<!--[if lt IE 8]>
@@ -16,7 +16,7 @@
 			<div id="head">
 				<a th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; Last</a>
 				<h1 th:if="${quote}" th:text="${'Quote of the Day (' + quote.schedule + '-' + #dates.format(#dates.createNow(), 'yyyy') + ')'}" />
-				<h1 th:unless="${quote}" th:text="${'Quote of the Day (' + #dates.format(#dates.createNow(), 'dd-MM-yyyy') + ')'}" />
+				<h1 th:unless="${quote}" th:text="#{meta.title} + ${'(' + #dates.format(#dates.createNow(), 'dd-MM-yyyy') + ')'}" />
 				<a th:href="@{/view(id=${next}, lang=${lang})}">Next &raquo;</a>
 			</div>
 			<div th:if="${quote}" id="view">
