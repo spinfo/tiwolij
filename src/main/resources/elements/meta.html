@@ -1,4 +1,10 @@
 <div th:fragment="meta" id="meta">
+	<div id="langselect">
+		<a th:each="language : ${#strings.arraySplit(@environment.getProperty('tiwolij.localizations'),',')}"
+			th:with="lang=${#strings.trim(language)}" th:href="${#httpServletRequest.requestURI} + '?lang=' + ${lang}">
+			<img th:src="@{/img/lang/{lang}.gif(lang=${lang})}" th:alt="${lang}" />
+		</a>
+	</div>
 	<a th:href="@{/}" th:text="#{meta.home}" />
 	<a th:href="@{/about}" th:text="#{meta.about}" />
 	<a th:href="@{/random}" th:text="#{meta.random}" />

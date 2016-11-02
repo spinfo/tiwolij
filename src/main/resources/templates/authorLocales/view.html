@@ -43,7 +43,7 @@
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{locales.author.edit}" th:href="@{/tiwolij/authors/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary" />
-							<a th:text="#{locales.author.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+							<a th:text="#{locales.author.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
 				</div>

@@ -24,7 +24,7 @@
 						<div class="panel-footer text-right">
 							<input th:field="*{id}" type="hidden" />
 							<button th:text="#{quotes.edit}" th:formaction="@{/tiwolij/quotes/edit}" type="submit" class="btn btn-sm btn-success" />
-							<a th:text="#{quotes.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+							<a th:text="#{quotes.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
 				</div>

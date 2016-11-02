@@ -43,10 +43,10 @@
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{authors.edit}" th:href="@{/tiwolij/authors/edit(authorId=*{id})}" role="button" class="btn btn-sm btn-primary" />
-							<a th:text="#{authors.delete}" th:href="@{/tiwolij/authors/delete(authorId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+							<a th:text="#{authors.delete}" th:href="@{/tiwolij/authors/delete(authorId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
-					<div th:if="${#strings.isEmpty(author)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
+					<div th:if="${#strings.isEmpty(author)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 				</div>
 			</div>
 		</section>
@@ -73,12 +73,12 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/authors/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/authors/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div th:if="${#lists.isEmpty(author.locales)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
+					<div th:if="${#lists.isEmpty(author.locales)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 					<div class="panel-footer text-right">
 						<a th:unless="${#strings.isEmpty(author.wikidataId)}" th:text="#{locales.import}" th:href="@{/tiwolij/authors/locales/import(authorId=${author.id})}" role="button" class="btn btn-sm btn-primary" />
 						<a th:text="#{locales.create}" th:href="@{/tiwolij/authors/locales/create(authorId=${author.id})}" role="button" class="btn btn-sm btn-success" />
@@ -107,12 +107,12 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/works/edit(workId=${work.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div th:if="${#lists.isEmpty(author.works)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
+					<div th:if="${#lists.isEmpty(author.works)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 					<div class="panel-footer text-right">
 						<a th:text="#{works.create}" th:href="@{/tiwolij/works/create(authorId=${author.id})}" role="button" class="btn btn-sm btn-success" />
 					</div>

@@ -21,9 +21,10 @@
 					<li th:each="entry : ${list}">
 						<a target="_blank" th:href="${entry.middle.href}" th:text="${entry.middle.name}" />
 						(<a target="_blank" th:href="${entry.right.href}" th:text="${entry.right.name}" />):
-						<a th:href="@{/view(id=${entry.left.quote.id}, lang=${lang})}" th:utext="${#strings.abbreviate(entry.left.corpus, 50)}" />
-						<a th:unless="${#strings.isEmpty(entry.left.href)}" target="_blank" th:href="${entry.left.href}">Source</a>
-						<span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="'(' + ${entry.left.meta} + ')'" />
+						<a th:href="@{/view(id=${entry.left.quote.id}, lang=${lang})}" th:utext="${entry.left.corpus}" />
+						<div th:unless="${#strings.isEmpty(entry.left.href)}" th:remove="tag">
+							(<a target="_blank" th:href="${entry.left.href}">Source</a><span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="', ' + ${entry.left.meta}" />)
+						</div>
 					</li>
 				</ul>
 			</div>

@@ -40,7 +40,7 @@
 							<input th:field="*{id}" type="hidden" />
 							<input th:field="*{wikidataId}" type="hidden" />
 							<button th:text="#{works.edit}" th:formaction="@{/tiwolij/works/edit}" type="submit" class="btn btn-sm btn-success" />
-							<a th:text="#{works.delete}" th:href="@{/tiwolij/works/delete(workId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+							<a th:text="#{works.delete}" th:href="@{/tiwolij/works/delete(workId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
 				</div>

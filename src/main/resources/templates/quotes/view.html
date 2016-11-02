@@ -29,10 +29,10 @@
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{quotes.edit}" th:href="@{/tiwolij/quotes/edit(quoteId=*{id})}" role="button" class="btn btn-sm btn-primary" />
-							<a th:text="#{quotes.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+							<a th:text="#{quotes.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
-					<div th:if="${#strings.isEmpty(quote)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
+					<div th:if="${#strings.isEmpty(quote)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 				</div>
 			</div>
 		</section>
@@ -63,12 +63,12 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/quotes/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div th:if="${#lists.isEmpty(quote.locales)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
+					<div th:if="${#lists.isEmpty(quote.locales)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 					<div class="panel-footer text-right">
 						<a th:text="#{locales.quote.create}" th:href="@{/tiwolij/quotes/locales/create(quoteId=${quote.id})}" role="button" class="btn btn-sm btn-success" />
 					</div>

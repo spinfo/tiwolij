@@ -56,7 +56,7 @@
 						<div class="panel-footer text-right">
 							<a th:text="#{locales.quote.preview}" th:href="@{/view(id=${locale.quote.id}, lang=*{language})}" target="_blank" role="button" class="btn btn-sm btn-default" />
 							<a th:text="#{locales.quote.edit}" th:href="@{/tiwolij/quotes/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary" />
-							<a th:text="#{locales.quote.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+							<a th:text="#{locales.quote.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
 				</div>

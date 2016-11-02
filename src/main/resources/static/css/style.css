@@ -58,8 +58,11 @@ form textarea:invalid, form input:invalid {
     text-align: center;
     background-color: darkgrey;
 }
-#frontend #meta * {
+#frontend #meta> * {
     padding: 10px 0;
+}
+#frontend #meta #langselect img {
+    padding: 0 5px;
 }
 #frontend .empty {
     padding: 50px 0;
@@ -67,60 +70,53 @@ form textarea:invalid, form input:invalid {
 }
 
 /*
- * FRONTEND / INDEX
- */
-
-#frontend #index {
-}
-#frontend #index form {
-	padding: 20px 0;
-	text-align: center;
-}
-#frontend #index button, #frontend #index input {
-	height: 30px;
-	border: 2px solid darkgrey;
-	text-align: center;
-}
-
-/*
  * FRONTEND / LIST
  */
 
 #frontend #list ul {
-	margin: 20px 0;
+    margin: 20px 0;
     list-style-type: square;
 }
 
 /*
- * FRONTEND / VIEW
+ * FRONTEND / INDEX, VIEW
  */
 
-#frontend #view {
+#frontend #index form {
+    padding: 20px 0;
+    text-align: center;
+}
+#frontend #index button, #frontend #index input {
+    height: 30px;
+    border: 2px solid darkgrey;
+    text-align: center;
+}
+#frontend #index, #frontend #view {
     display: flex;
     flex-flow: column;
     align-content: stretch;
     text-align: center;
     margin: 20px 0;
 }
-#frontend #view .image {
+#frontend #index .image, #frontend #view .image {
     flex-basis: 0;
     flex-grow: 1;
 }
-#frontend #view .corpus {
+#frontend #index .intro, #frontend #view .corpus {
     flex-basis: 0;
     flex-grow: 2;
 }
-#frontend #view .image img {
+#frontend #index .image img, #frontend #view .image img {
     max-height: 500px;
     max-width: 100%;
     border: 5px solid darkgrey;
 }
-#frontend #view .corpus .source {
+#frontend #index .intro .heatron, #frontend #view .corpus .source {
     margin: 20px 0;
     text-align: center;
     background-color: darkgrey;
 }
-#frontend #view .corpus p {
+#frontend #index .intro p, #frontend #view .corpus p {
     margin: 0;
     hyphens: auto;
     text-align: justify;
@@ -131,8 +127,8 @@ form textarea:invalid, form input:invalid {
  */
 
 #frontend #about p {
-	hyphens: auto;
-	text-align: justify;
+    hyphens: auto;
+    text-align: justify;
 }
 
 /*
@@ -159,16 +155,15 @@ form textarea:invalid, form input:invalid {
     #frontend #meta {
         flex-flow: row;
     }
-    /* FRONTEND / VIEW */
-    #frontend #view {
+    #frontend #index, #frontend #view {
         flex-flow: row;
         text-align: inherit;
     }
-    #frontend #view .corpus .source {
+    #frontend #index .intro .heatron, #frontend #view .corpus .source {
         margin-top: 0;
         margin-left: 20px;
     }
-    #frontend #view .corpus p {
+    #frontend #index .intro p, #frontend #view .corpus p {
         padding-left: 20px;
     }
 }

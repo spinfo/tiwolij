@@ -35,12 +35,12 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/authors/view(authorId=${author.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/authors/edit(authorId=${author.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/authors/delete(authorId=${author.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{all.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/authors/delete(authorId=${author.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div th:if="${#lists.isEmpty(authors)}" class="panel-body"><p th:text="#{all.empty}" class="text-danger" /></div>
+					<div th:if="${#lists.isEmpty(authors)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 				</div>
 			</div>
 		</section>
