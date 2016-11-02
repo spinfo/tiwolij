@@ -1,5 +1,10 @@
 package tiwolij.service.author;
 
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.List;
@@ -7,6 +12,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -227,14 +233,27 @@ public class AuthorServiceImpl implements AuthorService {
 	public Author importImage(Integer authorId, URL url) throws Exception {
 		Author author = getAuthor(authorId);
 
-		author.setImage(IOUtils.toByteArray(url.openStream()));
+		// https://stackoverflow.com/questions/1228381
+		byte[] bytes = IOUtils.toByteArray(url.openStream());
+		BufferedImage input = ImageIO.read(new ByteArrayInputStream(bytes));
+
+		Integer height = Integer.parseInt(env.getProperty("tiwolij.import.image.height"));
+		Integer width = (height * input.getWidth()) / input.getHeight();
+
+		Image output = input.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		image.getGraphics().drawImage(output, 0, 0, new Color(0, 0, 0), null);
+
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		ImageIO.write(image, "jpg", stream);
+		author.setImage(stream.toByteArray());
 
 		return authors.save(author);
 	}
 
 	@Override
 	public Author importImageAttribution(Integer authorId, String image) throws Exception {
-		URL wiki = new URL(env.getProperty("tiwolij.wikimediaapi") + image);
+		URL wiki = new URL("https://" + env.getProperty("wikimedia.api.image.extinfo") + image);
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document document = builder.parse(wiki.openStream());
 
