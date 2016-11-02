@@ -90,6 +90,9 @@ public class Frontend {
 			schedule = String.format("%02d", LocalDate.now().getDayOfMonth()) + "-"
 					+ String.format("%02d", LocalDate.now().getMonthValue());
 
+		mv.addObject("lang", language);
+		mv.addObject("list", quotes.getLocalesByScheduleAndLang(schedule, language));
+
 		if (quoteId == 0)
 			if (quotes.hasLocaleByScheduleAndLang(schedule, language))
 				quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getQuote().getId();
@@ -97,7 +100,6 @@ public class Frontend {
 				QuoteLocale next = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, false);
 				QuoteLocale prev = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, true);
 
-				mv.addObject("lang", language);
 				mv.addObject("next", next != null ? next.getQuote().getId() : false);
 				mv.addObject("prev", prev != null ? prev.getQuote().getId() : false);
 				return mv;
@@ -115,7 +117,6 @@ public class Frontend {
 		QuoteLocale next = quotes.getLocaleRandomNextByScheduleAndLang(quoteLocale.getSchedule(), language, false);
 		QuoteLocale prev = quotes.getLocaleRandomNextByScheduleAndLang(quoteLocale.getSchedule(), language, true);
 
-		mv.addObject("lang", language);
 		mv.addObject("author", authorLocale);
 		mv.addObject("work", workLocale);
 		mv.addObject("quote", quoteLocale);

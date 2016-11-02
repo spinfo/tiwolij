@@ -103,6 +103,7 @@ form textarea:invalid, form input:invalid {
     flex-grow: 1;
 }
 #frontend #index .intro, #frontend #view .corpus {
+	position: relative;
     flex-basis: 0;
     flex-grow: 2;
 }
@@ -111,10 +112,18 @@ form textarea:invalid, form input:invalid {
     max-width: 100%;
     border: 5px solid darkgrey;
 }
-#frontend #index .intro .heatron, #frontend #view .corpus .source {
+#frontend #index .intro .heatron, #frontend #view .corpus .source, #frontend #view .corpus .today {
     margin: 20px 0;
     text-align: center;
     background-color: darkgrey;
+}
+#frontend #view .corpus .today {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin-bottom: 0;
+	display: flex;
+	justify-content: space-around;
 }
 #frontend #index .intro p, #frontend #view .corpus p {
     margin: 0;
@@ -163,6 +172,10 @@ form textarea:invalid, form input:invalid {
         margin-top: 0;
         margin-left: 20px;
     }
+	#frontend #view .corpus .today {
+		position: absolute;
+		margin-left: 20px;
+	}
     #frontend #index .intro p, #frontend #view .corpus p {
         padding-left: 20px;
     }
