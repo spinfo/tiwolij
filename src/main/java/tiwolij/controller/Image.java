@@ -19,11 +19,14 @@ public class Image {
 
 	@GetMapping({ "", "/" })
 	public void image(@RequestParam(name = "id") int id, HttpServletResponse response) throws Exception {
-		if (authors.getAuthor(id) == null || authors.getAuthor(id).getImage() == null)
-			return;
-
 		response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
-		response.getOutputStream().write(authors.getAuthor(id).getImage());
+		
+		if (authors.getAuthor(id) == null || authors.getAuthor(id).getImage() == null)
+			response.sendRedirect("/img/tiwoli.png");
+		else
+			response.getOutputStream().write(authors.getAuthor(id).getImage());
+		
+		
 		response.getOutputStream().close();
 	}
 }
