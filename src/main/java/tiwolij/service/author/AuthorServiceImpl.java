@@ -236,7 +236,10 @@ public class AuthorServiceImpl implements AuthorService {
 		// https://stackoverflow.com/questions/1228381
 		byte[] bytes = IOUtils.toByteArray(url.openStream());
 		BufferedImage input = ImageIO.read(new ByteArrayInputStream(bytes));
-
+		
+		if (input == null)
+			return author;
+		
 		Integer height = Integer.parseInt(env.getProperty("tiwolij.import.image.height"));
 		Integer width = (height * input.getWidth()) / input.getHeight();
 
