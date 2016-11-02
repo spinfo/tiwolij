@@ -193,9 +193,8 @@ public class AuthorServiceImpl implements AuthorService {
 			String dir = md5.substring(0, 1) + "/" + md5.substring(0, 2) + "/";
 			URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/" + dir + image);
 
-			// TODO: reset
-			// author = importImage(author.getId(), url);
-			// author = importImageAttribution(author.getId(), image);
+			author = importImage(author.getId(), url);
+			author = importImageAttribution(author.getId(), image);
 		}
 
 		return author;
