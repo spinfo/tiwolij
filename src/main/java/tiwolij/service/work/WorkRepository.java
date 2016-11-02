@@ -8,11 +8,11 @@ import tiwolij.domain.Work;
 
 public interface WorkRepository extends CrudRepository<Work, Integer> {
 
-	public Work findOneById(Integer workId);
+	public Work findTop1ById(Integer workId);
 
-	public Work findOneBySlug(String slug);
+	public Work findTop1BySlug(String slug);
 	
-	public Work findOneByWikidataId(Integer wikidataId);
+	public Work findTop1ByWikidataId(Integer wikidataId);
 	
 	public List<Work> findAll();
 

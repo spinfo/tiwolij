@@ -36,7 +36,7 @@ public class QuoteServiceImpl implements QuoteService {
 
 	@Override
 	public Quote getQuote(Integer quoteId) {
-		return quotes.findOneById(quoteId);
+		return quotes.findTop1ById(quoteId);
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class QuoteServiceImpl implements QuoteService {
 
 	@Override
 	public QuoteLocale getLocale(Integer localeId) {
-		return locales.findOneById(localeId);
+		return locales.findTop1ById(localeId);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class QuoteServiceImpl implements QuoteService {
 		if (!hasLocale(quoteId, language))
 			return null;
 
-		return locales.findOneByQuoteIdAndLanguage(quoteId, language);
+		return locales.findTop1ByQuoteIdAndLanguage(quoteId, language);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class QuoteServiceImpl implements QuoteService {
 		List<RecordId> list = locales.findAllByLanguage(language);
 		Collections.shuffle(list);
 
-		return locales.findOneById(list.get(0).getId());
+		return locales.findTop1ById(list.get(0).getId());
 	}
 
 	@Override
@@ -150,7 +150,7 @@ public class QuoteServiceImpl implements QuoteService {
 
 	@Override
 	public Boolean hasLocale(Integer quoteId, String language) {
-		return locales.findOneByQuoteIdAndLanguage(quoteId, language) != null;
+		return locales.findTop1ByQuoteIdAndLanguage(quoteId, language) != null;
 	}
 
 	@Override

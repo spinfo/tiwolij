@@ -19,7 +19,7 @@ public class Image {
 
 	@GetMapping({ "", "/" })
 	public void image(@RequestParam(name = "id") int id, HttpServletResponse response) throws Exception {
-		if (!authors.hasAuthor(id))
+		if (authors.getAuthor(id) == null || authors.getAuthor(id).getImage() == null)
 			return;
 
 		response.setContentType("image/jpeg, image/jpg, image/png, image/gif");

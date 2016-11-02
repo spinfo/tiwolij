@@ -9,13 +9,13 @@ import tiwolij.domain.QuoteLocale;
 
 public interface QuoteLocaleRepository extends CrudRepository<QuoteLocale, Integer> {
 
-	public QuoteLocale findOneById(Integer localeId);
+	public QuoteLocale findTop1ById(Integer localeId);
 
-	public QuoteLocale findOneBySchedule(String schedule);
+	public QuoteLocale findTop1BySchedule(String schedule);
 
 	public QuoteLocale findTop1ByScheduleAndLanguage(String schedule, String language);
 
-	public QuoteLocale findOneByQuoteIdAndLanguage(Integer quoteId, String language);
+	public QuoteLocale findTop1ByQuoteIdAndLanguage(Integer quoteId, String language);
 
 	public List<QuoteLocale> findAll();
 

@@ -16,7 +16,7 @@
 								<label th:text="#{fields.quote}" for="quote" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<select th:field="*{quote}" class="form-control">
-										<option th:each="quote : ${quotes}" th:value="${quote.id}" th:text="${quote.work.author.slug + '_' + quote.work.slug + '_' + quote.id}" />
+										<option th:each="quote : ${quotes}" th:value="${quote.id}" th:text="${quote.work.author.slug} + '_' + ${quote.work.slug} + '_' + ${quote.id}" />
 									</select>
 								</div>
 							</div>

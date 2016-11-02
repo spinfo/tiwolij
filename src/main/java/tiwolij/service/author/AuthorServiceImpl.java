@@ -60,17 +60,17 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Author getAuthor(Integer authorId) {
-		return authors.findOneById(authorId);
+		return authors.findTop1ById(authorId);
 	}
 
 	@Override
 	public Author getAuthorBySlug(String slug) {
-		return authors.findOneBySlug(slug);
+		return authors.findTop1BySlug(slug);
 	}
 
 	@Override
 	public Author getAuthorByWikidataId(Integer wikidataId) {
-		return authors.findOneByWikidataId(wikidataId);
+		return authors.findTop1ByWikidataId(wikidataId);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public AuthorLocale getLocale(Integer localeId) {
-		return locales.findOneById(localeId);
+		return locales.findTop1ById(localeId);
 	}
 
 	@Override
@@ -88,7 +88,7 @@ public class AuthorServiceImpl implements AuthorService {
 		if (!hasLocale(authorId, language))
 			return null;
 
-		return locales.findOneByAuthorIdAndLanguage(authorId, language);
+		return locales.findTop1ByAuthorIdAndLanguage(authorId, language);
 	}
 
 	@Override
@@ -141,17 +141,17 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Boolean hasAuthorBySlug(String slug) {
-		return authors.findOneBySlug(slug) != null;
+		return authors.findTop1BySlug(slug) != null;
 	}
 
 	@Override
 	public Boolean hasAuthorByWikidataId(Integer wikidataId) {
-		return authors.findOneByWikidataId(wikidataId) != null;
+		return authors.findTop1ByWikidataId(wikidataId) != null;
 	}
 
 	@Override
 	public Boolean hasLocale(Integer authorId, String language) {
-		return locales.findOneByAuthorIdAndLanguage(authorId, language) != null;
+		return locales.findTop1ByAuthorIdAndLanguage(authorId, language) != null;
 	}
 
 	/*
@@ -175,7 +175,7 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public Author importAuthorByWikidataId(Integer wikidataId) throws Exception {
 		if (hasAuthorByWikidataId(wikidataId))
-			return authors.findOneByWikidataId(wikidataId);
+			return authors.findTop1ByWikidataId(wikidataId);
 
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + wikidataId);

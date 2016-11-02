@@ -8,11 +8,11 @@ import tiwolij.domain.Author;
 
 public interface AuthorRepository extends CrudRepository<Author, Integer> {
 
-	public Author findOneById(Integer authorId);
+	public Author findTop1ById(Integer authorId);
 
-	public Author findOneBySlug(String slug);
+	public Author findTop1BySlug(String slug);
 	
-	public Author findOneByWikidataId(Integer wikidataId);
+	public Author findTop1ByWikidataId(Integer wikidataId);
 
 	public List<Author> findAll();
 

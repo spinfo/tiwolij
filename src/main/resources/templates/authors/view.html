@@ -102,7 +102,7 @@
 						<tbody>
 							<tr th:each="work : ${author.works}">
 								<th th:text="'#' + ${work.id}" />
-								<td><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + work.wikidataId}" th:text="${'Q' + work.wikidataId}" /></td>
+								<td><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${work.wikidataId}" th:text="'Q' + ${work.wikidataId}" /></td>
 								<td th:text="${work.slug}" />
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default" />

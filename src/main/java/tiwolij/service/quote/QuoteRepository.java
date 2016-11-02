@@ -8,7 +8,7 @@ import tiwolij.domain.Quote;
 
 public interface QuoteRepository extends CrudRepository<Quote, Integer> {
 
-	public Quote findOneById(Integer quoteId);
+	public Quote findTop1ById(Integer quoteId);
 	
 	public List<Quote> findAll();
 

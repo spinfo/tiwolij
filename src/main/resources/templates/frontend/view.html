@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{meta.title})" />
+<head th:replace="../elements/header (title=#{meta.qotd})" />
 
 <body id="frontend">
 	<!--[if lt IE 8]>
@@ -15,8 +15,8 @@
 		<div id="inner">
 			<div id="head">
 				<a th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; Last</a>
-				<h1 th:if="${quote}" th:text="${'Quote of the Day (' + quote.schedule + '-' + #dates.format(#dates.createNow(), 'yyyy') + ')'}" />
-				<h1 th:unless="${quote}" th:text="#{meta.title} + ${'(' + #dates.format(#dates.createNow(), 'dd-MM-yyyy') + ')'}" />
+				<h1 th:if="${quote}" th:text="#{meta.qotd} + ' (' + ${quote.schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
+				<h1 th:unless="${quote}" th:text="#{meta.qotd} + ' (' + ${#dates.format(#dates.createNow(), 'dd-MM-yyyy')} + ')'" />
 				<a th:href="@{/view(id=${next}, lang=${lang})}">Next &raquo;</a>
 			</div>
 			<div th:if="${quote}" id="view">
@@ -26,7 +26,7 @@
 						In <a target="_blank" th:href="${work.href}" th:text="${work.name}" /> by
 						<a target="_blank" th:href="${author.href}" th:text="${author.name}" />
 						<div th:unless="${#strings.isEmpty(quote.href)}" th:remove="tag">
-							(<a target="_blank" th:href="${quote.href}">Source</a><span th:unless="${#strings.isEmpty(quote.meta)}" th:text="${', ' + quote.meta}" />)
+							(<a target="_blank" th:href="${quote.href}">Source</a><span th:unless="${#strings.isEmpty(quote.meta)}" th:text="', ' + ${quote.meta}" />)
 						</div>
 					</div>
 					<p th:utext="${quote.corpus}" />

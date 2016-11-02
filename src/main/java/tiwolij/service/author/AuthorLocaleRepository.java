@@ -8,9 +8,9 @@ import tiwolij.domain.AuthorLocale;
 
 public interface AuthorLocaleRepository extends CrudRepository<AuthorLocale, Integer> {
 
-	public AuthorLocale findOneById(Integer localeId);
+	public AuthorLocale findTop1ById(Integer localeId);
 
-	public AuthorLocale findOneByAuthorIdAndLanguage(Integer authorId, String language);
+	public AuthorLocale findTop1ByAuthorIdAndLanguage(Integer authorId, String language);
 
 	public List<AuthorLocale> findAll();
 

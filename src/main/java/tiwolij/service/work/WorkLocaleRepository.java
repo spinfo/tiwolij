@@ -8,9 +8,9 @@ import tiwolij.domain.WorkLocale;
 
 public interface WorkLocaleRepository extends CrudRepository<WorkLocale, Integer> {
 
-	public WorkLocale findOneById(Integer localeId);
+	public WorkLocale findTop1ById(Integer localeId);
 
-	public WorkLocale findOneByWorkIdAndLanguage(Integer workId, String language);
+	public WorkLocale findTop1ByWorkIdAndLanguage(Integer workId, String language);
 
 	public List<WorkLocale> findAll();
 

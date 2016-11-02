@@ -57,17 +57,17 @@ public class WorkServiceImpl implements WorkService {
 
 	@Override
 	public Work getWork(Integer workId) {
-		return works.findOneById(workId);
+		return works.findTop1ById(workId);
 	}
 
 	@Override
 	public Work getWorkBySlug(String slug) {
-		return works.findOneBySlug(slug);
+		return works.findTop1BySlug(slug);
 	}
 
 	@Override
 	public Work getWorkByWikidataId(Integer wikidataId) {
-		return works.findOneByWikidataId(wikidataId);
+		return works.findTop1ByWikidataId(wikidataId);
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public class WorkServiceImpl implements WorkService {
 
 	@Override
 	public WorkLocale getLocale(Integer localeId) {
-		return locales.findOneById(localeId);
+		return locales.findTop1ById(localeId);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class WorkServiceImpl implements WorkService {
 		if (!hasLocale(workId, language))
 			return null;
 
-		return locales.findOneByWorkIdAndLanguage(workId, language);
+		return locales.findTop1ByWorkIdAndLanguage(workId, language);
 	}
 
 	@Override
@@ -142,17 +142,17 @@ public class WorkServiceImpl implements WorkService {
 
 	@Override
 	public Boolean hasWorkBySlug(String slug) {
-		return works.findOneBySlug(slug) != null;
+		return works.findTop1BySlug(slug) != null;
 	}
 
 	@Override
 	public Boolean hasWorkByWikidataId(Integer wikidataId) {
-		return works.findOneByWikidataId(wikidataId) != null;
+		return works.findTop1ByWikidataId(wikidataId) != null;
 	}
 
 	@Override
 	public Boolean hasLocale(Integer workId, String language) {
-		return locales.findOneByWorkIdAndLanguage(workId, language) != null;
+		return locales.findTop1ByWorkIdAndLanguage(workId, language) != null;
 	}
 
 	/*
@@ -181,20 +181,20 @@ public class WorkServiceImpl implements WorkService {
 	@Override
 	public Work importWorkByWikidataId(Integer wikidataId) throws Exception {
 		if (hasWorkByWikidataId(wikidataId))
-			return works.findOneByWikidataId(wikidataId);
+			return works.findTop1ByWikidataId(wikidataId);
 
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + wikidataId);
 
-		Work work = new Work();
-		work.setWikidataId(wikidataId);
+		String slug = item.getLabels().containsKey("en") ? item.getLabels().get("en").getText().replace(" ", "_") : "";
 
-		if (item.getLabels().containsKey("en"))
-			work.setSlug(item.getLabels().get("en").getText().replace(" ", "_"));
-		else
+		if (slug.isEmpty())
 			for (String lang : env.getProperty("tiwolij.localizations", String[].class))
-				if (item.getLabels().containsKey(lang))
-					work.setSlug(item.getLabels().get(lang).getText().replace(" ", "_"));
+				if (slug.isEmpty() && item.getLabels().containsKey(lang))
+					slug = item.getLabels().get(lang).getText().replace(" ", "_");
+
+		Work work = hasWorkBySlug(slug) ? getWorkBySlug(slug) : new Work().setSlug(slug);
+		work.setWikidataId(wikidataId);
 
 		if (!item.hasStatement("P50"))
 			return work;

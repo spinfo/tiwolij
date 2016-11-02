@@ -95,8 +95,8 @@
 						<tbody>
 							<tr th:each="quote : ${work.quotes}">
 								<th th:text="'#' + ${quote.id}" />
-								<td th:text="${quote.work.author.slug + '_' + quote.work.slug + '_' + quote.id}" />
-								<td class="child-enum"><div th:each="locale : ${quote.locales}" th:text="${#strings.abbreviate(locale.corpus, 50) + ' (' + locale.language + ')'}" /></td>
+								<td th:text="${quote.work.author.slug} + '_' + ${quote.work.slug} + '_' + ${quote.id}" />
+								<td class="child-enum"><div th:each="locale : ${quote.locales}" th:text="${#strings.abbreviate(locale.corpus, 50)} + ' (' + ${locale.language} + ')'" /></td>
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/quotes/edit(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-primary" />

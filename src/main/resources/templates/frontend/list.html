@@ -14,7 +14,7 @@
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<h1 th:text="#{meta.qotds} ${'(' + #dates.format(#dates.createNow(), 'dd-MM-yyyy') + ')'}" />
+				<h1 th:text="#{meta.qotds} + ' (' + ${#dates.format(#dates.createNow(), 'dd-MM-yyyy')} + ')'" />
 			</div>
 			<div th:unless="${#lists.isEmpty(list)}" id="list">
 				<ul>
@@ -23,7 +23,7 @@
 						(<a target="_blank" th:href="${entry.right.href}" th:text="${entry.right.name}" />):
 						<a th:href="@{/view(id=${entry.left.quote.id}, lang=${lang})}" th:utext="${#strings.abbreviate(entry.left.corpus, 50)}" />
 						<a th:unless="${#strings.isEmpty(entry.left.href)}" target="_blank" th:href="${entry.left.href}">Source</a>
-						<span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="${'(' + entry.left.meta + ')'}" />
+						<span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="'(' + ${entry.left.meta} + ')'" />
 					</li>
 				</ul>
 			</div>

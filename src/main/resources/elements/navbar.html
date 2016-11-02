@@ -47,6 +47,9 @@
 						<li><a th:href="@{/tiwolij/quotes/locales/list}" th:text="#{navbar.quotes.locales}" /></li>
 					</ul>
 				</li>
+				<li th:classappend="${uri.startsWith(path + '/tiwolij/import')} ? 'active'">
+					<a th:href="@{/tiwolij/import}" th:text="#{locales.quote.import}" />
+				</li>
 			</ul>
 		</div>
 	</div>

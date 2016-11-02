@@ -16,7 +16,7 @@
 								<label for="work" class="col-sm-2 control-label">Work</label>
 								<div class="col-sm-10">
 									<select th:field="*{work}" class="form-control">
-										<option th:each="work : ${works}" th:value="${work.id}" th:text="${work.author.slug + '_' + work.slug}" />
+										<option th:each="work : ${works}" th:value="${work.id}" th:text="${work.author.slug} + '_' + ${work.slug}" />
 									</select>
 								</div>
 							</div>
