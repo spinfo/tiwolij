@@ -5,7 +5,7 @@
 			<img th:src="@{/img/lang/{lang}.gif(lang=${lang})}" th:alt="${lang}" />
 		</a>
 	</div>
-	<a th:href="@{/}" th:text="#{meta.home}" />
-	<a th:href="@{/about}" th:text="#{meta.about}" />
-	<a th:href="@{/random}" th:text="#{meta.random}" />
+	<a th:href="@{/(lang=${lang})}" th:text="#{meta.home}" />
+	<a th:href="@{/about(lang=${lang})}" th:text="#{meta.about}" />
+	<a th:href="@{/random(lang=${lang})}" th:text="#{meta.random}" />
 </div>

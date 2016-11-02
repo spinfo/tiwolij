@@ -93,9 +93,14 @@ public class QuoteServiceImpl implements QuoteService {
 
 		cal.setTime(format.parse(schedule + "-" + cal.get(Calendar.YEAR)));
 
+		if (locales.findAllByLanguage(language).size() == 0)
+			return null;
+			
 		while (result == null) {
 			cal.add(Calendar.DATE, prev ? -1 : +1);
-			result = getLocaleRandomByScheduleAndLang(format.format(cal.getTime()).substring(0, 5), language);
+			schedule = format.format(cal.getTime()).substring(0, 5);
+			if (hasLocaleByScheduleAndLang(schedule, language))
+				result = getLocaleRandomByScheduleAndLang(schedule, language);
 		}
 
 		return result;
@@ -161,6 +166,11 @@ public class QuoteServiceImpl implements QuoteService {
 	@Override
 	public Boolean hasLocale(Integer quoteId, String language) {
 		return locales.findTop1ByQuoteIdAndLanguage(quoteId, language) != null;
+	}
+
+	@Override
+	public Boolean hasLocaleByLang(String language) {
+		return locales.findAllByLanguage(language).size() > 0;
 	}
 
 	@Override

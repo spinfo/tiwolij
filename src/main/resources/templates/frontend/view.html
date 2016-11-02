@@ -14,27 +14,26 @@
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<a th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; Last</a>
+				<a th:if="${prev}" th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
 				<h1 th:if="${quote}" th:text="#{meta.qotd} + ' (' + ${quote.schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
 				<h1 th:unless="${quote}" th:text="#{meta.qotd} + ' (' + ${#dates.format(#dates.createNow(), 'dd-MM-yyyy')} + ')'" />
-				<a th:href="@{/view(id=${next}, lang=${lang})}">Next &raquo;</a>
+				<a th:if="${next}" th:href="@{/view(id=${next}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
 			</div>
 			<div th:if="${quote}" id="view">
 				<div class="image"><img th:src="@{/image(id=${author.author.id})}" th:alt="${author.name}" /></div>
 				<div class="corpus">
 					<div class="source">
-						In <a target="_blank" th:href="${work.href}" th:text="${work.name}" /> by
+						In <a target="_blank" th:href="${work.href}" th:text="${work.name}" />
+						<span th:text="#{frontend.by}" th:remove="tag" />
 						<a target="_blank" th:href="${author.href}" th:text="${author.name}" />
 						<div th:unless="${#strings.isEmpty(quote.href)}" th:remove="tag">
-							(<a target="_blank" th:href="${quote.href}">Source</a><span th:unless="${#strings.isEmpty(quote.meta)}" th:text="', ' + ${quote.meta}" />)
+							(<a th:text="#{frontend.source}" th:href="${quote.href}" target="_blank" /><span th:unless="${#strings.isEmpty(quote.meta)}" th:text="', ' + ${quote.meta}" />)
 						</div>
 					</div>
 					<p th:utext="${quote.corpus}" />
 				</div>
 			</div>
-			<div th:unless="${quote}" class="empty">
-				There is no quote to show here, sorry!
-			</div>
+			<div th:unless="${quote}" th:text="#{general.empty}" class="empty" />
 			<div th:replace="../elements/meta"></div>
 		</div>
 	</div>

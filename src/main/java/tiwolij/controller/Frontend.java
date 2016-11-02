@@ -38,12 +38,20 @@ public class Frontend {
 
 	@GetMapping({ "", "/" })
 	public ModelAndView root() {
-		return new ModelAndView("frontend/index");
+		ModelAndView mv = new ModelAndView("frontend/index");
+		String language = LocaleContextHolder.getLocale().getLanguage();
+
+		mv.addObject("lang", language);
+		return mv;
 	}
 
 	@GetMapping("/about")
 	public ModelAndView about() {
-		return new ModelAndView("frontend/about");
+		ModelAndView mv = new ModelAndView("frontend/about");
+		String language = LocaleContextHolder.getLocale().getLanguage();
+
+		mv.addObject("lang", language);
+		return mv;
 	}
 
 	@GetMapping("/list")
@@ -52,7 +60,8 @@ public class Frontend {
 		String language = LocaleContextHolder.getLocale().getLanguage();
 
 		if (schedule.isEmpty())
-			schedule = LocalDate.now().getDayOfMonth() + "-" + LocalDate.now().getMonthValue();
+			schedule = String.format("%02d", LocalDate.now().getDayOfMonth()) + "-"
+					+ String.format("%02d", LocalDate.now().getMonthValue());
 
 		List<QuoteLocale> locales = quotes.getLocalesByScheduleAndLang(schedule, language);
 		List<Triple<QuoteLocale, WorkLocale, AuthorLocale>> list = new ArrayList<Triple<QuoteLocale, WorkLocale, AuthorLocale>>();
@@ -78,9 +87,10 @@ public class Frontend {
 		String language = LocaleContextHolder.getLocale().getLanguage();
 
 		if (schedule.isEmpty())
-			schedule = LocalDate.now().getDayOfMonth() + "-" + LocalDate.now().getMonthValue();
+			schedule = String.format("%02d", LocalDate.now().getDayOfMonth()) + "-"
+					+ String.format("%02d", LocalDate.now().getMonthValue());
 
-		if (quoteId == 0) {
+		if (quoteId == 0)
 			if (quotes.hasLocaleByScheduleAndLang(schedule, language))
 				quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getQuote().getId();
 			else {
@@ -88,11 +98,10 @@ public class Frontend {
 				QuoteLocale prev = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, true);
 
 				mv.addObject("lang", language);
-				mv.addObject("next", next.getQuote().getId());
-				mv.addObject("prev", prev.getQuote().getId());
+				mv.addObject("next", next != null ? next.getQuote().getId() : false);
+				mv.addObject("prev", prev != null ? prev.getQuote().getId() : false);
 				return mv;
 			}
-		}
 
 		Quote quote = quotes.getQuote(quoteId);
 		QuoteLocale quoteLocale = quotes.getLocaleByQuoteAndLang(quoteId, language);
@@ -118,8 +127,12 @@ public class Frontend {
 	@GetMapping("/random")
 	public String random() {
 		String language = LocaleContextHolder.getLocale().getLanguage();
+
+		if (!quotes.hasLocaleByLang(language))
+			return "redirect:/view?lang=" + language;
+
 		QuoteLocale random = quotes.getLocaleRandomByLang(language);
-		return "redirect:/view?id=" + random.getQuote().getId();
+		return "redirect:/view?id=" + random.getQuote().getId() + "&lang=" + language;
 	}
 
 }
