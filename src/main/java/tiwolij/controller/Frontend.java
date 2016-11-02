@@ -82,10 +82,10 @@ public class Frontend {
 
 		if (quoteId == 0) {
 			if (quotes.hasLocaleByScheduleAndLang(schedule, language))
-				quoteId = quotes.getLocaleByScheduleAndLang(schedule, language).getQuote().getId();
+				quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getQuote().getId();
 			else {
-				QuoteLocale next = quotes.getLocaleNextByScheduleAndLang(schedule, language, false);
-				QuoteLocale prev = quotes.getLocaleNextByScheduleAndLang(schedule, language, true);
+				QuoteLocale next = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, false);
+				QuoteLocale prev = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, true);
 
 				mv.addObject("lang", language);
 				mv.addObject("next", next.getQuote().getId());
@@ -103,8 +103,8 @@ public class Frontend {
 		Author author = work.getAuthor();
 		AuthorLocale authorLocale = authors.getLocaleByLang(author.getId(), language);
 
-		QuoteLocale next = quotes.getLocaleNextByScheduleAndLang(quoteLocale.getSchedule(), language, false);
-		QuoteLocale prev = quotes.getLocaleNextByScheduleAndLang(quoteLocale.getSchedule(), language, true);
+		QuoteLocale next = quotes.getLocaleRandomNextByScheduleAndLang(quoteLocale.getSchedule(), language, false);
+		QuoteLocale prev = quotes.getLocaleRandomNextByScheduleAndLang(quoteLocale.getSchedule(), language, true);
 
 		mv.addObject("lang", language);
 		mv.addObject("author", authorLocale);

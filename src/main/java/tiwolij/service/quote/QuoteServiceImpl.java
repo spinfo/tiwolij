@@ -2,6 +2,7 @@ package tiwolij.service.quote;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -68,11 +69,6 @@ public class QuoteServiceImpl implements QuoteService {
 	}
 
 	@Override
-	public QuoteLocale getLocaleByScheduleAndLang(String schedule, String language) {
-		return locales.findTop1ByScheduleAndLanguage(schedule, language);
-	}
-
-	@Override
 	public QuoteLocale getLocaleRandomByLang(String language) {
 		List<RecordId> list = locales.findAllByLanguage(language);
 		Collections.shuffle(list);
@@ -81,7 +77,16 @@ public class QuoteServiceImpl implements QuoteService {
 	}
 
 	@Override
-	public QuoteLocale getLocaleNextByScheduleAndLang(String schedule, String language, Boolean prev) throws Exception {
+	public QuoteLocale getLocaleRandomByScheduleAndLang(String schedule, String language) {
+		List<RecordId> list = locales.findAllByScheduleAndLanguage(schedule, language);
+		Collections.shuffle(list);
+
+		return locales.findTop1ById(list.get(0).getId());
+	}
+
+	@Override
+	public QuoteLocale getLocaleRandomNextByScheduleAndLang(String schedule, String language, Boolean prev)
+			throws Exception {
 		QuoteLocale result = null;
 		Calendar cal = Calendar.getInstance();
 		DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -90,7 +95,7 @@ public class QuoteServiceImpl implements QuoteService {
 
 		while (result == null) {
 			cal.add(Calendar.DATE, prev ? -1 : +1);
-			result = locales.findTop1ByScheduleAndLanguage(format.format(cal.getTime()).substring(0, 5), language);
+			result = getLocaleRandomByScheduleAndLang(format.format(cal.getTime()).substring(0, 5), language);
 		}
 
 		return result;
@@ -108,7 +113,12 @@ public class QuoteServiceImpl implements QuoteService {
 
 	@Override
 	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language) {
-		return locales.findAllByScheduleAndLanguage(schedule, language);
+		List<QuoteLocale> all = new ArrayList<QuoteLocale>();
+		List<RecordId> list = locales.findAllByScheduleAndLanguage(schedule, language);
+
+		list.stream().forEach(l -> all.add(locales.findTop1ById(l.getId())));
+
+		return all;
 	}
 
 	/*

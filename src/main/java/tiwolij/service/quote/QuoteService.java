@@ -22,15 +22,15 @@ public interface QuoteService {
 	public Long getLocaleCount();
 
 	public QuoteLocale getLocale(Integer localeId);
-
+	
 	public QuoteLocale getLocaleByQuoteAndLang(Integer quoteId, String language);
-
-	public QuoteLocale getLocaleByScheduleAndLang(String schedule, String language);
 
 	public QuoteLocale getLocaleRandomByLang(String language);
 	
-	public QuoteLocale getLocaleNextByScheduleAndLang(String schedule, String language, Boolean prev) throws Exception;
-
+	public QuoteLocale getLocaleRandomByScheduleAndLang(String schedule, String language);
+	
+	public QuoteLocale getLocaleRandomNextByScheduleAndLang(String schedule, String language, Boolean prev) throws Exception;
+	
 	public List<QuoteLocale> getLocales();
 
 	public List<QuoteLocale> getLocalesByQuote(Integer quoteId);

@@ -25,6 +25,6 @@ public interface QuoteLocaleRepository extends CrudRepository<QuoteLocale, Integ
 
 	public List<RecordId> findAllByLanguage(String language);
 
-	public List<QuoteLocale> findAllByScheduleAndLanguage(String schedule, String language);
+	public List<RecordId> findAllByScheduleAndLanguage(String schedule, String language);
 
 }
