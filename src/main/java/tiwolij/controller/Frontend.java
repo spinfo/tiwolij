@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
-import tiwolij.domain.Quote;
 import tiwolij.domain.QuoteLocale;
 import tiwolij.domain.Work;
 import tiwolij.domain.WorkLocale;
@@ -59,9 +58,10 @@ public class Frontend {
 		ModelAndView mv = new ModelAndView("frontend/list");
 		String language = LocaleContextHolder.getLocale().getLanguage();
 
-		if (schedule.isEmpty())
-			schedule = String.format("%02d", LocalDate.now().getDayOfMonth()) + "-"
-					+ String.format("%02d", LocalDate.now().getMonthValue());
+		if (schedule.isEmpty()) {
+			LocalDate now = LocalDate.now();
+			schedule = String.format("%02d", now.getDayOfMonth()) + "-" + String.format("%02d", now.getMonthValue());
+		}
 
 		List<QuoteLocale> locales = quotes.getLocalesByScheduleAndLang(schedule, language);
 		List<Triple<QuoteLocale, WorkLocale, AuthorLocale>> list = new ArrayList<Triple<QuoteLocale, WorkLocale, AuthorLocale>>();
@@ -75,8 +75,9 @@ public class Frontend {
 			list.add(Triple.of(q, w, a));
 		}
 
-		mv.addObject("lang", language);
 		mv.addObject("list", list);
+		mv.addObject("lang", language);
+		mv.addObject("schedule", schedule);
 		return mv;
 	}
 
@@ -86,42 +87,41 @@ public class Frontend {
 		ModelAndView mv = new ModelAndView("frontend/view");
 		String language = LocaleContextHolder.getLocale().getLanguage();
 
-		if (schedule.isEmpty())
-			schedule = String.format("%02d", LocalDate.now().getDayOfMonth()) + "-"
-					+ String.format("%02d", LocalDate.now().getMonthValue());
+		if (quoteId > 0 && quotes.hasLocale(quoteId, language))
+			schedule = quotes.getLocaleByQuoteAndLang(quoteId, language).getSchedule();
 
-		mv.addObject("lang", language);
-		mv.addObject("list", quotes.getLocalesByScheduleAndLang(schedule, language));
+		else if (schedule.isEmpty()) {
+			LocalDate now = LocalDate.now();
+			schedule = String.format("%02d", now.getDayOfMonth()) + "-" + String.format("%02d", now.getMonthValue());
 
-		if (quoteId == 0)
-			if (quotes.hasLocaleByScheduleAndLang(schedule, language))
-				quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getQuote().getId();
-			else {
-				QuoteLocale next = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, false);
-				QuoteLocale prev = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, true);
+			if (!quotes.hasLocaleByScheduleAndLang(schedule, language))
+				return mv.addObject("lang", language).addObject("schedule", schedule);
 
-				mv.addObject("next", next != null ? next.getQuote().getId() : false);
-				mv.addObject("prev", prev != null ? prev.getQuote().getId() : false);
-				return mv;
-			}
+			quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getId();
+		}
 
-		Quote quote = quotes.getQuote(quoteId);
 		QuoteLocale quoteLocale = quotes.getLocaleByQuoteAndLang(quoteId, language);
+		mv.addObject("quote", quoteLocale);
 
-		Work work = quote.getWork();
+		Work work = quoteLocale.getQuote().getWork();
 		WorkLocale workLocale = works.getLocaleByLang(work.getId(), language);
+		mv.addObject("work", workLocale);
 
 		Author author = work.getAuthor();
 		AuthorLocale authorLocale = authors.getLocaleByLang(author.getId(), language);
-
-		QuoteLocale next = quotes.getLocaleRandomNextByScheduleAndLang(quoteLocale.getSchedule(), language, false);
-		QuoteLocale prev = quotes.getLocaleRandomNextByScheduleAndLang(quoteLocale.getSchedule(), language, true);
-
 		mv.addObject("author", authorLocale);
-		mv.addObject("work", workLocale);
-		mv.addObject("quote", quoteLocale);
-		mv.addObject("next", next.getQuote().getId());
-		mv.addObject("prev", prev.getQuote().getId());
+
+		QuoteLocale prev = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, true);
+		Integer prevId = prev != null ? prev.getQuote().getId() : null;
+		mv.addObject("prevId", prevId);
+
+		QuoteLocale next = quotes.getLocaleRandomNextByScheduleAndLang(schedule, language, false);
+		Integer nextId = next != null ? next.getQuote().getId() : null;
+		mv.addObject("nextId", nextId);
+
+		mv.addObject("lang", language);
+		mv.addObject("schedule", schedule);
+		mv.addObject("list", quotes.getLocalesByScheduleAndLang(schedule, language));
 		return mv;
 	}
 

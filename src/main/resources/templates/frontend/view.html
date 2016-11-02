@@ -14,10 +14,9 @@
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<a th:if="${prev}" th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
-				<h1 th:if="${quote}" th:text="#{meta.qotd} + ' (' + ${quote.schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
-				<h1 th:unless="${quote}" th:text="#{meta.qotd} + ' (' + ${#dates.format(#dates.createNow(), 'dd-MM-yyyy')} + ')'" />
-				<a th:if="${next}" th:href="@{/view(id=${next}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
+				<a th:if="${prevId}" th:href="@{/view(id=${prevId}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
+				<h1 th:text="#{meta.qotd} + ' (' + ${schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
+				<a th:if="${nextId}" th:href="@{/view(id=${nextId}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
 			</div>
 			<div th:if="${quote}" id="view">
 				<div class="image"><img th:src="@{/image(id=${author.author.id})}" th:alt="${author.name}" /></div>
