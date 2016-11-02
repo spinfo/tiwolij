@@ -23,14 +23,10 @@
 	- zwischen zitaten des tages
 	- zwischen tagen, ggf. vor/nach allen zitaten des tages letzter/nächster tag
 
-## Bilder skalieren beim Import
+## [done] Bilder skalieren beim Import
 - die importierten Bilder sollten auf eine maximale Größe (500px höhe) skaliert werden, um die Datenbank nicht unnötig aufzublähen
 
-## Weitere DB-Anpassungen
-- Felder für Jahr und Uhrzeit, mindestens für autoChirp Export
-- Feld für "final" auf quoteLocale
-
-## [waiting] Import bestehender Daten
+## [done] Import bestehender Daten
 - derzeit wartend auf bestehende CSV-2-Java Import Klasse
 - gdocs spreadsheet soll in die db, umweg über csv sinnvoll
 - csv-importer für jedes datenblatt/sheet
@@ -42,6 +38,14 @@
 - Exportieren von quoteLocales nur, wenn "finalisiert" == true
 - Export filterbar nach Sprache/etc.
 - Export als "GoogleDocs Style Import" für autoChirp
+
+## Weitere DB-Anpassungen
+- Felder für Jahr und Uhrzeit, mindestens für autoChirp Export
+- Feld für "final" auf quoteLocale
+
+## my_little_buglist
+- abgreifen der query-vars im frontend-controller in sinnvolle logik bringen
+	- uc: home->quote for date xx-xx->db(null)->view(null(schedule=xx-xx)) ABER veiw(null(schedule=now)) FALSCH
 
 ## [low-prio] Community Integration
 - einen *send in* oder *suggest new quote* button im frontend
