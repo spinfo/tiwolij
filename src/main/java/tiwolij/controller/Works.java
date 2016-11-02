@@ -79,7 +79,9 @@ public class Works {
 		if (work.getWikidataId() == null)
 			throw new NoSuchEntityErrorException("No Wikidata ID given");
 
-		work = works.importWork(work.getWikidataId());
+		work = works.importWorkByWikidataId(work.getWikidataId());
+		works.importLocales(work.getId());
+		
 		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 

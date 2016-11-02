@@ -10,6 +10,8 @@ public interface WorkRepository extends CrudRepository<Work, Integer> {
 
 	public Work findOneById(Integer workId);
 
+	public Work findOneBySlug(String slug);
+	
 	public Work findOneByWikidataId(Integer wikidataId);
 	
 	public List<Work> findAll();

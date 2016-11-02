@@ -80,7 +80,7 @@ public class QuoteLocales {
 	@GetMapping("/delete")
 	public String delete(@RequestParam(name = "localeId") Integer localeId) {
 		Quote quote = quotes.getLocale(localeId).getQuote();
-		
+
 		quotes.delLocale(localeId);
 		return "redirect:/tiwolij/quotes/view?quoteId=" + quote.getId();
 	}

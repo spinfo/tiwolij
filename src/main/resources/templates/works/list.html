@@ -26,9 +26,9 @@
 							<tr th:each="work : ${works}">
 								<th th:text="'#' + ${work.id}" />
 								<td><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + work.wikidataId}" th:text="${'Q' + work.wikidataId}" /></td>
-								<td><a th:href="@{/tiwolij/authors/view(authorId=${work.author.id})}" th:text="${work.author.slug}" /></td>
-								<td th:text="${work.slug}" />
-								<td class="child-enum"><div th:each="locale : ${work.locales}" th:text="${locale.name + ' (' + locale.language + ')'}" /></td>
+								<td><a th:href="@{/tiwolij/authors/view(authorId=${work.author.id})}" th:text="${#strings.abbreviate(work.author.slug, 25)}" /></td>
+								<td th:text="${#strings.abbreviate(work.slug, 25)}" />
+								<td class="child-enum"><div th:each="locale : ${work.locales}" th:text="${#strings.abbreviate(locale.name, 25) + ' (' + locale.language + ')'}" /></td>
 								<td class="text-center"><a th:text="#{actions.list}" th:href="@{/tiwolij/quotes/list(workId=${work.id})}" /></td>
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default" />

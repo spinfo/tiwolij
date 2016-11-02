@@ -39,7 +39,7 @@ public class TiwoliJ extends WebMvcConfigurerAdapter {
 		List<Locale> list = new ArrayList<Locale>();
 		Locale standard = new Locale(env.getProperty("tiwolij.defaultlocale"));
 
-		Arrays.asList(env.getProperty("tiwolij.localizations").split(", ")).stream()
+		Arrays.asList(env.getProperty("tiwolij.localizations", String[].class)).stream()
 				.forEach(l -> list.add(new Locale(l)));
 
 		SessionLocaleResolver slr = new SessionLocaleResolver() {

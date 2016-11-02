@@ -1,8 +1,11 @@
 package tiwolij.service.author;
 
 import java.net.URL;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,13 +15,13 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
 import org.wikidata.wdtk.datamodel.interfaces.MonolingualTextValue;
 import org.wikidata.wdtk.datamodel.interfaces.Value;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
+import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
 
 import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
@@ -33,10 +36,16 @@ public class AuthorServiceImpl implements AuthorService {
 
 	private final AuthorLocaleRepository locales;
 
+	private final Pattern regexLang;
+	private final Pattern regexTitle;
+
 	public AuthorServiceImpl(Environment env, AuthorRepository authors, AuthorLocaleRepository locales) {
 		this.env = env;
 		this.authors = authors;
 		this.locales = locales;
+
+		regexLang = Pattern.compile(env.getProperty("tiwolij.import.regex.lang"));
+		regexTitle = Pattern.compile(env.getProperty("tiwolij.import.regex.title"));
 	}
 
 	/*
@@ -44,21 +53,17 @@ public class AuthorServiceImpl implements AuthorService {
 	 */
 
 	@Override
-	public Long getCount() {
-		return authors.count();
-	}
-
-	@Override
 	public Author getAuthor(Integer authorId) {
-		Assert.notNull(authorId);
-
 		return authors.findOneById(authorId);
 	}
 
 	@Override
-	public Author getAuthorByWikidata(Integer wikidataId) {
-		Assert.notNull(wikidataId);
+	public Author getAuthorBySlug(String slug) {
+		return authors.findOneBySlug(slug);
+	}
 
+	@Override
+	public Author getAuthorByWikidataId(Integer wikidataId) {
 		return authors.findOneByWikidataId(wikidataId);
 	}
 
@@ -68,22 +73,12 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 
 	@Override
-	public Long getLocaleCount() {
-		return locales.count();
-	}
-
-	@Override
 	public AuthorLocale getLocale(Integer localeId) {
-		Assert.notNull(localeId);
-
 		return locales.findOneById(localeId);
 	}
 
 	@Override
 	public AuthorLocale getLocaleByLang(Integer authorId, String language) {
-		Assert.notNull(authorId);
-		Assert.notNull(language);
-
 		if (!hasLocale(authorId, language))
 			return null;
 
@@ -97,8 +92,6 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public List<AuthorLocale> getLocalesByAuthor(Integer authorId) {
-		Assert.notNull(authorId);
-
 		return locales.findAllByAuthorId(authorId);
 	}
 
@@ -108,15 +101,11 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Author setAuthor(Author author) {
-		Assert.notNull(author);
-
 		return authors.save(author);
 	}
 
 	@Override
 	public AuthorLocale setLocale(AuthorLocale locale) {
-		Assert.notNull(locale);
-
 		return locales.save(locale);
 	}
 
@@ -126,14 +115,11 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public void delAuthor(Integer authorId) {
-		Assert.notNull(authorId);
-
 		authors.delete(authorId);
 	}
 
 	@Override
 	public void delLocale(Integer localeId) {
-		Assert.notNull(localeId);
 
 		locales.delete(localeId);
 	}
@@ -148,10 +134,32 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 
 	@Override
-	public Boolean hasLocale(Integer authorId, String language) {
-		Assert.notNull(authorId);
+	public Boolean hasAuthorBySlug(String slug) {
+		return authors.findOneBySlug(slug) != null;
+	}
 
+	@Override
+	public Boolean hasAuthorByWikidataId(Integer wikidataId) {
+		return authors.findOneByWikidataId(wikidataId) != null;
+	}
+
+	@Override
+	public Boolean hasLocale(Integer authorId, String language) {
 		return locales.findOneByAuthorIdAndLanguage(authorId, language) != null;
+	}
+
+	/*
+	 * COUNTERS
+	 */
+
+	@Override
+	public Long count() {
+		return authors.count();
+	}
+
+	@Override
+	public Long countLocales() {
+		return locales.count();
 	}
 
 	/*
@@ -159,16 +167,23 @@ public class AuthorServiceImpl implements AuthorService {
 	 */
 
 	@Override
-	public Author importAuthor(Integer wikidataId) throws Exception {
-		Assert.notNull(wikidataId);
-		Assert.isNull(authors.findOneByWikidataId(wikidataId));
+	public Author importAuthorByWikidataId(Integer wikidataId) throws Exception {
+		if (hasAuthorByWikidataId(wikidataId))
+			return authors.findOneByWikidataId(wikidataId);
 
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + wikidataId);
 
 		Author author = new Author();
-		author.setSlug(item.getLabels().get("en").getText().replace(" ", "_"));
 		author.setWikidataId(wikidataId);
+
+		if (item.getLabels().containsKey("en"))
+			author.setSlug(item.getLabels().get("en").getText().replace(" ", "_"));
+		else
+			for (String lang : env.getProperty("tiwolij.localizations", String[].class))
+				if (item.getLabels().containsKey(lang))
+					author.setSlug(item.getLabels().get(lang).getText().replace(" ", "_"));
+
 		author = authors.save(author);
 
 		if (item.hasStatement("P18")) {
@@ -178,21 +193,41 @@ public class AuthorServiceImpl implements AuthorService {
 			String dir = md5.substring(0, 1) + "/" + md5.substring(0, 2) + "/";
 			URL url = new URL("https://upload.wikimedia.org/wikipedia/commons/" + dir + image);
 
-			author = importImage(author.getId(), url);
-			author = importImageAttribution(author.getId(), image);
+			// TODO: reset
+			// author = importImage(author.getId(), url);
+			// author = importImageAttribution(author.getId(), image);
 		}
-
-		importLocales(author.getId());
 
 		return author;
 	}
 
 	@Override
-	public Author importImage(Integer authorId, URL url) throws Exception {
-		Assert.notNull(authorId);
-		Assert.notNull(url);
+	public Author importAuthorByArticle(String article) throws Exception {
+		Matcher wikiTitle = regexTitle.matcher(article);
+		Matcher wikiLanguage = regexLang.matcher(article);
 
+		if (!wikiTitle.find() || !wikiLanguage.find())
+			throw new ParseException(article, 0);
+
+		String title = wikiTitle.group(1);
+		String language = wikiLanguage.group(1);
+
+		String api = env.getProperty("wikipedia.api.article.wikidataid");
+		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document document = builder.parse(new URL("https://" + language + api + title).openStream());
+
+		Node props = document.getElementsByTagName("pageprops").item(0);
+		String id = props.getAttributes().getNamedItem("wikibase_item").getNodeValue();
+		Integer wikidataId = Integer.parseInt(id.substring(1));
+
+		return hasAuthorByWikidataId(wikidataId) ? getAuthorByWikidataId(wikidataId)
+				: importAuthorByWikidataId(wikidataId);
+	}
+
+	@Override
+	public Author importImage(Integer authorId, URL url) throws Exception {
 		Author author = getAuthor(authorId);
+
 		author.setImage(IOUtils.toByteArray(url.openStream()));
 
 		return authors.save(author);
@@ -200,12 +235,9 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public Author importImageAttribution(Integer authorId, String image) throws Exception {
-		Assert.notNull(authorId);
-		Assert.notNull(image);
-
-		URL commons = new URL(env.getProperty("tiwolij.wikimediaapi") + image);
+		URL wiki = new URL(env.getProperty("tiwolij.wikimediaapi") + image);
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document document = builder.parse(commons.openStream());
+		Document document = builder.parse(wiki.openStream());
 
 		Node creatorNode = document.getElementsByTagName("Artist").item(0);
 		Node licenseNode = document.getElementsByTagName("LicenseShortName").item(0);
@@ -223,15 +255,15 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public AuthorLocale importLocale(Integer authorId, String language) throws Exception {
-		Assert.notNull(authorId);
-		Assert.notNull(language);
-		Assert.isTrue(!hasLocale(authorId, language));
-
 		Author author = getAuthor(authorId);
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + author.getWikidataId());
 		Map<String, MonolingualTextValue> labels = item.getLabels();
 		MonolingualTextValue label = labels.get(language);
+
+		if (label == null)
+			throw new NoSuchEntityErrorException(
+					"Q" + author.getWikidataId() + " has no locale for language " + language);
 
 		AuthorLocale locale = new AuthorLocale(author);
 		locale.setLanguage(language);
@@ -243,13 +275,11 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public List<AuthorLocale> importLocales(Integer authorId) {
-		Assert.notNull(authorId);
-
-		for (String language : env.getProperty("tiwolij.localizations").split(", ")) {
+		for (String language : env.getProperty("tiwolij.localizations", String[].class)) {
 			try {
 				importLocale(authorId, language);
 			} catch (Exception e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
 			}
 		}
 

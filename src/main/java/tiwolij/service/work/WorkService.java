@@ -11,17 +11,15 @@ public interface WorkService {
 	 * GETTERS
 	 */
 
-	public Long getCount();
-
 	public Work getWork(Integer workId);
 
-	public Work getWorkByWikidata(Integer wikidataId);
+	public Work getWorkBySlug(String slug);
+	
+	public Work getWorkByWikidataId(Integer wikidataId);
 
 	public List<Work> getWorks();
 
 	public List<Work> getWorksByAuthor(Integer authorId);
-
-	public Long getLocaleCount();
 
 	public WorkLocale getLocale(Integer localeId);
 
@@ -52,14 +50,30 @@ public interface WorkService {
 	 */
 
 	public Boolean hasWork(Integer workId);
+	
+	public Boolean hasWorkBySlug(String slug);
+
+	public Boolean hasWorkByWikidataId(Integer wikidataId);
 
 	public Boolean hasLocale(Integer workId, String language);
+
+	/*
+	 * COUNTERS
+	 */
+
+	public Long count();
+
+	public Long countByAuthorId(Integer authorId);
+
+	public Long countLocales();
 
 	/*
 	 * IMPORTERS
 	 */
 
-	public Work importWork(Integer wikidataId) throws Exception;
+	public Work importWorkByWikidataId(Integer wikidataId) throws Exception;
+
+	public Work importWorkByArticle(String article) throws Exception;
 
 	public WorkLocale importLocale(Integer workId, String language) throws Exception;
 

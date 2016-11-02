@@ -7,8 +7,8 @@ DROP TABLE IF EXISTS authors;
 
 CREATE TABLE authors (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
-	`slug` VARCHAR(255) NOT NULL,
-	`wikidata_id` INTEGER,
+	`slug` VARCHAR(255) UNIQUE NOT NULL,
+	`wikidata_id` INTEGER UNIQUE,
 	`image` LONGBLOB,
 	`image_attribution` VARCHAR(255) DEFAULT 'Unspecified',
 	PRIMARY KEY (`id`)
@@ -26,8 +26,8 @@ CREATE TABLE authors_locales (
 CREATE TABLE works (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
 	`author_id` INTEGER NOT NULL,
-	`slug` VARCHAR(255) NOT NULL,
-	`wikidata_id` INTEGER,
+	`slug` VARCHAR(255) UNIQUE NOT NULL,
+	`wikidata_id` INTEGER UNIQUE,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `FK_WORKS_AUTHOR` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );

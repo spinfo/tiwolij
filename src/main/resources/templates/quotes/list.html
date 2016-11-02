@@ -23,8 +23,8 @@
 						<tbody>
 							<tr th:each="quote : ${quotes}">
 								<th th:text="'#' + ${quote.id}" />
-								<td><a th:href="@{/tiwolij/authors/view(authorId=${quote.work.author.id})}" th:text="${quote.work.author.slug}" /></td>
-								<td><a th:href="@{/tiwolij/works/view(workId=${quote.work.id})}" th:text="${quote.work.slug}" /></td>
+								<td><a th:href="@{/tiwolij/authors/view(authorId=${quote.work.author.id})}" th:text="${#strings.abbreviate(quote.work.author.slug, 25)}" /></td>
+								<td><a th:href="@{/tiwolij/works/view(workId=${quote.work.id})}" th:text="${#strings.abbreviate(quote.work.slug, 25)}" /></td>
 								<td class="child-enum"><div th:each="locale : ${quote.locales}" th:text="${#strings.abbreviate(locale.corpus, 50) + ' (' + locale.language + ')'}" /></td>
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default" />

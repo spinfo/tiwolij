@@ -10,6 +10,8 @@ public interface AuthorRepository extends CrudRepository<Author, Integer> {
 
 	public Author findOneById(Integer authorId);
 
+	public Author findOneBySlug(String slug);
+	
 	public Author findOneByWikidataId(Integer wikidataId);
 
 	public List<Author> findAll();

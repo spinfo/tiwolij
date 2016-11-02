@@ -26,12 +26,12 @@ public class Backend {
 	
 	@GetMapping({ "", "/" })
 	public ModelAndView getRoot() {
-		ModelAndView mv = new ModelAndView("backend");
+		ModelAndView mv = new ModelAndView("backend/summary");
 
-		mv.addObject("authors", authors.getCount());
-		mv.addObject("authorLocales", authors.getLocaleCount());
-		mv.addObject("works", works.getCount());
-		mv.addObject("workLocales", works.getLocaleCount());
+		mv.addObject("authors", authors.count());
+		mv.addObject("authorLocales", authors.countLocales());
+		mv.addObject("works", works.count());
+		mv.addObject("workLocales", works.countLocales());
 		mv.addObject("quotes", quotes.getCount());
 		mv.addObject("quoteLocales", quotes.getLocaleCount());
 		return mv;

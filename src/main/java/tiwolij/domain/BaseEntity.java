@@ -14,6 +14,14 @@ public class BaseEntity {
 		return result;
 	}
 
+	public void set(String field, String value) {
+		try {
+			getClass().getDeclaredField(field).set(this, value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public int compareNaturalBy(BaseEntity that, String by) {
 		String s1 = this.get(by) == null ? "" : this.get(by).toString();
 		String s2 = that.get(by) == null ? "" : that.get(by).toString();

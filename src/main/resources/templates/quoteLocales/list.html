@@ -26,7 +26,7 @@
 						<tbody>
 							<tr th:each="locale : ${locales}">
 								<th th:text="'#' + ${locale.id}" />
-								<td><a th:href="@{/tiwolij/quotes/view(quoteId=${locale.quote.id})}" th:text="${locale.quote.work.author.slug + '_' + locale.quote.work.slug + '_' + locale.quote.id}" /></td>
+								<td><a th:href="@{/tiwolij/quotes/view(quoteId=${locale.quote.id})}" th:text="${#strings.abbreviate(locale.quote.work.author.slug + '_' + locale.quote.work.slug + '_' + locale.quote.id, 25)}" /></td>
 								<td th:text="${locale.language}" />
 								<td th:text="${locale.schedule}" />
 								<td th:text="${#strings.abbreviate(locale.corpus, 50)}" />

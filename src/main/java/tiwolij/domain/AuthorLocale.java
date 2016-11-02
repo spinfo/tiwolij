@@ -14,7 +14,7 @@ public class AuthorLocale extends BaseEntity {
 
 	@Id
 	@GeneratedValue
-	protected int id;
+	protected Integer id;
 
 	@ManyToOne
 	@JoinColumn(name = "author_id", nullable = false)
@@ -35,7 +35,7 @@ public class AuthorLocale extends BaseEntity {
 		this.author = author;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -55,24 +55,29 @@ public class AuthorLocale extends BaseEntity {
 		return href;
 	}
 
-	public void setId(int id) {
+	public AuthorLocale setId(int id) {
 		this.id = id;
+		return this;
 	}
 
-	public void setAuthor(Author author) {
+	public AuthorLocale setAuthor(Author author) {
 		this.author = author;
+		return this;
 	}
 
-	public void setLanguage(String language) {
+	public AuthorLocale setLanguage(String language) {
 		this.language = language;
+		return this;
 	}
 
-	public void setName(String name) {
+	public AuthorLocale setName(String name) {
 		this.name = name;
+		return this;
 	}
 
-	public void setHref(String href) {
+	public AuthorLocale setHref(String href) {
 		this.href = href;
+		return this;
 	}
 
 }

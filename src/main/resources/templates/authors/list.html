@@ -27,7 +27,7 @@
 							<tr th:each="author : ${authors}">
 								<th th:text="'#' + ${author.id}" />
 								<td><a th:unless="${#strings.isEmpty(author.wikidataId)}" target="_blank" th:href="${'https://www.wikidata.org/wiki/Q' + author.wikidataId}" th:text="${'Q' + author.wikidataId}" /></td>
-								<td th:text="${author.slug}" />
+								<td th:text="${#strings.abbreviate(author.slug, 25)}" />
 								<td class="child-enum"><div th:each="locale : ${author.locales}" th:text="${locale.name + ' (' + locale.language + ')'}" /></td>
 								<td class="text-center"><a th:unless="${#lists.isEmpty(author.image)}" target="_blank" th:text="#{actions.view}" th:href="@{/image(id=${author.id})}" /></td>
 								<td class="text-center"><a th:href="@{/tiwolij/works/list(authorId=${author.id})}" th:text="#{actions.list}" /></td>

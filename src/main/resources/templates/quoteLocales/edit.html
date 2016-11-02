@@ -9,7 +9,7 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="#{locales.quote.edit} + ${' #' + locale.id}" class="panel-heading" />
+					<div th:text="#{locales.quote.edit} + ' #' + ${locale.id}" class="panel-heading" />
 					<form th:object="${locale}" class="form-horizontal" method="post">
 						<div class="panel-body">
 							<div class="form-group">

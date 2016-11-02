@@ -9,7 +9,7 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="#{quotes.view} + ${' #' + quote.id}" class="panel-heading" />
+					<div th:text="#{quotes.view} + ' #' + ${quote.id}" class="panel-heading" />
 					<form th:unless="${#strings.isEmpty(quote)}" th:object="${quote}">
 						<div class="panel-body form-horizontal">
 							<div class="form-group">

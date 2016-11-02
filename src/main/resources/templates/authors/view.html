@@ -9,7 +9,7 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="#{authors.view} + ${' #' + author.id}" class="panel-heading" />
+					<div th:text="#{authors.view} + ' #' + ${author.id}" class="panel-heading" />
 					<form th:unless="${#strings.isEmpty(author)}" th:object="${author}">
 						<div class="panel-body form-horizontal">
 							<div th:unless="${#strings.isEmpty(author.wikidataId)}" class="form-group">
