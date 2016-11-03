@@ -60,7 +60,9 @@ public class Frontend {
 
 		if (schedule.isEmpty()) {
 			LocalDate now = LocalDate.now();
-			schedule = String.format("%02d", now.getDayOfMonth()) + "-" + String.format("%02d", now.getMonthValue());
+			String day = String.format("%02d", now.getDayOfMonth());
+			String month = String.format("%02d", now.getMonthValue());
+			schedule = day + "-" + month;
 		}
 
 		List<QuoteLocale> locales = quotes.getLocalesByScheduleAndLang(schedule, language);
@@ -90,15 +92,17 @@ public class Frontend {
 		if (quoteId > 0 && quotes.hasLocale(quoteId, language))
 			schedule = quotes.getLocaleByQuoteAndLang(quoteId, language).getSchedule();
 
-		else if (schedule.isEmpty()) {
+		if (schedule.isEmpty()) {
 			LocalDate now = LocalDate.now();
-			schedule = String.format("%02d", now.getDayOfMonth()) + "-" + String.format("%02d", now.getMonthValue());
-
-			if (!quotes.hasLocaleByScheduleAndLang(schedule, language))
-				return mv.addObject("lang", language).addObject("schedule", schedule);
-
-			quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getId();
+			String day = String.format("%02d", now.getDayOfMonth());
+			String month = String.format("%02d", now.getMonthValue());
+			schedule = day + "-" + month;
 		}
+
+		if (quoteId == 0 && quotes.hasLocaleByScheduleAndLang(schedule, language))
+			quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getId();
+		else
+			return mv.addObject("lang", language).addObject("schedule", schedule);
 
 		QuoteLocale quoteLocale = quotes.getLocaleByQuoteAndLang(quoteId, language);
 		mv.addObject("quote", quoteLocale);
