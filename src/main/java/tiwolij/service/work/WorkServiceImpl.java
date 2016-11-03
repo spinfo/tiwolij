@@ -240,6 +240,9 @@ public class WorkServiceImpl implements WorkService {
 
 	@Override
 	public WorkLocale importLocale(Integer workId, String language) throws Exception {
+		if (hasLocale(workId, language))
+			return getLocaleByLang(workId, language);
+		
 		Work work = getWork(workId);
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + work.getWikidataId());

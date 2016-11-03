@@ -276,6 +276,9 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public AuthorLocale importLocale(Integer authorId, String language) throws Exception {
+		if (hasLocale(authorId, language))
+			return getLocaleByLang(authorId, language);
+		
 		Author author = getAuthor(authorId);
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + author.getWikidataId());
