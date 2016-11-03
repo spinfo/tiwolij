@@ -23,7 +23,7 @@
 						(<a target="_blank" th:href="${entry.right.href}" th:text="${entry.right.name}" />):
 						<a th:href="@{/view(id=${entry.left.quote.id}, lang=${lang})}" th:utext="${entry.left.corpus}" />
 						<div th:unless="${#strings.isEmpty(entry.left.href)}" th:remove="tag">
-							(<a th:text="#{frontend.source}" th:href="${entry.left.href}" target="_blank" /><span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="', ' + ${entry.left.meta}" />)
+							(<a th:text="#{fields.source}" th:href="${entry.left.href}" target="_blank" /><span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="', ' + ${entry.left.meta}" />)
 						</div>
 					</li>
 				</ul>
