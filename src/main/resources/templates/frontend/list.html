@@ -14,7 +14,7 @@
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<h1 th:text="#{meta.qotds} + ' (' + ${#dates.format(#dates.createNow(), 'dd-MM-yyyy')} + ')'" />
+				<h1 th:text="#{meta.qotds} + ' (' + ${schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
 			</div>
 			<div th:unless="${#lists.isEmpty(list)}" id="list">
 				<ul>

@@ -33,7 +33,10 @@
 					<p th:utext="${quote.corpus}" />
 					<div th:unless="${#lists.isEmpty(list)}" class="today">
 						<span th:text="#{frontend.qotds} + ':'" th:remove="tag" />
-						<a th:each="locale, iterStat : ${list}" th:text="'#' + ${iterStat.count}" th:href="@{/view(id=${locale.quote.id}, lang=${lang})}"  th:classappend="${locale == quote} ? 'current'" />
+						<div th:each="locale, iterStat : ${list}" th:remove="tag">
+							<span  th:if="${locale} == ${quote}" th:text="'#' + ${iterStat.count}" class="current" />
+							<a th:unless="${locale} == ${quote}" th:text="'#' + ${iterStat.count}" th:href="@{/view(id=${locale.quote.id}, lang=${lang})}" />
+						</div>
 					</div>
 				</div>
 			</div>
