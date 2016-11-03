@@ -1,53 +1,76 @@
-# ToDo List
+# Todo Liste
 
-## [done] Automatischer Wikidata-Import
-- [done] beim anlegen neuer objekte in der db, wikiartikel/language-links crawl-farmen
-- [done] beim anlegen neuer autoren bilder mirrorn
+## Buglist
+- Firefox 45.2.0 auf Debian 8 rendert die Seite falsch (Jannik)
 
-## [done] Datenbanken-Anpassungen
-- [done] *volumes* soll *works* heißen
-- [done] *citings* soll *quotes* heißen
-- [done] volltextlink teils mit metadaten: seitenangabe
-- [done] sprachentabelle für übersetzungen/lokalisierung (translations):
-	- mehrere wiki-urls
-	- namen von autoren
-	- namen von werken
-- [feature suggestion] direkt-switch zwischen zitaten, wenn es direkte übersetzungen gibt (beispiel: balzac, 1. januar, "eugénie grandet")
+## Offene Punkte, Vorschläge und Diskussion
 
-## [done] Interface Updates
-- [done] eine *home*-seite, mit links zu:
-	- zufälligem zitat des tages
-	- zufälligem zitat
-	- zitat zu spezifiziertem datum
-- [done] weiterhin navi-interface auf *karteikarten*-darstellung (frontend):
-	- zwischen zitaten des tages
-	- zwischen tagen, ggf. vor/nach allen zitaten des tages letzter/nächster tag
+### Hosting an der Uni zu Köln
+- von RRZK die Domain tiwoli(j|app|web).spinfo.uni-koeln.de auf unsere VM mappen
+- von LetsEncrypt ein SSL-Zertifikat für die Domain holen
+- eine (productive) Instanz von TiwoliJ hosten
 
-## [done] Bilder skalieren beim Import
-- die importierten Bilder sollten auf eine maximale Größe (500px höhe) skaliert werden, um die Datenbank nicht unnötig aufzublähen
+### Pagination und verbesserte Navigation/Suche fürs Backend
+- derzeit werden alle DB-Objekte auf einer Seite angezeigt, die entsprechend lang ist
+- wenn man ein bestimmtes Zitat suchen will, muss man bisher die Browsersuche nutzen, das kann man einfacher übers Backend löschen
 
-## [done] Import bestehender Daten
-- derzeit wartend auf bestehende CSV-2-Java Import Klasse
-- gdocs spreadsheet soll in die db, umweg über csv sinnvoll
-- csv-importer für jedes datenblatt/sheet
-- minimale daten extrahieren, sonstiges durch automatisierung ergänzen (farmen)
+### Direktlink auf alternative Locales desselben Zitats
+- Direkt-Switch zwischen Zitaten, wenn es direkte Übersetzungen gibt (bspw. Balzac, 1. Januar, "Eugénie Grandet")
+> Phil: Kann ich machen, hätte aber gern eine Rückmeldung dazu, wo das ins Interface sollte ums nicht zu überladen.
 
-## Export-Funktionalität
-- alle db-daten müssen in autochirp-gerechtem format exportierbar sein
-- weiterhin export-formate zur aktualisierung der android/ios-app-internen db
-- Exportieren von quoteLocales nur, wenn "finalisiert" == true
-- Export filterbar nach Sprache/etc.
+### Hervorheben von Zitaten mit mehreren Locales
+- im Interesse des formalisierten Erschließens von in den Daten versteckten Erkenntnissen,
+- sollen Zitate mit mehreren Locales auf einen Blick ersichtlich sein
+- sollen differenzen zwischen Datumsangaben zwischen "gleichen" Zitaten errechnet und angezeigt werden
+- und mehr!
+
+### Weitere DB-Anpassungen
+- optionale Felder für *year* und *time*, mindestens für autoChirp Export
+- Felder für die Moderation der DB-Records:
+	- *final* oder *locked*
+	- *curated*
+
+### Export-Funktionalität
 - Export als "GoogleDocs Style Import" für autoChirp
+- Export-Formate zur Aktualisierung der Android/iOS-App
+- Exporte filtern, bspw.:
+	- Exportieren von quoteLocales nur, wenn "finalisiert"
+	- Exportieren von einer Sprache
+	- Exportieren von Datums-Ranges
 
-## Weitere DB-Anpassungen
-- Felder für Jahr und Uhrzeit, mindestens für autoChirp Export
-- Feld für "final" auf quoteLocale
+### Spanische Lokalisierung des Interface
+- im Projekt unter src/main/resources/locales liegen die verschiedenen Lokalisierungen der Applikation, Spanisch fehlt
+- sobald alle Strings in Deutsch/Englisch vorhanden sind bräuchten wir einmal einen Spanischsprechenden zum Übersetzen
 
-## my_little_buglist
-- abgreifen der query-vars im frontend-controller in sinnvolle logik bringen
-	- uc: home->quote for date xx-xx->db(null)->view(null(schedule=xx-xx)) ABER veiw(null(schedule=now)) FALSCH
+### Community Integration
+- einen *Send in*- oder *Suggest new Quote*-Button im Frontend inkl. Moderationsinterface
+> Phil: Würde ich erstmal weit zurückstellen und stattdessen ein eMail-Formular o.ä. anbieten.
 
-## [low-prio] Community Integration
-- einen *send in* oder *suggest new quote* button im frontend
-- rattenschwanz moderationsinterface
-- dantenbankfeld *freigeschaltet* (curated oder locked)
+## Abgeschlossenes
+
+### Automatischer Wikidata-Import
+- beim Anlegen neuer Objekte in der DB Stammdaten aus Wikidata/-pedia importieren
+- beim Anlegen neuer Autoren Bilder aus Wikidata mirrorn
+
+### Datenbanken-Anpassungen
+- *volumes* soll *works* heißen
+- *citings* soll *quotes* heißen
+- Volltextlink teils mit Metadaten (seitenangabe) als *meta* Feld
+- Sprachentabelle für Übersetzungen/Lokalisierung:
+
+### Interface Updates
+- *home*-Seite, mit Links zu:
+	- zufälligem Zitat des Tages
+	- zufälligem Zitat
+	- Zitat zu spezifiziertem Datum
+- Navigations-Interface auf Karteikarten-Darstellung (Frontend):
+	- zwischen Tagen
+	- zwischen Zitaten des Tages
+
+### Bilder skalieren beim Import
+- importierte Bilder auf eine maximale Größe (500px höhe) skalieren
+
+### Import bestehender Daten
+- GDocs Spreadsheet soll in die DB, Umweg über TSV sinnvoll
+- TSV-Importer für jedes Datenblatt/Sheet
+- Minimale Daten extrahieren, sonstiges aus Wikidata/-pedia ergänzen
