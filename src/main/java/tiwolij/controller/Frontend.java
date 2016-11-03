@@ -99,10 +99,11 @@ public class Frontend {
 			schedule = day + "-" + month;
 		}
 
-		if (quoteId == 0 && quotes.hasLocaleByScheduleAndLang(schedule, language))
-			quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getId();
-		else
+		if (quoteId == 0 && !quotes.hasLocaleByScheduleAndLang(schedule, language))
 			return mv.addObject("lang", language).addObject("schedule", schedule);
+
+		if (quoteId == 0)
+			quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getId();
 
 		QuoteLocale quoteLocale = quotes.getLocaleByQuoteAndLang(quoteId, language);
 		mv.addObject("quote", quoteLocale);
