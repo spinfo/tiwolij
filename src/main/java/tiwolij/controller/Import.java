@@ -182,7 +182,7 @@ public class Import {
 				// duplicate
 				for (QuoteLocale l : quotes.getLocalesByScheduleAndLang(quoteLocale.getSchedule(),
 						quoteLocale.getLanguage()))
-					if (levenshteinDistance(l.getCorpus(), quoteLocale.getCorpus()) < 25)
+					if (levenshteinDistance(l.getCorpus(), quoteLocale.getCorpus()) < 10)
 						throw new DuplicateKeyException("Duplicate entry");
 
 				/*
