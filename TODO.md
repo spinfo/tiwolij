@@ -2,6 +2,7 @@
 
 ## Buglist
 - Firefox 45.2.0 auf Debian 8 rendert die Seite falsch (Jannik)
+- (nicht reproduzierbar) Versehentlicher doppelter Import verdoppelt nicht alle, aber einige Zitate (JH)
 
 ## Offene Punkte, Vorschläge und Diskussion
 
@@ -9,6 +10,16 @@
 - von RRZK die Domain tiwoli(j|app|web).spinfo.uni-koeln.de auf unsere VM mappen
 - von LetsEncrypt ein SSL-Zertifikat für die Domain holen
 - eine (productive) Instanz von TiwoliJ hosten
+
+### Import
+- Fehler beim Import mit Feldangabe (Zeile|Spalte) an den Nutzer weiterleiten
+
+### TiwoliChirp
+- TEXT deutsch: “Der DD. MONATAUSGESCHRIEBEN in der Weltliteratur: AUTORVORNAME AUTORNACHNAME: WERKTITEL. #tiwoli LINK zur Seite” + angehangenes Bild (verbraucht keinen Platz mehr in den 140 Zeichen, Rest müsste eigentlich immer passen, zur Not Titel mit … abkürzen).
+- BILD Screenshots macht sich eigentlich ganz hübsch auf Twitter → Sind die irgendwie automatisch erzeugbar? Alternativ (aber nicht so schön): Einfach das Autorbild anhängen.
+- SPRACHE: Andere Sprachen, andere Twitter-Accounts? (JH) würde dafür plädieren. Wir können ja mal mit deutsch anfangen und dann sehen, wer uns so folgt.
+- UHRZEIT: In manchen Zitatschnipseln steht die Uhrzeit mit im Text, allerdings nicht analysiert, d.h. da müsste HeidelTime ein zweites Mal drüber. Die Uhrzeit könnte man für das Scheduling gebrauchen.
+- VERTEILUNG: Zitate mit Uhrzeit sind ja festgelegt, die anderen sollten über den Tag verteilt werden. Hat dazu Vorschläge?
 
 ### Pagination und verbesserte Navigation/Suche fürs Backend
 - derzeit werden alle DB-Objekte auf einer Seite angezeigt, die entsprechend lang ist
@@ -40,11 +51,12 @@
 
 ### Spanische Lokalisierung des Interface
 - im Projekt unter src/main/resources/locales liegen die verschiedenen Lokalisierungen der Applikation, Spanisch fehlt
-- sobald alle Strings in Deutsch/Englisch vorhanden sind bräuchten wir einmal einen Spanischsprechenden zum Übersetzen
+- sobald alle Strings in Deutsch/Englisch vorhanden sind bräuchten wir einmal einen Spanischsprechenden zum Übersetzen --> JH: Kann Francisco fragen (Chilene, der bei uns arbeitet)
 
 ### Community Integration
 - einen *Send in*- oder *Suggest new Quote*-Button im Frontend inkl. Moderationsinterface
 > Phil: Würde ich erstmal weit zurückstellen und stattdessen ein eMail-Formular o.ä. anbieten.
+
 
 ## Abgeschlossenes
 
