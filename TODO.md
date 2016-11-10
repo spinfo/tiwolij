@@ -10,6 +10,7 @@
 - von RRZK die Domain tiwoli(j|app|web).spinfo.uni-koeln.de auf unsere VM mappen
 - von LetsEncrypt ein SSL-Zertifikat für die Domain holen
 - eine (productive) Instanz von TiwoliJ hosten
+- TivoliJ Compilation als WAR auf Jetty anpassen
 
 ### Import
 - Fehler beim Import mit Feldangabe (Zeile|Spalte) an den Nutzer weiterleiten
