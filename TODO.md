@@ -2,7 +2,6 @@
 
 ## Buglist
 - Firefox 45.2.0 auf Debian 8 rendert die Seite falsch (Jannik)
-- (nicht reproduzierbar) Versehentlicher doppelter Import verdoppelt nicht alle, aber einige Zitate (JH)
 
 ## Offene Punkte, Vorschläge und Diskussion
 
@@ -11,9 +10,6 @@
 - von LetsEncrypt ein SSL-Zertifikat für die Domain holen
 - eine (productive) Instanz von TiwoliJ hosten
 - TivoliJ Compilation als WAR auf Jetty anpassen
-
-### Import
-- Fehler beim Import mit Feldangabe (Zeile|Spalte) an den Nutzer weiterleiten
 
 ### TiwoliChirp
 - TEXT deutsch: “Der DD. MONATAUSGESCHRIEBEN in der Weltliteratur: AUTORVORNAME AUTORNACHNAME: WERKTITEL. #tiwoli LINK zur Seite” + angehangenes Bild (verbraucht keinen Platz mehr in den 140 Zeichen, Rest müsste eigentlich immer passen, zur Not Titel mit … abkürzen).
@@ -36,12 +32,6 @@
 - sollen differenzen zwischen Datumsangaben zwischen "gleichen" Zitaten errechnet und angezeigt werden
 - und mehr!
 
-### Weitere DB-Anpassungen
-- optionale Felder für *year* und *time*, mindestens für autoChirp Export
-- Felder für die Moderation der DB-Records:
-	- *final* oder *locked*
-	- *curated*
-
 ### Export-Funktionalität
 - Export als "GoogleDocs Style Import" für autoChirp
 - Export-Formate zur Aktualisierung der Android/iOS-App
@@ -60,6 +50,20 @@
 
 
 ## Abgeschlossenes
+
+### Bugs
+- (nicht reproduzierbar) Versehentlicher doppelter Import verdoppelt nicht alle, aber einige Zitate (JH)
+- Import-format des Meta-Feldes auf "<Url> <dash-separated-string>"
+
+### Weitere DB-Anpassungen
+- optionale Felder für *year* und *time*, mindestens für autoChirp Export
+- Felder für die Moderation der DB-Records:
+	- *final* oder *locked*
+	- *curated*
+
+### Import
+- Fehler beim Import mit Feldangabe (Zeile|Spalte) an den Nutzer weiterleiten
+> Nicht (i|j), $Zeile; done.
 
 ### Automatischer Wikidata-Import
 - beim Anlegen neuer Objekte in der DB Stammdaten aus Wikidata/-pedia importieren

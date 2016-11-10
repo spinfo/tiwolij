@@ -59,11 +59,12 @@ public class Import {
 	}
 
 	@PostMapping({ "", "/" })
-	public String root(@RequestParam("file") MultipartFile file, @RequestParam("format") String format,
+	public ModelAndView root(@RequestParam("file") MultipartFile file, @RequestParam("format") String format,
 			@RequestParam(name = "language", defaultValue = "") String language) throws Exception {
 
-		Map<Exception, String> errors = new HashMap<Exception, String>();
-		Map<QuoteLocale, String> imports = new HashMap<QuoteLocale, String>();
+		ModelAndView mv = new ModelAndView("backend/report");
+		Map<String, Exception> errors = new HashMap<String, Exception>();
+		Map<String, QuoteLocale> imports = new HashMap<String, QuoteLocale>();
 
 		List<String> languages = Arrays.asList(env.getProperty("tiwolij.localizations", String[].class));
 		Pattern regexDate = Pattern.compile(env.getProperty("tiwolij.import.regex.date"));
@@ -170,7 +171,7 @@ public class Import {
 					if (values.get("source [meta]").contains(" ")) {
 						String source = values.get("source [meta]");
 						quoteLocale.setHref(source.substring(0, source.indexOf(" ")));
-						quoteLocale.setMeta(source.substring(source.indexOf(" ") + 1));
+						quoteLocale.setMeta(source.substring(source.indexOf(" ") + 1).replaceAll("-", " "));
 					} else
 						quoteLocale.setHref(values.get("source [meta]"));
 				}
@@ -308,18 +309,16 @@ public class Import {
 				quotes.setQuote(quote.setWork(work));
 				quotes.setLocale(quoteLocale.setQuote(quote));
 
-				imports.put(quoteLocale, line);
-			} catch (Exception e) {
-				System.err.println(e.getClass() + ": " + e.getMessage() + " // " + values);
-				e.printStackTrace();
-				errors.put(e, line);
+				imports.put(line, quoteLocale);
+			} catch (Exception error) {
+				errors.put(line, error);
 			}
 		}
 
-		System.out.println("imports: " + imports.size());
-		System.out.println(" errors: " + errors.size());
-
-		return "redirect:/tiwolij/quotes/locales";
+		mv.addObject("format", format);
+		mv.addObject("quotes", imports);
+		mv.addObject("errors", errors);
+		return mv;
 	}
 
 	// https://en.wikibooks.org/wiki/Algorithm_Implementation/Strings/Levenshtein_distance#Java

@@ -1,0 +1,98 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title=#{locales.report})" />
+
+<body>
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{locales.report}" class="panel-heading" />
+					<div class="panel-body form-horizontal">
+						<div class="form-group">
+							<label th:text="#{fields.format}" class="col-sm-2 control-label" />
+							<div class="col-sm-10">
+								<p class="form-control-static">
+									<span th:text="${format}" />
+								</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label th:text="#{fields.quotes}" class="col-sm-2 control-label" />
+							<div class="col-sm-10">
+								<p class="form-control-static">
+									<span th:text="${#maps.size(quotes)}" />
+								</p>
+							</div>
+						</div>
+						<div class="form-group">
+							<label th:text="#{fields.errors}" class="col-sm-2 control-label" />
+							<div class="col-sm-10">
+								<p class="form-control-static">
+									<span th:text="${#maps.size(errors)}" />
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section th:unless="${#lists.isEmpty(quotes)}" class="row">
+			<div class="col-md-12">
+				<div class="panel panel-success">
+					<div th:text="#{fields.quotes}" class="panel-heading" />
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th th:text="#{fields.id}"/>
+								<th th:text="#{fields.quote}" />
+								<th th:text="#{fields.language}" />
+								<th th:text="#{fields.schedule}"  />
+								<th th:text="#{fields.corpus}" />
+								<th th:text="#{fields.source}" class="text-center" />
+								<th th:text="#{fields.meta}" />
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="quote : ${quotes}" th:with="slug=${quote.value.quote.work.author.slug} + '_' + ${quote.value.quote.work.slug} + '_' + ${quote.value.quote.id}">
+								<th th:text="'#' + ${quote.value.id}" />
+								<td><a th:href="@{/tiwolij/quotes/view(quoteId=${quote.value.quote.id})}" th:text="${#strings.abbreviate(slug, 25)}" /></td>
+								<td th:text="${quote.value.language}" />
+								<td th:text="${quote.value.schedule}" />
+								<td th:text="${#strings.abbreviate(quote.value.corpus, 50)}" />
+								<td class="text-center"><a th:unless="${#strings.isEmpty(quote.value.href)}" th:text="#{actions.view}" th:href="${quote.value.href}" target="_blank" /></td>
+								<td th:text="${quote.value.meta}" />
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+		<section class="row" th:unless="${#lists.isEmpty(errors)}">
+			<div class="col-md-12">
+				<div class="panel panel-danger">
+					<div th:text="#{fields.errors}" class="panel-heading" />
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th th:text="#{fields.error}"/>
+								<th th:text="#{fields.line}" class="text-right" />
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="error : ${errors}">
+								<th th:text="${error.value.message}" />
+								<td th:text="${error.key}" class="text-right" />
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>
