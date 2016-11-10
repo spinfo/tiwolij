@@ -206,14 +206,15 @@ public class WorkServiceImpl implements WorkService {
 			throw new NoSuchEntityErrorException("Q" + wikidataId + " has no author");
 
 		Integer id = Integer.parseInt(wikiData.group(1));
+		Author author;
 
-		if (!authors.hasAuthorByWikidataId(id))
-			authors.importAuthorByWikidataId(id);
+		if (!authors.hasAuthorByWikidataId(id)) {
+			author = authors.importAuthorByWikidataId(id);
+			authors.importLocales(author.getId());
+		} else
+			author = authors.getAuthorByWikidataId(id);
 
-		Author author = authors.getAuthorByWikidataId(id);
-		work = works.save(work.setAuthor(author));
-
-		return work;
+		return works.save(work.setAuthor(author));
 	}
 
 	@Override
@@ -242,7 +243,7 @@ public class WorkServiceImpl implements WorkService {
 	public WorkLocale importLocale(Integer workId, String language) throws Exception {
 		if (hasLocale(workId, language))
 			return getLocaleByLang(workId, language);
-		
+
 		Work work = getWork(workId);
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + work.getWikidataId());
