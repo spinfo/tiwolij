@@ -50,6 +50,18 @@
 									<input th:field="*{meta}" type="text" class="form-control" placeholder="Seite 56" />
 								</div>
 							</div>
+							<div class="form-group">
+								<label th:text="#{fields.year}" for="year" class="col-sm-2 control-label" />
+								<div class="col-sm-10">
+									<input th:field="*{year}" type="number" class="form-control" placeholder="1838" maxlength="4" th:max="${#dates.format(#dates.createNow(), 'yyyy')}" />
+								</div>
+							</div>
+							<div class="form-group">
+								<label th:text="#{fields.time}" for="time" class="col-sm-2 control-label" />
+								<div class="col-sm-10">
+									<input th:field="*{time}" type="text" class="form-control" placeholder="06:00" maxlength="5" pattern="^([0-1][0-9]|2[0-3]):([0-5][0-9])$" />
+								</div>
+							</div>
 						</div>
 						<div class="panel-footer text-right">
 							<button th:text="#{locales.quote.create}" th:formaction="@{/tiwolij/quotes/locales/create}" type="submit" class="btn btn-sm btn-success" />

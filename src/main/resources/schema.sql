@@ -55,6 +55,8 @@ CREATE TABLE quotes_locales (
 	`corpus` TEXT NOT NULL,
 	`href` VARCHAR(255),
 	`meta` VARCHAR(255),
+	`year` INTEGER,
+	`time` VARCHAR(5),
 	PRIMARY KEY (`id`),
 	CONSTRAINT `FK_QUOTES_LOCALES` FOREIGN KEY (`quote_id`) REFERENCES `quotes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
