@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -10,7 +11,7 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div th:text="#{locales.quote.import}" class="panel-heading" />
-					<form enctype="multipart/form-data" class="form-horizontal" method="post">
+					<form enctype="multipart/form-data" class="form-horizontal" method="post" onsubmit="document.getElementById('submit').disabled=true">
 						<div class="panel-body">
 							<div class="form-group">
 								<label th:text="#{fields.file}" for="file" class="col-sm-2 control-label" />
@@ -37,7 +38,7 @@
 							</div>
 						</div>
 						<div class="panel-footer text-right">
-							<button th:text="#{locales.quote.import}" th:formaction="@{/tiwolij/import}" type="submit" class="btn btn-sm btn-success" />
+							<button id="submit" th:text="#{locales.quote.import}" th:formaction="@{/tiwolij/import}" type="submit" class="btn btn-sm btn-success" />
 						</div>
 					</form>
 				</div>
