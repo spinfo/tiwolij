@@ -107,7 +107,7 @@
 					</table>
 					<div th:if="${#lists.isEmpty(work.quotes)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 					<div class="panel-footer text-right">
-						<a th:text="#{quote.create}" th:href="@{/tiwolij/quotes/create(workId=${work.id})}" role="button" class="btn btn-sm btn-success" />
+						<a th:text="#{quotes.create}" th:href="@{/tiwolij/quotes/create(workId=${work.id})}" role="button" class="btn btn-sm btn-success" />
 					</div>
 				</div>
 			</div>
