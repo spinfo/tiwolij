@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{meta.qotds})" />
+<head th:replace="../elements/header (title=#{frontend.qotds})" />
 
 <body id="frontend">
 	<!--[if lt IE 8]>
@@ -14,7 +14,7 @@
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<h1 th:text="#{meta.qotds} + ' (' + ${schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
+				<h1 th:text="#{frontend.qotds} + ' (' + ${schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
 			</div>
 			<div th:unless="${#lists.isEmpty(list)}" id="list">
 				<ul>

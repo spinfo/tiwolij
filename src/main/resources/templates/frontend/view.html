@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{meta.qotd})" />
+<head th:replace="../elements/header (title=#{frontend.qotd})" />
 
 <body id="frontend">
 	<!--[if lt IE 8]>
@@ -15,11 +15,11 @@
 		<div id="inner">
 			<div id="head">
 				<a th:if="${prevId}" th:href="@{/view(id=${prevId}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
-				<h1 th:text="#{meta.qotd} + ' (' + ${schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
+				<h1 th:text="#{frontend.qotd} + ' (' + ${schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
 				<a th:if="${nextId}" th:href="@{/view(id=${nextId}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
 			</div>
 			<div th:if="${quote}" id="view">
-				<div class="image"><img th:src="@{/image(id=${author.author.id})}" th:alt="${author.name}" /></div>
+				<div class="image"><img th:src="@{/image/author(id=${author.author.id})}" th:alt="${author.name}" /></div>
 				<div class="corpus">
 					<div class="source">
 						<span th:text="#{frontend.in}" th:remove="tag" />

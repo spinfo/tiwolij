@@ -45,6 +45,9 @@ public class TiwoliJ extends WebMvcConfigurerAdapter {
 		SessionLocaleResolver slr = new SessionLocaleResolver() {
 			@Override
 			public Locale resolveLocale(HttpServletRequest request) {
+				if (request.getHeader("Accept-Language") == null)
+					return standard;
+
 				Locale sessionLocale = (Locale) WebUtils.getSessionAttribute(request, LOCALE_SESSION_ATTRIBUTE_NAME);
 				Locale requestLocale = Locale.lookup(LanguageRange.parse(request.getHeader("Accept-Language")), list);
 
