@@ -81,6 +81,7 @@ public class Works {
 
 		work = works.importWorkByWikidataId(work.getWikidataId());
 		works.importLocales(work.getId());
+		authors.importLocales(work.getAuthor().getId());
 		
 		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}

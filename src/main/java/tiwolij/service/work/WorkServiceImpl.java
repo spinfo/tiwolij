@@ -206,13 +206,8 @@ public class WorkServiceImpl implements WorkService {
 			throw new NoSuchEntityErrorException("Q" + wikidataId + " has no author");
 
 		Integer id = Integer.parseInt(wikiData.group(1));
-		Author author;
-
-		if (!authors.hasAuthorByWikidataId(id)) {
-			author = authors.importAuthorByWikidataId(id);
-			authors.importLocales(author.getId());
-		} else
-			author = authors.getAuthorByWikidataId(id);
+		Author author = authors.hasAuthorByWikidataId(id) ? authors.getAuthorByWikidataId(id)
+				: authors.importAuthorByWikidataId(id);
 
 		return works.save(work.setAuthor(author));
 	}
