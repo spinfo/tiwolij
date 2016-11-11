@@ -10,6 +10,9 @@
 			<a th:href="@{/tiwolij/}" th:text="#{navbar.title}" class="navbar-brand" />
 		</div>
 		<div id="navbar-collapse" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				<li><a th:href="@{/}" th:text="#{meta.home}" /></li>
+			</ul>
 			<ul class="nav navbar-nav navbar-right">
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/authors')} ? 'active'" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -48,7 +51,10 @@
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/import')} ? 'active'">
-					<a th:href="@{/tiwolij/import}" th:text="#{locales.quote.import}" />
+					<a th:href="@{/tiwolij/import}" th:text="#{navbar.import}" />
+				</li>
+				<li th:classappend="${uri.startsWith(path + '/tiwolij/export')} ? 'active'">
+					<a th:href="@{/tiwolij/export}" th:text="#{navbar.export}" />
 				</li>
 			</ul>
 		</div>
