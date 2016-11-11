@@ -19,7 +19,10 @@
 				<a th:if="${nextId}" th:href="@{/view(id=${nextId}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
 			</div>
 			<div th:if="${quote}" id="view">
-				<div class="image"><img th:src="@{/image/author(id=${author.author.id})}" th:alt="${author.name}" /></div>
+				<div class="image">
+					<img th:src="@{/image/author(id=${author.author.id})}" th:alt="${author.name}" />
+					<p th:text="${author.author.imageAttribution}" class="text-muted" />
+				</div>
 				<div class="corpus">
 					<div class="source">
 						<span th:text="#{frontend.in}" th:remove="tag" />

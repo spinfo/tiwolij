@@ -101,6 +101,8 @@ form textarea:invalid, form input:invalid {
 #frontend #index .image, #frontend #view .image {
     flex-basis: 0;
     flex-grow: 1;
+		background-color: darkgrey;
+		/*border: 5px solid darkgrey;*/
 }
 #frontend #index .intro, #frontend #view .corpus {
     position: relative;
@@ -110,7 +112,12 @@ form textarea:invalid, form input:invalid {
 #frontend #index .image img, #frontend #view .image img {
     max-height: 500px;
     max-width: 100%;
-    border: 5px solid darkgrey;
+    padding: 5px;
+		/*border: 5px solid darkgrey;*/
+}
+#frontend #index .image p, #frontend #view .image p {
+		font-size: smaller;
+		text-align: center;
 }
 #frontend #index .intro .heatron, #frontend #view .corpus .source, #frontend #view .corpus .today {
     margin: 20px 0;
