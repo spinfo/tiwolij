@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
+
+<Configure id="tiwolij" class="org.eclipse.jetty.webapp.WebAppContext">
+  <Set name="contextPath">/tiwolij</Set>
+  <Set name="war"><SystemProperty name="jetty.home"/>/webapps/tiwolij.war</Set>
+
+  <Call name="setInitParameter">
+    <Arg>org.eclipse.jetty.servlet.SessionIdPathParameterName</Arg>
+    <Arg>none</Arg>
+  </Call>
+
+  <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/></Arg>
+    <Arg>tiwolij.defaultlocale</Arg>
+    <Arg type="java.lang.String">en</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+  <New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/></Arg>
+    <Arg>tiwolij.localizations</Arg>
+    <Arg type="java.lang.String">de, en, es</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/></Arg>
+    <Arg>tiwolij.import.regex.date</Arg>
+    <Arg type="java.lang.String">(\\d+)[./-](\\d+)</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/></Arg>
+    <Arg>tiwolij.import.regex.lang</Arg>
+    <Arg type="java.lang.String">://(.{2})\\.wikipedia</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/></Arg>
+    <Arg>tiwolij.import.regex.title</Arg>
+    <Arg type="java.lang.String">wiki/([^/]*)$</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/></Arg>
+    <Arg>tiwolij.import.regex.wdid</Arg>
+    <Arg type="java.lang.String">Q(\\d+)</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>tiwolij.import.image.height</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">500</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>tiwolij.import.format</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">
+work_id; schedule; language; corpus; source [meta],
+schedule; corpus; author_name; work_name; author_href; work_href; author_slug; work_slug; source [meta]
+		</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>wikimedia.api.image.extinfo</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">commons.wikimedia.org/w/api.php?action=query&redirects&format=xml&prop=imageinfo&iiprop=extmetadata&titles=File:</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>wikipedia.api.article.wikidataid</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">.wikipedia.org/w/api.php?action=query&redirects&format=xml&prop=pageprops&ppprop=wikibase_item&titles=</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.datasource.url</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">jdbc:mysql://localhost:33006/tiwolij?useSSL=false</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.datasource.initialize</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">false</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.datasource.username</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">tiwolij</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.datasource.password</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">password</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.datasource.testWhileIdle</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">true</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.datasource.validationQuery</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">SELECT 1</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.jpa.show-sql</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">false</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.jpa.hibernate.ddl-auto</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">validate</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.jpa.hibernate.naming-strategy</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">org.hibernate.cfg.ImprovedNamingStrategy</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg><Ref refid='tiwolij'/>spring.jpa.properties.hibernate.dialect</Arg>
+    <Arg></Arg>
+    <Arg type="java.lang.String">org.hibernate.dialect.MySQL5Dialect</Arg>
+    <Arg type="boolean">true</Arg>
+  </New>
+</Configure>
