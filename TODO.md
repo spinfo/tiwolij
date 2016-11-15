@@ -8,8 +8,8 @@
 ## Offene Punkte, Vorschläge und Diskussion
 
 ### Import-Benutzermeh
-- Wenn man beim Import die falsche Lokalisierung angibt, werden gnadenlos alle Autoren mit der falschen Lokalisierung importiert. Hier täte ein Panic-Knopf mit Rollback gut (ja, ich weiß, hat auch Nachteile, aber ich habe mir gerade die ganze DB verhunzt und muss jetzt alles noch einmal neu importieren.
-
+- Wenn man beim Import die falsche Lokalisierung angibt, werden gnadenlos alle Autoren mit der falschen Lokalisierung importiert. Hier täte ein Panic-Knopf mit Rollback gut (ja, ich weiß, hat auch Nachteile, aber ich habe mir gerade die ganze DB verhunzt und muss jetzt alles noch einmal neu importieren. (jh)
+ 
 ### Ueberschrift der tiwoli Seite
 - in der Ueberschrift würde ich das "2016" also das Jahr generell raus lassen, stattdessen das Datum in Schriftform anzeigen, also deutsch: 11. November, english: 11th of November etc.?
 
