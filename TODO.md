@@ -2,8 +2,13 @@
 
 ## Buglist
 - Firefox 45.2.0 auf Debian 8 rendert die Seite falsch (Jannik)
+- Wechseln zwischen Sprachen führt nicht immer zu dem richtigen Datum, z.B. von Deutsch 16-11-2016 (1) zu English endet im 15.11. - oder kommt man beim Sprachenwechsel immer am heutigen Tag raus? Finde ich nicht so ganz intuitiv, vielleicht dann lieber ein genereller "Heute / Today" Button der immer da ist? (Jannik)
+
 
 ## Offene Punkte, Vorschläge und Diskussion
+
+### Ueberschrift der tiwoli Seite
+- in der Ueberschrift würde ich das "2016" also das Jahr generell raus lassen, stattdessen das Datum in Schriftform anzeigen, also deutsch: 11. November, english: 11th of November etc.?
 
 ### Hosting an der Uni zu Köln
 - von RRZK die Domain tiwoli(j|app|web).spinfo.uni-koeln.de auf unsere VM mappen
