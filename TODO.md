@@ -2,16 +2,22 @@
 
 ## Buglist
 - Firefox 45.2.0 auf Debian 8 rendert die Seite falsch (Jannik)
+- Bildreferenz auf flashcard setzen, Farben anpassen
 - Wechseln zwischen Sprachen führt nicht immer zu dem richtigen Datum, z.B. von Deutsch 16-11-2016 (1) zu English endet im 15.11. - oder kommt man beim Sprachenwechsel immer am heutigen Tag raus? Finde ich nicht so ganz intuitiv, vielleicht dann lieber ein genereller "Heute / Today" Button der immer da ist? (Jannik)
-
 
 ## Offene Punkte, Vorschläge und Diskussion
 
 ### Import-Benutzermeh
 - Wenn man beim Import die falsche Lokalisierung angibt, werden gnadenlos alle Autoren mit der falschen Lokalisierung importiert. Hier täte ein Panic-Knopf mit Rollback gut (ja, ich weiß, hat auch Nachteile, aber ich habe mir gerade die ganze DB verhunzt und muss jetzt alles noch einmal neu importieren. (jh)
- 
+
 ### Ueberschrift der tiwoli Seite
 - in der Ueberschrift würde ich das "2016" also das Jahr generell raus lassen, stattdessen das Datum in Schriftform anzeigen, also deutsch: 11. November, english: 11th of November etc.?
+
+### Weitere DB-Anpassungen
+- Felder für die Moderation der DB-Records:
+	- *final* oder *locked*
+	- *curated*
+- Time-feld auf 8 Stellen erweitern
 
 ### Hosting an der Uni zu Köln
 - von RRZK die Domain tiwoli(j|app|web).spinfo.uni-koeln.de auf unsere VM mappen
@@ -32,7 +38,8 @@
 
 ### Direktlink auf alternative Locales desselben Zitats
 - Direkt-Switch zwischen Zitaten, wenn es direkte Übersetzungen gibt (bspw. Balzac, 1. Januar, "Eugénie Grandet")
-> Phil: Kann ich machen, hätte aber gern eine Rückmeldung dazu, wo das ins Interface sollte ums nicht zu überladen.
+> PS: Kann ich machen, hätte aber gern eine Rückmeldung dazu, wo das ins Interface sollte ums nicht zu überladen.
+> PS: Ggf. nur auf Homepage alle möglichen Sprachen/Flaggen einblenden und pro Zitat nur die, für dies Übersetzungen gibt?!
 
 ### Hervorheben von Zitaten mit mehreren Locales
 - im Interesse des formalisierten Erschließens von in den Daten versteckten Erkenntnissen,
@@ -50,11 +57,12 @@
 
 ### Spanische Lokalisierung des Interface
 - im Projekt unter src/main/resources/locales liegen die verschiedenen Lokalisierungen der Applikation, Spanisch fehlt
-- sobald alle Strings in Deutsch/Englisch vorhanden sind bräuchten wir einmal einen Spanischsprechenden zum Übersetzen --> JH: Kann Francisco fragen (Chilene, der bei uns arbeitet)
+- sobald alle Strings in Deutsch/Englisch vorhanden sind bräuchten wir einmal einen Spanischsprechenden zum Übersetzen
+> JH: Kann Francisco fragen (Chilene, der bei uns arbeitet)
 
 ### Community Integration
 - einen *Send in*- oder *Suggest new Quote*-Button im Frontend inkl. Moderationsinterface
-> Phil: Würde ich erstmal weit zurückstellen und stattdessen ein eMail-Formular o.ä. anbieten.
+> PS: Würde ich erstmal weit zurückstellen und stattdessen ein eMail-Formular o.ä. anbieten.
 
 
 ## Abgeschlossenes
@@ -63,11 +71,12 @@
 - (nicht reproduzierbar) Versehentlicher doppelter Import verdoppelt nicht alle, aber einige Zitate (JH)
 - Import-format des Meta-Feldes auf "<Url> <dash-separated-string>"
 
+### Flashcards
+- Anzeige per Domain //image/flashcard?id=<authorId>&lang=<language>
+- Baut Image mit Autorenbild, Corpus und Autor/Werk im TiwoliJ-Stil
+
 ### Weitere DB-Anpassungen
 - optionale Felder für *year* und *time*, mindestens für autoChirp Export
-- Felder für die Moderation der DB-Records:
-	- *final* oder *locked*
-	- *curated*
 
 ### Import
 - Fehler beim Import mit Feldangabe (Zeile|Spalte) an den Nutzer weiterleiten
