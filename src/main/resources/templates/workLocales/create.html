@@ -12,32 +12,10 @@
 					<div th:text="#{locales.work.create}" class="panel-heading" />
 					<form th:object="${locale}" class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div class="form-group">
-								<label th:text="#{fields.work}" for="work" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<select th:field="*{work}" class="form-control">
-										<option th:each="work : ${works}" th:value="${work.id}" th:text="${work.slug}" />
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.language}" for="language" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{language}" type="text" class="form-control" placeholder="de" maxlength="2" pattern="^[a-z]{2}$" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.name}" for="name" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{name}" type="text" class="form-control" placeholder="Vom Umsturz der Werte" maxlength="255" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.link}" for="href" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{href}" type="url" class="form-control" placeholder="https://www.worldcat.org/oclc/3484348" maxlength="255" />
-								</div>
-							</div>
+							<div th:replace="../elements/fields :: select('work', true, ${works}, 'id', 'slug')" />
+							<div th:replace="../elements/fields :: input('language', true, 'text', 2, '^[a-z]{2}$', 'de')" />
+							<div th:replace="../elements/fields :: input('name', true, 'text', 255, '', 'Vom Umsturz der Werte')" />
+							<div th:replace="../elements/fields :: input('href', false, 'url', 255, '', 'https://www.worldcat.org/oclc/3484348')" />
 						</div>
 						<div class="panel-footer text-right">
 							<button th:text="#{locales.work.create}" th:formaction="@{/tiwolij/works/locales/create}" type="submit" class="btn btn-sm btn-success" />

@@ -10,40 +10,17 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div th:text="#{authors.view} + ' #' + ${author.id}" class="panel-heading" />
-					<form th:unless="${#strings.isEmpty(author)}" th:object="${author}">
-						<div class="panel-body form-horizontal">
-							<div th:unless="${#strings.isEmpty(author.wikidataId)}" class="form-group">
-								<label th:text="#{fields.wikidataid}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p class="form-control-static">
-										<a th:text="'Q' + *{wikidataId}" th:href="@{https://www.wikidata.org/wiki/Q} + *{wikidataId}" target="_blank" />
-									</p>
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.slug}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{slug}" class="form-control-static" />
-								</div>
-							</div>
-							<div th:unless="${#lists.isEmpty(author.image)}" class="form-group">
-								<label th:text="#{fields.image}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p class="form-control-static">
-										<a th:text="#{actions.view}" th:href="@{/image/author(id=*{id})}" target="_blank" />
-									</p>
-								</div>
-							</div>
-							<div th:unless="${#lists.isEmpty(author.image)}" class="form-group">
-								<label th:text="#{fields.imageattr}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{imageAttribution}" class="form-control-static" />
-								</div>
-							</div>
+					<form th:unless="${#strings.isEmpty(author)}" th:object="${author}" class="form-horizontal">
+						<div class="panel-body">
+							<div th:replace="../elements/fields :: view('wikidataId', 'Q' + *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" th:unless="${#strings.isEmpty(author.wikidataId)}" />
+							<div th:replace="../elements/fields :: view('slug', *{slug}, '', false)" />
+							<div th:replace="../elements/fields :: view('image', #{actions.view}, @{/image/author(id=*{id})}, true)" th:unless="${#lists.isEmpty(author.image)}" />
+							<div th:replace="../elements/fields :: view('imageAttribution', *{imageAttribution}, '', false)" th:unless="${#lists.isEmpty(author.image)}" />
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{authors.edit}" th:href="@{/tiwolij/authors/edit(authorId=*{id})}" role="button" class="btn btn-sm btn-primary" />
-							<a th:text="#{authors.delete}" th:href="@{/tiwolij/authors/delete(authorId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+							<a th:text="#{authors.delete}" th:href="@{/tiwolij/authors/delete(authorId=*{id})}" role="button" class="btn btn-sm btn-danger"
+								th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
 					<div th:if="${#strings.isEmpty(author)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
@@ -60,7 +37,7 @@
 								<th th:text="#{fields.id}" />
 								<th th:text="#{fields.language}" />
 								<th th:text="#{fields.name}" />
-								<th th:text="#{fields.link}" class="text-center" />
+								<th th:text="#{fields.source}" class="text-center" />
 								<th th:text="#{actions}" class="text-right" />
 							</tr>
 						</thead>
@@ -73,14 +50,16 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/authors/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/authors/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger"
+										th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
 					<div th:if="${#lists.isEmpty(author.locales)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 					<div class="panel-footer text-right">
-						<a th:unless="${#strings.isEmpty(author.wikidataId)}" th:text="#{locales.import}" th:href="@{/tiwolij/authors/locales/import(authorId=${author.id})}" role="button" class="btn btn-sm btn-primary" />
+						<a th:unless="${#strings.isEmpty(author.wikidataId)}" th:href="@{/tiwolij/authors/locales/import(authorId=${author.id})}"
+							th:text="#{locales.import}" role="button" class="btn btn-sm btn-primary" />
 						<a th:text="#{locales.create}" th:href="@{/tiwolij/authors/locales/create(authorId=${author.id})}" role="button" class="btn btn-sm btn-success" />
 					</div>
 				</div>
@@ -94,7 +73,7 @@
 						<thead>
 							<tr>
 								<th th:text="#{fields.id}" />
-								<th th:text="#{fields.wikidataid}" />
+								<th th:text="#{fields.wikidataId}" />
 								<th th:text="#{fields.slug}" />
 								<th th:text="#{actions}" class="text-right" />
 							</tr>
@@ -107,7 +86,8 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/works/edit(workId=${work.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger"
+										th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>

@@ -10,65 +10,22 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div th:text="#{locales.quote.view} + ' #' + ${locale.id}" class="panel-heading" />
-					<form th:object="${locale}">
-						<div class="panel-body form-horizontal">
-							<div class="form-group">
-								<label th:text="#{fields.quote}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p class="form-control-static">
-										<a th:text="${locale.quote.work.author.slug} + '_' + ${locale.quote.work.slug} + '_' + ${locale.quote.id}" th:href="@{/tiwolij/quotes/view(quoteId=${locale.quote.id})}" />
-									</p>
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.language}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{language}" class="form-control-static" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.schedule}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{schedule}" class="form-control-static" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.corpus}" for="corpus" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{corpus}" class="form-control-static" />
-								</div>
-							</div>
-							<div th:unless="${#strings.isEmpty(locale.href)}" class="form-group">
-								<label th:text="#{fields.source}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p class="form-control-static">
-										<a th:text="#{actions.view}" th:href="*{href}" target="_blank" />
-									</p>
-								</div>
-							</div>
-							<div th:unless="${#strings.isEmpty(locale.meta)}" class="form-group">
-								<label th:text="#{fields.meta}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{meta}" class="form-control-static" />
-								</div>
-							</div>
-							<div th:unless="${#strings.isEmpty(locale.year)}" class="form-group">
-								<label th:text="#{fields.year}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{year}" class="form-control-static" />
-								</div>
-							</div>
-							<div th:unless="${#strings.isEmpty(locale.time)}" class="form-group">
-								<label th:text="#{fields.time}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{time}" class="form-control-static" />
-								</div>
-							</div>
+					<form th:object="${locale}" class="form-horizontal">
+						<div class="panel-body">
+							<div th:replace="../elements/fields :: view('quote', *{quote.id}, @{/tiwolij/quotes/view(quoteId=*{quote.id})}, false)" />
+							<div th:replace="../elements/fields :: view('language', *{language}, '', false)" />
+							<div th:replace="../elements/fields :: view('schedule', *{schedule}, '', false)" />
+							<div th:replace="../elements/fields :: view('corpus', *{corpus}, '', false)" />
+							<div th:replace="../elements/fields :: view('href', #{actions.view}, *{href}, true)" th:unless="*{#strings.isEmpty(href)}" />
+							<div th:replace="../elements/fields :: view('meta', *{meta}, '', false)" th:unless="*{#strings.isEmpty(meta)}" />
+							<div th:replace="../elements/fields :: view('year', *{year}, '', false)" th:unless="*{#strings.isEmpty(year)}" />
+							<div th:replace="../elements/fields :: view('time', *{time}, '', false)" th:unless="*{#strings.isEmpty(time)}" />
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{locales.quote.preview}" th:href="@{/view(id=${locale.quote.id}, lang=*{language})}" target="_blank" role="button" class="btn btn-sm btn-default" />
 							<a th:text="#{locales.quote.edit}" th:href="@{/tiwolij/quotes/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary" />
-							<a th:text="#{locales.quote.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+							<a th:text="#{locales.quote.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger"
+								th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
 				</div>

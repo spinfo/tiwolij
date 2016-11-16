@@ -1,0 +1,33 @@
+<div th:fragment="view(name, value, href, popup)" class="form-group">
+	<label th:text="#{'fields.' + ${name}}" class="col-sm-2 control-label" />
+	<div class="col-sm-10">
+		<p class="form-control-static">
+			<a th:text="${value}" th:href="${href}" th:remove="${#strings.isEmpty(href)} ? 'tag'" th:target="${popup} ? '_blank'" />
+		</p>
+	</div>
+</div>
+
+<div th:fragment="input(name, required, type, maxlength, pattern, placeholder)" class="form-group">
+	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
+	<div class="col-sm-10">
+		<input th:value="${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}" th:type="${type}"
+			th:maxlength="${maxlength}" th:pattern="${pattern}" th:placeholder="${placeholder}" class="form-control" />
+	</div>
+</div>
+
+<div th:fragment="textarea(name, required, rows, maxlength, placeholder)" class="form-group">
+	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
+	<div class="col-sm-10">
+		<textarea th:value="${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}" th:rows="${rows}"
+		 th:placeholder="${placeholder}" class="form-control" />
+	</div>
+</div>
+
+<div th:fragment="select(name, required, options, value, label)" class="form-group">
+	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
+	<div class="col-sm-10">
+		<select th:id="${name}" th:name="${name}" th:required="${required}" class="form-control">
+			<option th:each="option : ${options}"  th:value="${option.get(value)}" th:text="${option.get(label)}" />
+		</select>
+	</div>
+</div>

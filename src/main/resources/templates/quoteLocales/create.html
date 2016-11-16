@@ -12,56 +12,14 @@
 					<div th:text="#{locales.quote.create}" class="panel-heading" />
 					<form th:object="${locale}" class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div class="form-group">
-								<label th:text="#{fields.quote}" for="quote" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<select th:field="*{quote}" class="form-control">
-										<option th:each="quote : ${quotes}" th:value="${quote.id}" th:text="${quote.work.author.slug} + '_' + ${quote.work.slug} + '_' + ${quote.id}" />
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.language}" for="language" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{language}" type="text" class="form-control" placeholder="de" maxlength="2" pattern="^[a-z]{2}$" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.schedule}" for="schedule" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{schedule}" type="text" class="form-control" placeholder="14-04" maxlength="5" pattern="^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.corpus}" for="corpus" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<textarea th:field="*{corpus}" class="form-control" rows="5" placeholder="&lt;b&gt;Heute, d. 14. April&lt;/b&gt; 1838, morgens um 6 Uhr, ward meine liebe Frau Elisabeth, geb. Kr&ouml;ger, mit Gottes gn&auml;diger Hilfe aufs gl&uuml;cklichste von einem T&ouml;chterchen entbunden, welches in der hl. Taufe den Namen Clara empfangen soll." />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.source}" for="href" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{href}" type="url" class="form-control" placeholder="http://d-nb.info/970666128" maxlength="255" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.meta}" for="meta" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{meta}" type="text" class="form-control" placeholder="Seite 56" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.year}" for="year" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{year}" type="number" class="form-control" placeholder="1838" maxlength="4" th:max="${#dates.format(#dates.createNow(), 'yyyy')}" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.time}" for="time" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{time}" type="text" class="form-control" placeholder="06:00" maxlength="5" pattern="^([0-1][0-9]|2[0-3]):([0-5][0-9])$" />
-								</div>
-							</div>
+							<div th:replace="../elements/fields :: select('quote', true, ${quotes}, 'id', 'id')" />
+							<div th:replace="../elements/fields :: input('language', true, 'text', 2, '^[a-z]{2}$', 'de')" />
+							<div th:replace="../elements/fields :: input('schedule', true, 'text', 5, '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$', '14-04')" />
+							<div th:replace="../elements/fields :: textarea('corpus', true, 5, '', '&lt;b&gt;Heute, d. 14. April&lt;/b&gt; 1838, morgens um 6 Uhr, ward meine liebe Frau Elisabeth, geb. Kr&ouml;ger, mit Gottes gn&auml;diger Hilfe aufs gl&uuml;cklichste von einem T&ouml;chterchen entbunden, welches in der hl. Taufe den Namen Clara empfangen soll.')" />
+							<div th:replace="../elements/fields :: input('href', false, 'url', 255, '', 'http://d-nb.info/970666128')" />
+							<div th:replace="../elements/fields :: input('meta', false, 'text', 255, '', 'Seite 56')" />
+							<div th:replace="../elements/fields :: input('year', false, 'number', 4, '', '1838')" />
+							<div th:replace="../elements/fields :: input('time', false, 'text', 8, '^([0-1][0-9]|2[0-3])(:[0-5][0-9]){2}$', '06:00:00')" />
 						</div>
 						<div class="panel-footer text-right">
 							<button th:text="#{locales.quote.create}" th:formaction="@{/tiwolij/quotes/locales/create}" type="submit" class="btn btn-sm btn-success" />

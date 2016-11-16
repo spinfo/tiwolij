@@ -10,34 +10,16 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div th:text="#{works.view} + ' #' + ${work.id}" class="panel-heading" />
-					<form th:object="${work}">
-						<div class="panel-body form-horizontal">
-							<div th:unless="${#strings.isEmpty(work.wikidataId)}" class="form-group">
-								<label th:text="#{fields.wikidataid}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p class="form-control-static">
-										<a th:text="'Q' + *{wikidataId}" th:href="@{https://www.wikidata.org/wiki/Q} + *{wikidataId}" target="_blank" />
-									</p>
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.author}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p class="form-control-static">
-										<a th:text="${work.author.slug}" th:href="@{/tiwolij/authors/view(authorId=${work.author.id})}" />
-									</p>
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.slug}" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<p th:text="*{slug}" class="form-control-static" />
-								</div>
-							</div>
+					<form th:object="${work}" class="form-horizontal">
+						<div class="panel-body">
+							<div th:replace="../elements/fields :: view('wikidataId', *{wikidataId}, '', false)" th:unless="*{#strings.isEmpty(wikidataId)}" />
+							<div th:replace="../elements/fields :: view('author', *{author.slug}, @{/tiwolij/authors/view(authorId=${work.author.id})}, false)" />
+							<div th:replace="../elements/fields :: view('slug', *{slug}, @{/tiwolij/authors/view(authorId=${work.author.id})}, false)" />
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{works.edit}" th:href="@{/tiwolij/works/edit(workId=*{id})}" role="button" class="btn btn-sm btn-primary" />
-							<a th:text="#{works.delete}" th:href="@{/tiwolij/works/delete(workId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+							<a th:text="#{works.delete}" th:href="@{/tiwolij/works/delete(workId=*{id})}" role="button" class="btn btn-sm btn-danger"
+								th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
 				</div>
@@ -53,7 +35,7 @@
 								<th th:text="#{fields.id}" />
 								<th th:text="#{fields.language}" />
 								<th th:text="#{fields.name}" />
-								<th th:text="#{fields.link}" class="text-center" />
+								<th th:text="#{fields.source}" class="text-center" />
 								<th th:text="#{actions}" class="text-right" />
 							</tr>
 						</thead>
@@ -66,14 +48,16 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/works/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/works/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/works/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/works/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger"
+										th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>
 					</table>
 					<div th:if="${#lists.isEmpty(work.locales)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 					<div class="panel-footer text-right">
-						<a th:unless="${#strings.isEmpty(work.wikidataId)}" th:text="#{locales.import}" th:href="@{/tiwolij/works/locales/import(workId=${work.id})}" role="button" class="btn btn-sm btn-primary" />
+						<a th:unless="${#strings.isEmpty(work.wikidataId)}" th:href="@{/tiwolij/works/locales/import(workId=${work.id})}"
+							th:text="#{locales.import}" role="button" class="btn btn-sm btn-primary" />
 						<a th:text="#{locales.create}" th:href="@{/tiwolij/works/locales/create(workId=${work.id})}" role="button" class="btn btn-sm btn-success" />
 					</div>
 				</div>
@@ -100,7 +84,8 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/quotes/edit(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-danger"
+										th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 								</td>
 							</tr>
 						</tbody>

@@ -12,37 +12,16 @@
 					<div th:text="#{locales.author.edit} + ' #' + ${locale.id}" class="panel-heading" />
 					<form th:object="${locale}" class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div class="form-group">
-								<label th:text="#{fields.author}" for="author" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<select th:field="*{author}" class="form-control">
-										<option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.slug}" />
-									</select>
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.language}" for="language" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{language}" type="text" class="form-control" placeholder="de" maxlength="2" pattern="^[a-z]{2}$" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.name}" for="name" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{name}" type="text" class="form-control" placeholder="Max Scheler" maxlength="255" />
-								</div>
-							</div>
-							<div class="form-group">
-								<label th:text="#{fields.link}" for="href" class="col-sm-2 control-label" />
-								<div class="col-sm-10">
-									<input th:field="*{href}" type="url" class="form-control" placeholder="http://www.maxscheler.com/" maxlength="255" />
-								</div>
-							</div>
+							<div th:replace="../elements/fields :: select('author', true, ${authors}, 'id', 'slug')" />
+							<div th:replace="../elements/fields :: input('language', true, 'text', 2, '^[a-z]{2}$', 'de')" />
+							<div th:replace="../elements/fields :: input('name', true, 'text', 255, '', 'Max Scheler')" />
+							<div th:replace="../elements/fields :: input('href', false, 'url', 255, '', 'http://www.maxscheler.com/')" />
 						</div>
 						<div class="panel-footer text-right">
 							<input th:field="*{id}" type="hidden" />
 							<button th:text="#{locales.author.edit}" th:formaction="@{/tiwolij/authors/locales/edit}" type="submit" class="btn btn-sm btn-success" />
-							<a th:text="#{locales.author.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+							<a th:text="#{locales.author.delete}" th:href="@{/tiwolij/authors/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger"
+								th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
 						</div>
 					</form>
 					</div>
