@@ -37,6 +37,10 @@ public class QuoteLocale extends BaseEntity {
 
 	protected String time;
 
+	protected Boolean locked;
+
+	protected String curator;
+
 	public QuoteLocale() {
 	}
 
@@ -78,6 +82,14 @@ public class QuoteLocale extends BaseEntity {
 
 	public String getTime() {
 		return time;
+	}
+
+	public Boolean getLocked() {
+		return locked;
+	}
+
+	public String getCurator() {
+		return curator;
 	}
 
 	public QuoteLocale setId(Integer id) {
@@ -124,4 +136,15 @@ public class QuoteLocale extends BaseEntity {
 		this.time = time;
 		return this;
 	}
+
+	public QuoteLocale setLocked(Boolean locked) {
+		this.locked = locked;
+		return this;
+	}
+
+	public QuoteLocale setCurator(String curator) {
+		this.curator = curator;
+		return this;
+	}
+
 }

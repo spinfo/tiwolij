@@ -56,7 +56,9 @@ CREATE TABLE quotes_locales (
 	`href` VARCHAR(255),
 	`meta` VARCHAR(255),
 	`year` INTEGER,
-	`time` VARCHAR(5),
+	`time` VARCHAR(8),
+	`locked` BOOLEAN DEFAULT 1,
+	`curator` VARCHAR(25) DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `FK_QUOTES_LOCALES` FOREIGN KEY (`quote_id`) REFERENCES `quotes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
