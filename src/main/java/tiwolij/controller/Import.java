@@ -59,8 +59,9 @@ public class Import {
 	}
 
 	@PostMapping({ "", "/" })
-	public ModelAndView root(@RequestParam("file") MultipartFile file, @RequestParam("format") String format,
-			@RequestParam(name = "language", defaultValue = "") String language) throws Exception {
+	public ModelAndView root(@RequestParam("file") MultipartFile file, @RequestParam("encoding") String encoding,
+			@RequestParam("format") String format, @RequestParam(name = "language", defaultValue = "") String language)
+			throws Exception {
 
 		ModelAndView mv = new ModelAndView("backend/report");
 		Map<String, Exception> errors = new HashMap<String, Exception>();
@@ -85,7 +86,8 @@ public class Import {
 		Iterator<String> i1;
 		Iterator<String> i2;
 		Map<String, String> values = new HashMap<String, String>();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(file.getBytes())));
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(new ByteArrayInputStream(file.getBytes()), encoding));
 
 		while ((line = reader.readLine()) != null) {
 			if (line.trim().isEmpty() || line.startsWith("#") || line.startsWith("//"))

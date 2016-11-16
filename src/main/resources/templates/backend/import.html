@@ -20,6 +20,17 @@
 								</div>
 							</div>
 							<div class="form-group">
+								<label th:text="#{fields.encoding}" for="encoding" class="col-sm-2 control-label" />
+								<div class="col-sm-10">
+									<select id="encoding" name="encoding" class="form-control" required="true">
+										<option value="UTF-8" selected="selected">UTF-8</option>
+										<option value="UTF-16">UTF-16</option>
+										<option value="US-ASCII">US-ASCII</option>
+										<option value="cp1252">ISO-8859-1/Latin-1</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
 								<label th:text="#{fields.format}" for="format" class="col-sm-2 control-label" />
 								<div class="col-sm-10">
 									<select id="format" name="format" class="form-control" required="true">
