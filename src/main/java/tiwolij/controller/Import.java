@@ -68,9 +68,9 @@ public class Import {
 		Map<String, QuoteLocale> imports = new HashMap<String, QuoteLocale>();
 
 		List<String> languages = Arrays.asList(env.getProperty("tiwolij.localizations", String[].class));
-		Pattern regexDate = Pattern.compile(env.getProperty("tiwolij.import.regex.date"));
-		Pattern regexLang = Pattern.compile(env.getProperty("tiwolij.import.regex.lang"));
-		Pattern regexWDId = Pattern.compile(env.getProperty("tiwolij.import.regex.wdid"));
+		Pattern regexDate = Pattern.compile("(\\d+)[./-](\\d+)");
+		Pattern regexLang = Pattern.compile("://(.{2})\\.wikipedia");
+		Pattern regexWDId = Pattern.compile("Q(\\d+)");
 
 		Quote quote;
 		QuoteLocale quoteLocale;

@@ -50,8 +50,8 @@ public class AuthorServiceImpl implements AuthorService {
 		this.authors = authors;
 		this.locales = locales;
 
-		regexLang = Pattern.compile(env.getProperty("tiwolij.import.regex.lang"));
-		regexTitle = Pattern.compile(env.getProperty("tiwolij.import.regex.title"));
+		regexLang = Pattern.compile("://(.{2})\\.wikipedia");
+		regexTitle = Pattern.compile("wiki/([^/]*)$");
 	}
 
 	/*
