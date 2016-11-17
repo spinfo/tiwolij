@@ -14,12 +14,12 @@ body {
 .child-enum>:not(:last-child)::after {
     content: ',';
 }
-form input:invalid, form select:invalid, textarea:invalid {
+#backend form input:invalid, #backend form select:invalid, #backend textarea:invalid {
     border-color: #8a6d3b;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     background-color: #fcf8e3;
 }
-form input:valid, form select:valid, form textarea:valid {
+#backend form input:valid, #backend form select:valid, #backend form textarea:valid {
     border-color: #3c763d;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
     background-color: #e3fceb;

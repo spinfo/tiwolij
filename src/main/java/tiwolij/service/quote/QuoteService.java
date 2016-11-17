@@ -22,18 +22,21 @@ public interface QuoteService {
 	public Long getLocaleCount();
 
 	public QuoteLocale getLocale(Integer localeId);
-	
+
 	public QuoteLocale getLocaleByQuoteAndLang(Integer quoteId, String language);
 
 	public QuoteLocale getLocaleRandomByLang(String language);
-	
+
 	public QuoteLocale getLocaleRandomByScheduleAndLang(String schedule, String language);
-	
-	public QuoteLocale getLocaleRandomNextByScheduleAndLang(String schedule, String language, Boolean prev) throws Exception;
-	
+
+	public QuoteLocale getLocaleRandomNextByScheduleAndLang(String schedule, String language, Boolean prev)
+			throws Exception;
+
 	public List<QuoteLocale> getLocales();
 
 	public List<QuoteLocale> getLocalesByQuote(Integer quoteId);
+
+	public List<QuoteLocale> getLocalesBySchedule(String schedule);
 
 	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language);
 
@@ -60,9 +63,9 @@ public interface QuoteService {
 	public Boolean hasQuote(Integer quoteId);
 
 	public Boolean hasLocale(Integer quoteId, String language);
-	
+
 	public Boolean hasLocaleByLang(String language);
-	
+
 	public Boolean hasLocaleByScheduleAndLang(String schedule, String language);
 
 }

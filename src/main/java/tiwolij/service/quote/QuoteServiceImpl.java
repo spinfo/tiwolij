@@ -95,7 +95,7 @@ public class QuoteServiceImpl implements QuoteService {
 
 		if (locales.findAllByLanguage(language).size() == 0)
 			return null;
-			
+
 		while (result == null) {
 			cal.add(Calendar.DATE, prev ? -1 : +1);
 			schedule = format.format(cal.getTime()).substring(0, 5);
@@ -114,6 +114,11 @@ public class QuoteServiceImpl implements QuoteService {
 	@Override
 	public List<QuoteLocale> getLocalesByQuote(Integer quoteId) {
 		return locales.findAllByQuoteId(quoteId);
+	}
+
+	@Override
+	public List<QuoteLocale> getLocalesBySchedule(String schedule) {
+		return locales.findAllBySchedule(schedule);
 	}
 
 	@Override

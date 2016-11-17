@@ -3,6 +3,8 @@ package tiwolij.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,8 +101,17 @@ public class Frontend {
 			schedule = day + "-" + month;
 		}
 
+		Map<String, Integer> languages = quotes.getLocalesBySchedule(schedule).stream()
+				.collect(Collectors.toMap(QuoteLocale::getLanguage, l -> l.getQuote().getId(), (l1, l2) -> {
+					return l2;
+				}));
+
+		mv.addObject("lang", language);
+		mv.addObject("langs", languages);
+		mv.addObject("schedule", schedule);
+
 		if (quoteId == 0 && !quotes.hasLocaleByScheduleAndLang(schedule, language))
-			return mv.addObject("lang", language).addObject("schedule", schedule);
+			return mv;
 
 		if (quoteId == 0)
 			quoteId = quotes.getLocaleRandomByScheduleAndLang(schedule, language).getId();
@@ -124,8 +135,6 @@ public class Frontend {
 		Integer nextId = next != null ? next.getQuote().getId() : null;
 		mv.addObject("nextId", nextId);
 
-		mv.addObject("lang", language);
-		mv.addObject("schedule", schedule);
 		mv.addObject("list", quotes.getLocalesByScheduleAndLang(schedule, language));
 		return mv;
 	}
