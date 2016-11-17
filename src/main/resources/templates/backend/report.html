@@ -39,7 +39,7 @@
 				</div>
 			</div>
 		</section>
-		<section th:unless="${#lists.isEmpty(quotes)}" class="row">
+		<section th:unless="${#maps.isEmpty(quotes)}" class="row">
 			<div class="col-md-12">
 				<div class="panel panel-success">
 					<div th:text="#{fields.quotes}" class="panel-heading" />
@@ -70,7 +70,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="row" th:unless="${#lists.isEmpty(errors)}">
+		<section class="row" th:unless="${#maps.isEmpty(errors)}">
 			<div class="col-md-12">
 				<div class="panel panel-danger">
 					<div th:text="#{fields.errors}" class="panel-heading" />
