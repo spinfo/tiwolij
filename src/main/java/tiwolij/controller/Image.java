@@ -3,6 +3,7 @@ package tiwolij.controller;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
@@ -12,11 +13,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
+import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,6 +45,9 @@ public class Image {
 	@Autowired
 	private QuoteService quotes;
 
+	@Autowired
+	private MessageSource messages;
+
 	@GetMapping("/author")
 	public void author(@RequestParam(name = "id") Integer authorId, HttpServletResponse response) throws Exception {
 		if (authors.getAuthor(authorId) != null && authors.getAuthor(authorId).getImage() != null) {
@@ -58,26 +64,37 @@ public class Image {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		BufferedImage image = new BufferedImage(900, 600, BufferedImage.TYPE_INT_RGB);
 		Graphics2D graphic = image.createGraphics();
+		graphic.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
 		QuoteLocale quote = quotes.getLocaleByQuoteAndLang(quoteId, language);
 		WorkLocale work = works.getLocaleByLang(quote.getQuote().getWork().getId(), language);
 		AuthorLocale author = authors.getLocaleByLang(work.getWork().getAuthor().getId(), language);
 
+		Locale locale = new Locale(language);
+		String month = messages.getMessage("months." + quote.getSchedule().split("-")[1], null, locale);
+		String schedule = quote.getSchedule().split("-")[0] + messages.getMessage("months.delim", null, locale) + month;
+
+		// colors
+		Color text = new Color(51, 51, 51);
+		Color textmuted = new Color(119, 119, 119);
+		Color lightgrey = new Color(211, 211, 211);
+		Color darkgrey = new Color(169, 169, 169);
+
 		// background
-		graphic.setColor(Color.LIGHT_GRAY);
+		graphic.setColor(lightgrey);
 		graphic.fillRect(0, 0, image.getWidth(), image.getHeight());
 
 		// header box
-		graphic.setColor(Color.GRAY);
-		graphic.fillRect(30, 30, 840, 50);
+		graphic.setColor(darkgrey);
+		graphic.fillRect(30, 30, 840, 60);
 
 		// header
-		graphic.setColor(Color.BLACK);
+		graphic.setColor(text);
 		graphic.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		graphic.drawString(quote.getSchedule() + ": " + work.getName() + ", " + author.getName(), 35, 65);
+		graphic.drawString(schedule + ": " + work.getName() + ", " + author.getName(), 35, 65);
 
 		// image box
-		graphic.setColor(Color.GRAY);
+		graphic.setColor(darkgrey);
 		graphic.fillRect(30, 120, 300, 450);
 
 		// image
@@ -96,19 +113,47 @@ public class Image {
 
 		graphic.drawImage(img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH), 35, 125, null);
 
-		// corpus
-		AttributedString attstr = new AttributedString(quote.getCorpus().replaceAll("\\<[^>]*>", ""));
-		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 20));
-		AttributedCharacterIterator iter = attstr.getIterator();
+		// formated texts
+		Float x, y, bound;
+		AttributedString attstr;
+		LineBreakMeasurer measure;
+		AttributedCharacterIterator iter;
 		FontRenderContext frc = graphic.getFontRenderContext();
-		LineBreakMeasurer measure = new LineBreakMeasurer(iter, frc);
+
+		// corpus
+		graphic.setColor(text);
+		attstr = new AttributedString(quote.getCorpus().replaceAll("\\<[^>]*>", ""));
+		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+		iter = attstr.getIterator();
+		measure = new LineBreakMeasurer(iter, frc);
 		measure.setPosition(iter.getBeginIndex());
 
-		int y = 120;
+		x = 360f;
+		y = 120f;
+		bound = 510f;
 		while (measure.getPosition() < iter.getEndIndex()) {
-			TextLayout layout = measure.nextLayout(510);
+			TextLayout layout = measure.nextLayout(bound);
 			y += layout.getAscent();
-			layout.draw(graphic, 360, y);
+			layout.draw(graphic, x, y);
+			y += layout.getDescent() + layout.getLeading();
+		}
+
+		// imageAttribution
+		graphic.setColor(textmuted);
+		attstr = new AttributedString(quote.getQuote().getWork().getAuthor().getImageAttribution());
+		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+		iter = attstr.getIterator();
+		measure = new LineBreakMeasurer(iter, frc);
+		measure.setPosition(iter.getBeginIndex());
+
+		x = 35f;
+		y = 130f + height;
+		bound = 290f;
+		while (measure.getPosition() < iter.getEndIndex()) {
+			TextLayout layout = measure.nextLayout(bound);
+			x = x + (bound - layout.getAdvance()) / 2;
+			y += layout.getAscent();
+			layout.draw(graphic, x, y);
 			y += layout.getDescent() + layout.getLeading();
 		}
 
