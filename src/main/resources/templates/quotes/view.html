@@ -12,8 +12,8 @@
 					<div th:text="#{quotes.view} + ' #' + ${quote.id}" class="panel-heading" />
 					<form th:unless="${#strings.isEmpty(quote)}" th:object="${quote}" class="form-horizontal">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: view('work', *{slug}, '', false)" />
-							<div th:replace="../elements/fields :: view('slug', *{work.slug}, @{/tiwolij/works/view(workId=*{work.id})}, false)" />
+							<div th:replace="../elements/fields :: view('work', *{work.slug}, @{/tiwolij/works/view(workId=*{work.id})}, false)" />
+							<div th:replace="../elements/fields :: view('slug', *{work.author.slug} + '_' + *{work.slug} + '_' + *{id}, '', false)" />
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{quotes.edit}" th:href="@{/tiwolij/quotes/edit(quoteId=*{id})}" role="button" class="btn btn-sm btn-primary" />
