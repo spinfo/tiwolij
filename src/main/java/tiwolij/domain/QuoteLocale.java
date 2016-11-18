@@ -33,7 +33,7 @@ public class QuoteLocale extends BaseEntity {
 
 	protected String meta;
 
-	protected Integer year;
+	protected String year;
 
 	protected String time;
 
@@ -76,7 +76,7 @@ public class QuoteLocale extends BaseEntity {
 		return meta;
 	}
 
-	public Integer getYear() {
+	public String getYear() {
 		return year;
 	}
 
@@ -127,7 +127,7 @@ public class QuoteLocale extends BaseEntity {
 		return this;
 	}
 
-	public QuoteLocale setYear(Integer year) {
+	public QuoteLocale setYear(String year) {
 		this.year = year;
 		return this;
 	}
