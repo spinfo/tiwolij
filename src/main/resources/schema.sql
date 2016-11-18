@@ -16,7 +16,7 @@ CREATE TABLE authors (
 CREATE TABLE authors_locales (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
 	`author_id` INTEGER NOT NULL,
-	`language` VARCHAR(2) NOT NULL,
+	`language` VARCHAR(10) NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
 	`href` VARCHAR(255),
 	PRIMARY KEY (`id`),
@@ -34,7 +34,7 @@ CREATE TABLE works (
 CREATE TABLE works_locales (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
 	`work_id` INTEGER NOT NULL,
-	`language` VARCHAR(2) NOT NULL,
+	`language` VARCHAR(10) NOT NULL,
 	`name` VARCHAR(255) NOT NULL,
 	`href` VARCHAR(255),
 	PRIMARY KEY (`id`),
@@ -50,15 +50,15 @@ CREATE TABLE quotes (
 CREATE TABLE quotes_locales (
 	`id` INTEGER AUTO_INCREMENT NOT NULL,
 	`quote_id` INTEGER NOT NULL,
-	`language` VARCHAR(2) NOT NULL,
-	`schedule` VARCHAR(5) NOT NULL,
+	`language` VARCHAR(10) NOT NULL,
+	`schedule` VARCHAR(20) NOT NULL,
 	`corpus` TEXT NOT NULL,
 	`href` VARCHAR(255),
 	`meta` VARCHAR(255),
-	`year` INTEGER,
-	`time` VARCHAR(8),
+	`year` VARCHAR(20),
+	`time` VARCHAR(20),
 	`locked` BOOLEAN DEFAULT 1,
-	`curator` VARCHAR(25) DEFAULT NULL,
+	`curator` VARCHAR(50) DEFAULT NULL,
 	PRIMARY KEY (`id`),
 	CONSTRAINT `FK_QUOTES_LOCALES` FOREIGN KEY (`quote_id`) REFERENCES `quotes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
