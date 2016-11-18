@@ -46,7 +46,11 @@
 ### Community Integration
 - einen *Send in*- oder *Suggest new Quote*-Button im Frontend inkl. Moderationsinterface
 	- PS: Würde ich erstmal weit zurückstellen und stattdessen ein eMail-Formular o.ä. anbieten.
+	- JH: Jo, das wäre was für ein Forschungsgefördertes Projekt.
 
+### TwLiterature-Specials
+- JH: wir könnten ein Weihnachtsspecial mit "A christmas carol" vorbereiten, wo zwar die Daten 25./26.12. nur implizit vorkommen, aber eine Menge Uhrzeiten genannt werden. Lustig v.a., weil Scrooge die Nacht gleich ein paarmal erlebt. Mal schauen, ob ich da eine Timeline draus gebaut bekomme. Die Objekte müssten evtl. in der DB durch ein zusätzliches Flag gekennzeichnet werden, da sie keine expliziten Datumsangaben enthalten.
+- JH: Gleiches überlege ich mir für den 16. Juni / Bloomsday - Bei beidem Unterstützung gerne willkommen.
 
 ## Abgeschlossenes
 
@@ -67,7 +71,7 @@
 
 ### Bugs
 - (nicht reproduzierbar) Versehentlicher doppelter Import verdoppelt nicht alle, aber einige Zitate (JH)
-- Import-format des Meta-Feldes auf "[Url] [dash-separated-string]"
+- Import-format des Meta-Feldes auf "\[Url] [dash-separated-string]"
 - Bildreferenz auf flashcard setzen, Farben anpassen
 - Wechseln zwischen Sprachen führt nicht immer zu dem richtigen Datum, z.B. von Deutsch 16-11-2016 (1) zu English endet im 15.11. - oder kommt man beim Sprachenwechsel immer am heutigen Tag raus? Finde ich nicht so ganz intuitiv, vielleicht dann lieber ein genereller "Heute / Today" Button der immer da ist? (Jannik)
 > PS: Wenn ein Zitat angezeigt wird, werden nur noch die Sprach-Links eingeblendet, in denen das Zitat vorliegt; auf allen anderen Seiten werden alle Sprach-Links angeboten.
