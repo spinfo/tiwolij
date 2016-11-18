@@ -71,7 +71,7 @@ public class Image {
 		AuthorLocale author = authors.getLocaleByLang(work.getWork().getAuthor().getId(), language);
 
 		Locale locale = new Locale(language);
-		String month = messages.getMessage("months." + quote.getSchedule().split("-")[1], null, locale);
+		String month = " " + messages.getMessage("months." + quote.getSchedule().split("-")[1], null, locale);
 		String schedule = quote.getSchedule().split("-")[0] + messages.getMessage("months.delim", null, locale) + month;
 
 		// colors
@@ -91,7 +91,7 @@ public class Image {
 		// header
 		graphic.setColor(text);
 		graphic.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		graphic.drawString(schedule + ": " + work.getName() + ", " + author.getName(), 35, 65);
+		graphic.drawString(schedule + " - " + author.getName() + ": " + work.getName(), 35, 67);
 
 		// image box
 		graphic.setColor(darkgrey);
@@ -111,10 +111,11 @@ public class Image {
 			width = (height * img.getWidth()) / img.getHeight();
 		}
 
-		graphic.drawImage(img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH), 35, 125, null);
+		Integer center = 35 + (290 - width) / 2;
+		graphic.drawImage(img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH), center, 125, null);
 
 		// formated texts
-		Float x, y, bound;
+		Float dx, x, y, bound;
 		AttributedString attstr;
 		LineBreakMeasurer measure;
 		AttributedCharacterIterator iter;
@@ -151,9 +152,9 @@ public class Image {
 		bound = 290f;
 		while (measure.getPosition() < iter.getEndIndex()) {
 			TextLayout layout = measure.nextLayout(bound);
-			x = x + (bound - layout.getAdvance()) / 2;
+			dx = x + (bound - layout.getAdvance()) / 2;
 			y += layout.getAscent();
-			layout.draw(graphic, x, y);
+			layout.draw(graphic, dx, y);
 			y += layout.getDescent() + layout.getLeading();
 		}
 

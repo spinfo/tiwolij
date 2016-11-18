@@ -17,7 +17,7 @@
 				<a th:if="${prevId}" th:href="@{/view(id=${prevId}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
 				<h1 th:with="date=${#strings.arraySplit(schedule, '-')}">
 					<span th:text="#{frontend.qotd}" th:remove="tag" />
-					(<span th:text="${date[0]} + #{months.delim} + #{'months.' + ${date[1]}}" th:remove="tag" />)
+					(<span th:text="${date[0]} + #{months.delim} + ' ' + #{'months.' + ${date[1]}}" th:remove="tag" />)
 				 </h1>
 				<a th:if="${nextId}" th:href="@{/view(id=${nextId}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
 			</div>
