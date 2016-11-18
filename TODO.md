@@ -5,6 +5,10 @@
 
 ## Offene Punkte, Vorschläge und Diskussion
 
+### Bildattribution irreführend (FF)
+- unter das Autorenbild den Namen des Autors setzen und dann einen Link auf die Wikimedia Commons (nicht die Copyright-Info)
+	- denn das sieht in manchen Fällen so aus, als ob das der Abgebildete ist, etwa hier: https://tiwoli.spinfo.uni-koeln.de/view?id=341&lang=de
+
 ### TiwoliChirp
 - TEXT deutsch: “Der DD. MONATAUSGESCHRIEBEN in der Weltliteratur: AUTORVORNAME AUTORNACHNAME: WERKTITEL. #tiwoli LINK zur Seite” + angehangenes Bild (verbraucht keinen Platz mehr in den 140 Zeichen, Rest müsste eigentlich immer passen, zur Not Titel mit … abkürzen).
 - BILD Screenshots macht sich eigentlich ganz hübsch auf Twitter → Sind die irgendwie automatisch erzeugbar? Alternativ (aber nicht so schön): Einfach das Autorbild anhängen.
@@ -14,7 +18,7 @@
 
 ### Pagination und verbesserte Navigation/Suche fürs Backend
 - derzeit werden alle DB-Objekte auf einer Seite angezeigt, die entsprechend lang ist
-- wenn man ein bestimmtes Zitat suchen will, muss man bisher die Browsersuche nutzen, das kann man einfacher übers Backend löschen
+- wenn man ein bestimmtes Zitat suchen will, muss man bisher die Browsersuche nutzen, das kann man einfacher übers Backend lösen
 
 ### Export-Funktionalität
 - Export als "GoogleDocs Style Import" für autoChirp
@@ -27,11 +31,11 @@
 ### Spanische Lokalisierung des Interface
 - im Projekt unter src/main/resources/locales liegen die verschiedenen Lokalisierungen der Applikation, Spanisch fehlt
 - sobald alle Strings in Deutsch/Englisch vorhanden sind bräuchten wir einmal einen Spanischsprechenden zum Übersetzen
-> JH: Kann Francisco fragen (Chilene, der bei uns arbeitet)
+	- JH: Kann Francisco fragen (Chilene, der bei uns arbeitet)
 
 ### Import-Benutzermeh
 - Wenn man beim Import die falsche Lokalisierung angibt, werden gnadenlos alle Autoren mit der falschen Lokalisierung importiert. Hier täte ein Panic-Knopf mit Rollback gut (ja, ich weiß, hat auch Nachteile, aber ich habe mir gerade die ganze DB verhunzt und muss jetzt alles noch einmal neu importieren. (jh)
-> PS: Haben kurz drüber geredet, ist nahezu unschaffbar ohne Transaction-History etc. - ich denke, da sollten die Kuratoren anfangs Vorsicht walten lassen und später können wir aushandeln, ob dieses Feature an eine etwaige Nutzerverwaltung gehängt wird oder seperat implementiert werden soll; marke es erstmal als medium-prio.
+	- PS: Haben kurz drüber geredet, ist nahezu unschaffbar ohne Transaction-History etc. - ich denke, da sollten die Kuratoren anfangs Vorsicht walten lassen und später können wir aushandeln, ob dieses Feature an eine etwaige Nutzerverwaltung gehängt wird oder seperat implementiert werden soll; marke es erstmal als medium-prio.
 
 ### Hervorheben von Zitaten mit mehreren Locales
 - im Interesse des formalisierten Erschließens von in den Daten versteckten Erkenntnissen,
@@ -41,17 +45,25 @@
 
 ### Community Integration
 - einen *Send in*- oder *Suggest new Quote*-Button im Frontend inkl. Moderationsinterface
-> PS: Würde ich erstmal weit zurückstellen und stattdessen ein eMail-Formular o.ä. anbieten.
+	- PS: Würde ich erstmal weit zurückstellen und stattdessen ein eMail-Formular o.ä. anbieten.
 
 
 ## Abgeschlossenes
+
+### Datenbank-Anpassungen (FF)
+- Erscheinungsjahr des Werkes als VARCHAR
+- einige andere Felder etwas weniger strikt gestaltet
+
+### Design-Kram (FF)
+- wie bei zitaten üblich ganz oben im kasten die reihenfolge so wählen "name": "titel" ("quelle")
+- statt "Referenz" würde ich "Quelle" schreiben, das ist genauer.
 
 ### Weitere DB-Anpassungen
 - Felder für die Moderation der DB-Records:
 	- *final* oder *locked*
 	- *curated*
 - Time-feld auf 8 Stellen erweitern
-> PS: Implementiert und können bearbeitet werden, haben aber bisher keine Effekte (16.11.2016)
+	- PS: Implementiert und können bearbeitet werden, haben aber bisher keine Effekte
 
 ### Bugs
 - (nicht reproduzierbar) Versehentlicher doppelter Import verdoppelt nicht alle, aber einige Zitate (JH)
@@ -65,7 +77,7 @@
 > PS: Kann ich machen, hätte aber gern eine Rückmeldung dazu, wo das ins Interface sollte ums nicht zu überladen.
 > PS: Ggf. nur auf Homepage alle möglichen Sprachen/Flaggen einblenden und pro Zitat nur die, für dies Übersetzungen gibt?!
 
-### Ueberschrift der tiwoli Seite
+### Überschrift der tiwoli Seite
 - in der Ueberschrift würde ich das "2016" also das Jahr generell raus lassen, stattdessen das Datum in Schriftform anzeigen, also deutsch: 11. November, english: 11th of November etc.?
 
 ### Hosting an der Uni zu Köln
@@ -83,7 +95,7 @@
 
 ### Import
 - Fehler beim Import mit Feldangabe (Zeile|Spalte) an den Nutzer weiterleiten
-> Nicht (i|j), $Zeile; done.
+ 	- Nicht (i|j), $Zeile; done.
 
 ### Automatischer Wikidata-Import
 - beim Anlegen neuer Objekte in der DB Stammdaten aus Wikidata/-pedia importieren
@@ -93,7 +105,7 @@
 - *volumes* soll *works* heißen
 - *citings* soll *quotes* heißen
 - Volltextlink teils mit Metadaten (seitenangabe) als *meta* Feld
-- Sprachentabelle für Übersetzungen/Lokalisierung:
+- Sprachentabelle für Übersetzungen/Lokalisierung
 
 ### Interface Updates
 - *home*-Seite, mit Links zu:
