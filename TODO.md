@@ -57,6 +57,7 @@
 ### Datenbank-Anpassungen (FF)
 - Erscheinungsjahr des Werkes als VARCHAR
 - einige andere Felder etwas weniger strikt gestaltet
+- die Anzeige einer **Version History** übers Web-Backend wär ganz cool, damit man den Überblick nicht verliert bzw. schnell Sachen backtracken kann
 
 ### Design-Kram (FF)
 - wie bei zitaten üblich ganz oben im kasten die reihenfolge so wählen "name": "titel" ("quelle")
