@@ -1,15 +1,15 @@
-package tiwolij;
+package tiwolij.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.unihd.dbs.heideltime.standalone.exceptions.DocumentCreationTimeMissingException;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
 import tiwolij.domain.QuoteLocale;
+import tiwolij.domain.Work;
 
-public class DateAndTime {
+public class tivoliChirp {
 
 //	private Map<String, String> dayTimes = new HashMap<String, String>();
 	
@@ -105,4 +105,6 @@ public class DateAndTime {
 			return Language.WILDCARD;
 		}
 	}
+	
+	
 }

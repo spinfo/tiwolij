@@ -26,8 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 import de.unihd.dbs.heideltime.standalone.DocumentType;
 import de.unihd.dbs.heideltime.standalone.OutputType;
 import de.unihd.dbs.heideltime.standalone.POSTagger;
-import tiwolij.DateAndTime;
-import tiwolij.HeidelTimeWrapper;
 import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
 import tiwolij.domain.Quote;
@@ -37,6 +35,8 @@ import tiwolij.domain.WorkLocale;
 import tiwolij.service.author.AuthorService;
 import tiwolij.service.quote.QuoteService;
 import tiwolij.service.work.WorkService;
+import tiwolij.util.HeidelTimeWrapper;
+import tiwolij.util.tivoliChirp;
 
 @Controller
 @RequestMapping("/tiwolij/import")
@@ -78,7 +78,7 @@ public class Import {
 		Pattern regexWDId = Pattern.compile("Q(\\d+)");
 		
 		Map<String, HeidelTimeWrapper> htWrappers = new HashMap<String,HeidelTimeWrapper>();
-		DateAndTime dat = new DateAndTime();
+		tivoliChirp dat = new tivoliChirp();
 
 		Quote quote;
 		QuoteLocale quoteLocale;
@@ -201,6 +201,7 @@ public class Import {
 					if (levenshteinDistance(l.getCorpus(), quoteLocale.getCorpus()) < 10)
 						throw new DuplicateKeyException("Duplicate entry");
 
+				
 				//set year
 				quoteLocale.setYear(dat.getYear(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
 				//set time

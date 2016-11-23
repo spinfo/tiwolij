@@ -1,4 +1,4 @@
-package tiwolij;
+package tiwolij.util;
 
 import java.io.FileNotFoundException;
 
