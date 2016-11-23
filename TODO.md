@@ -10,7 +10,7 @@
 	- denn das sieht in manchen Fällen so aus, als ob das der Abgebildete ist, etwa hier: https://tiwoli.spinfo.uni-koeln.de/view?id=341&lang=de
 
 ### TiwoliChirp
-- TEXT deutsch: “Der DD. MONATAUSGESCHRIEBEN in der Weltliteratur: AUTORVORNAME AUTORNACHNAME: WERKTITEL. #tiwoli LINK zur Seite” + angehangenes Bild (verbraucht keinen Platz mehr in den 140 Zeichen, Rest müsste eigentlich immer passen, zur Not Titel mit … abkürzen).
+- TEXT deutsch: “Der DD. MONATAUSGESCHRIEBEN in der Weltliteratur: AUTORVORNAME AUTORNACHNAME: WERKTITEL. #tiwoli LINK zur Seite” + angehangenes Bild (FlashCard, verbraucht keinen Platz mehr in den 140 Zeichen, Rest müsste eigentlich immer passen, zur Not Titel mit … abkürzen).
 - BILD Screenshots macht sich eigentlich ganz hübsch auf Twitter → Sind die irgendwie automatisch erzeugbar? Alternativ (aber nicht so schön): Einfach das Autorbild anhängen.
 - SPRACHE: Andere Sprachen, andere Twitter-Accounts? (JH) würde dafür plädieren. Wir können ja mal mit deutsch anfangen und dann sehen, wer uns so folgt.
 - UHRZEIT: In manchen Zitatschnipseln steht die Uhrzeit mit im Text, allerdings nicht analysiert, d.h. da müsste HeidelTime ein zweites Mal drüber. Die Uhrzeit könnte man für das Scheduling gebrauchen.
