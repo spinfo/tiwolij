@@ -1,26 +1,14 @@
 package tiwolij.util;
 
-import java.io.FileNotFoundException;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.annotation.PostConstruct;
 
 import de.unihd.dbs.heideltime.standalone.Config;
 import de.unihd.dbs.heideltime.standalone.DocumentType;
 import de.unihd.dbs.heideltime.standalone.HeidelTimeStandalone;
 import de.unihd.dbs.heideltime.standalone.OutputType;
 import de.unihd.dbs.heideltime.standalone.POSTagger;
-import de.unihd.dbs.heideltime.standalone.exceptions.DocumentCreationTimeMissingException;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
-import tiwolij.domain.QuoteLocale;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -30,19 +18,11 @@ import org.springframework.stereotype.Component;
  * @author Alena Geduldig
  *
  */
-@Component
 public class HeidelTimeWrapper extends HeidelTimeStandalone {
 
-	
+	public HeidelTimeWrapper() {
 
-
-
-
-	
-	public HeidelTimeWrapper(){
-		
 	}
-
 
 	/**
 	 *
@@ -59,7 +39,6 @@ public class HeidelTimeWrapper extends HeidelTimeStandalone {
 	 * @param doIntervalTagging
 	 *            whether or not to invoke the IntervalTagger
 	 */
-
 	public HeidelTimeWrapper(Language language, DocumentType typeToProcess, OutputType outputType, String configPath,
 			POSTagger posTagger, Boolean doIntervalTagging) {
 
@@ -82,15 +61,11 @@ public class HeidelTimeWrapper extends HeidelTimeStandalone {
 			configStream = HeidelTimeWrapper.class.getResourceAsStream(configPath);
 			Properties props = new Properties();
 			props.load(configStream);
-   //   props.setProperty("treeTaggerHome", treetagger);
 			Config.setProps(props);
 			configStream.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 }
