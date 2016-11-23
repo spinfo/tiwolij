@@ -10,7 +10,7 @@ CREATE TABLE authors (
 	`slug` VARCHAR(255) UNIQUE NOT NULL,
 	`wikidata_id` INTEGER UNIQUE,
 	`image` LONGBLOB,
-	`image_attribution` VARCHAR(255) DEFAULT 'Unspecified',
+	`image_attribution` VARCHAR(255),
 	PRIMARY KEY (`id`)
 );
 CREATE TABLE authors_locales (
@@ -58,7 +58,7 @@ CREATE TABLE quotes_locales (
 	`year` VARCHAR(20),
 	`time` VARCHAR(20),
 	`locked` BOOLEAN DEFAULT 1,
-	`curator` VARCHAR(50) DEFAULT NULL,
+	`curator` VARCHAR(50),
 	PRIMARY KEY (`id`),
 	CONSTRAINT `FK_QUOTES_LOCALES` FOREIGN KEY (`quote_id`) REFERENCES `quotes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
