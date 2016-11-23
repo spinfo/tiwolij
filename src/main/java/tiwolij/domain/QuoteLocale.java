@@ -64,6 +64,14 @@ public class QuoteLocale extends BaseEntity {
 		return schedule;
 	}
 
+	public String getDay() {
+		return schedule.split("-")[0];
+	}
+
+	public String getMonth() {
+		return schedule.split("-")[1];
+	}
+
 	public String getCorpus() {
 		return corpus;
 	}
