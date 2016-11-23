@@ -3,7 +3,7 @@
 
 <head th:replace="../elements/header (title=#{locales.work.create})" />
 
-<body>
+<body id="backend">
 	<div class="container">
 		<nav th:replace="../elements/navbar" />
 		<section class="row">
@@ -12,10 +12,10 @@
 					<div th:text="#{locales.work.create}" class="panel-heading" />
 					<form th:object="${locale}" class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: select('work', true, ${works}, 'id', 'slug')" />
-							<div th:replace="../elements/fields :: input('language', true, 'text', 2, '^[a-z]{2}$', 'de')" />
-							<div th:replace="../elements/fields :: input('name', true, 'text', 255, '', 'Vom Umsturz der Werte')" />
-							<div th:replace="../elements/fields :: input('href', false, 'url', 255, '', 'https://www.worldcat.org/oclc/3484348')" />
+							<div th:replace="../elements/fields :: pulldown('work', true, ${works}, 'id', 'slug')" />
+							<div th:replace="../elements/fields :: putin('language', true, 'text', 2, '^[a-z]{2}$', 'de')" />
+							<div th:replace="../elements/fields :: putin('name', true, 'text', 255, '', 'Vom Umsturz der Werte')" />
+							<div th:replace="../elements/fields :: putin('href', false, 'url', 255, '', 'https://www.worldcat.org/oclc/3484348')" />
 						</div>
 						<div class="panel-footer text-right">
 							<button th:text="#{locales.work.create}" th:formaction="@{/tiwolij/works/locales/create}" type="submit" class="btn btn-sm btn-success" />

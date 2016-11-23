@@ -2,9 +2,9 @@ package tiwolij.controller.backend;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,7 +37,7 @@ import tiwolij.service.author.AuthorService;
 import tiwolij.service.quote.QuoteService;
 import tiwolij.service.work.WorkService;
 import tiwolij.util.HeidelTimeWrapper;
-import tiwolij.util.TivoliChirp;
+import tiwolij.util.TiwoliChirp;
 
 @Controller
 @RequestMapping("/tiwolij/import")
@@ -59,6 +59,7 @@ public class Import {
 	public ModelAndView root() {
 		ModelAndView mv = new ModelAndView("backend/import/import");
 
+		mv.addObject("encodings", new String[] { "UTF-8", "UTF-16", "US-ASCII", "cp1252" });
 		mv.addObject("formats", env.getProperty("tiwolij.import.format", String[].class));
 		mv.addObject("languages", env.getProperty("tiwolij.localizations", String[].class));
 		return mv;
@@ -66,8 +67,8 @@ public class Import {
 
 	@PostMapping({ "", "/" })
 	public ModelAndView root(@RequestParam("file") MultipartFile file, @RequestParam("encoding") String encoding,
-			@RequestParam("format") String format, @RequestParam(name = "language", defaultValue = "") String language)
-			throws Exception {
+			@RequestParam("format") String format, @RequestParam(name = "forcelang", defaultValue = "") String language,
+			@RequestParam(name = "heideltag", defaultValue = "false") Boolean heideltag) throws Exception {
 
 		ModelAndView mv = new ModelAndView("backend/import/report");
 		Map<String, Exception> errors = new HashMap<String, Exception>();
@@ -77,9 +78,9 @@ public class Import {
 		Pattern regexDate = Pattern.compile("(\\d+)[./-](\\d+)");
 		Pattern regexLang = Pattern.compile("://(.{2})\\.wikipedia");
 		Pattern regexWDId = Pattern.compile("Q(\\d+)");
-		
-		Map<String, HeidelTimeWrapper> htWrappers = new HashMap<String,HeidelTimeWrapper>();
-		TivoliChirp tc = new TivoliChirp();
+
+		TiwoliChirp tiwoliChirp = new TiwoliChirp();
+		Map<String, HeidelTimeWrapper> htWrappers = new HashMap<String, HeidelTimeWrapper>();
 
 		Quote quote;
 		QuoteLocale quoteLocale;
@@ -95,8 +96,8 @@ public class Import {
 		Iterator<String> i1;
 		Iterator<String> i2;
 		Map<String, String> values = new HashMap<String, String>();
-		BufferedReader reader = new BufferedReader(
-				new InputStreamReader(new ByteArrayInputStream(file.getBytes()), encoding));
+		InputStream stream = new ByteArrayInputStream(file.getBytes());
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stream, encoding));
 
 		while ((line = reader.readLine()) != null) {
 			if (line.trim().isEmpty() || line.startsWith("#") || line.startsWith("//"))
@@ -144,11 +145,6 @@ public class Import {
 						throw new ParseException("Missing language", lineno);
 
 					quoteLocale.setLanguage(language);
-					
-					//create HeidelTimeWrapper for language
-					if(!htWrappers.keySet().contains(language)){
-						htWrappers.put(language, new HeidelTimeWrapper(tc.getLanguage(language), DocumentType.NARRATIVES, OutputType.TIMEML, "/heideltime/config.props", POSTagger.NO, false));
-					}
 				}
 
 				else if (values.containsKey("language") && !values.get("language").isEmpty()) {
@@ -202,12 +198,21 @@ public class Import {
 					if (levenshteinDistance(l.getCorpus(), quoteLocale.getCorpus()) < 10)
 						throw new DuplicateKeyException("Duplicate entry");
 
-				
-				//set year
-				quoteLocale.setYear(tc.getYear(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
-				//set time
-				quoteLocale.setTime(tc.getTime(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
-		
+				// heideltime tagging
+				if (heideltag) {
+					// create HeidelTimeWrapper for language
+					if (!htWrappers.containsKey(language)) {
+						htWrappers.put(language,
+								new HeidelTimeWrapper(tiwoliChirp.getLanguage(language), DocumentType.NARRATIVES,
+										OutputType.TIMEML, "/heideltime/config.props", POSTagger.NO, false));
+					}
+
+					// set year
+					quoteLocale.setYear(tiwoliChirp.getYear(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
+
+					// set time
+					quoteLocale.setTime(tiwoliChirp.getTime(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
+				}
 
 				/*
 				 * WORK

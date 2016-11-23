@@ -71,7 +71,7 @@ public class Image {
 		AuthorLocale author = authors.getLocaleByLang(work.getWork().getAuthor().getId(), language);
 
 		Locale locale = new Locale(language);
-		String month = " " + messages.getMessage("months." + quote.getSchedule().split("-")[1], null, locale);
+		String month = messages.getMessage("months." + quote.getSchedule().split("-")[1], null, locale);
 		String schedule = quote.getSchedule().split("-")[0] + messages.getMessage("months.delim", null, locale) + month;
 
 		// colors

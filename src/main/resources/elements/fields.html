@@ -7,23 +7,23 @@
 	</div>
 </div>
 
-<div th:fragment="input(name, required, type, maxlength, pattern, placeholder)" class="form-group">
+<div th:fragment="putin(name, required, type, maxlength, pattern, placeholder)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
 	<div class="col-sm-10">
-		<input th:value="${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}" th:type="${type}"
-			th:maxlength="${maxlength}" th:pattern="${pattern}" th:placeholder="${placeholder}" class="form-control" />
+		<input th:value="${#object.get(name) instanceof T(java.lang.String)} ? ${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}"
+			th:type="${type}" th:maxlength="${maxlength}" th:pattern="${pattern}" th:placeholder="${placeholder}" class="form-control" />
 	</div>
 </div>
 
-<div th:fragment="textarea(name, required, rows, maxlength, placeholder)" class="form-group">
+<div th:fragment="areatext(name, required, rows, maxlength, placeholder)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
 	<div class="col-sm-10">
-		<textarea th:value="${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}" th:rows="${rows}"
-		 th:placeholder="${placeholder}" class="form-control" />
+		<textarea th:value="${#object.get(name) instanceof T(java.lang.String)} ? ${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}"
+			th:rows="${rows}" th:maxlength="${maxlength}" th:placeholder="${placeholder}" class="form-control" />
 	</div>
 </div>
 
-<div th:fragment="select(name, required, options, value, label)" class="form-group">
+<div th:fragment="pulldown(name, required, options, value, label)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
 	<div class="col-sm-10">
 		<select th:id="${name}" th:name="${name}" th:required="${required}" class="form-control">
@@ -31,5 +31,31 @@
 			<option th:each="option : ${options}" th:value="${#strings.isEmpty(value)} ? ${option} : ${option.get(value)}"
 				th:text="${#strings.isEmpty(label)} ? ${option} : ${option.get(label)}" />
 		</select>
+	</div>
+</div>
+
+<div th:fragment="boxcheck(name)" class="form-group">
+	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
+	<div class="col-sm-10">
+		<div class="checkbox">
+			<label>
+				<input th:id="${name}" th:name="${name}" type="checkbox" />
+				<span th:text="#{general.checkbox} + #{fields.heideltag}" th:remove="tag" />
+			</label>
+		</div>
+	</div>
+</div>
+
+<div th:fragment="portin(name, action, type, maxlength, pattern, label, addon, placeholder)" class="form-group">
+	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
+	<div class="col-sm-10">
+		<div class="input-group">
+			<div th:text="${addon}" class="input-group-addon" />
+			<input th:id="${name}" th:name="${name}" th:type="${type}" th:maxlength="${maxlength}" th:pattern="${pattern}"
+				th:placeholder="${placeholder}" class="form-control" />
+			<span class="input-group-btn">
+				<button th:text="${label}" th:formaction="${action}" type="submit" class="btn btn-primary" formnovalidate="true" />
+			</span>
+		</div>
 	</div>
 </div>
