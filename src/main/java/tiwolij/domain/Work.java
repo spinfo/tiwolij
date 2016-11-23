@@ -1,6 +1,8 @@
 package tiwolij.domain;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -61,8 +63,8 @@ public class Work extends BaseEntity {
 		return quotes;
 	}
 
-	public List<WorkLocale> getLocales() {
-		return locales;
+	public Map<String, WorkLocale> getLocales() {
+		return locales.stream().collect(Collectors.toMap(WorkLocale::getLanguage, l -> l));
 	}
 
 	public Work setId(Integer id) {

@@ -2,6 +2,8 @@ package tiwolij.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -62,8 +64,8 @@ public class Author extends BaseEntity {
 		return works;
 	}
 
-	public List<AuthorLocale> getLocales() {
-		return locales;
+	public Map<String, AuthorLocale> getLocales() {
+		return locales.stream().collect(Collectors.toMap(AuthorLocale::getLanguage, l -> l));
 	}
 
 	public Author setId(Integer id) {

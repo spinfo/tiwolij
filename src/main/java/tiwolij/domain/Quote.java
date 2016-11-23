@@ -1,6 +1,8 @@
 package tiwolij.domain;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,8 +42,8 @@ public class Quote extends BaseEntity {
 		return work;
 	}
 
-	public List<QuoteLocale> getLocales() {
-		return locales;
+	public Map<String, QuoteLocale> getLocales() {
+		return locales.stream().collect(Collectors.toMap(QuoteLocale::getLanguage, l -> l));
 	}
 
 	public Quote setId(Integer id) {
