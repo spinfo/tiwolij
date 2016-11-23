@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,7 +37,7 @@ import tiwolij.service.author.AuthorService;
 import tiwolij.service.quote.QuoteService;
 import tiwolij.service.work.WorkService;
 import tiwolij.util.HeidelTimeWrapper;
-import tiwolij.util.tivoliChirp;
+import tiwolij.util.TivoliChirp;
 
 @Controller
 @RequestMapping("/tiwolij/import")
@@ -78,7 +79,7 @@ public class Import {
 		Pattern regexWDId = Pattern.compile("Q(\\d+)");
 		
 		Map<String, HeidelTimeWrapper> htWrappers = new HashMap<String,HeidelTimeWrapper>();
-		tivoliChirp dat = new tivoliChirp();
+		TivoliChirp tc = new TivoliChirp();
 
 		Quote quote;
 		QuoteLocale quoteLocale;
@@ -146,7 +147,7 @@ public class Import {
 					
 					//create HeidelTimeWrapper for language
 					if(!htWrappers.keySet().contains(language)){
-						htWrappers.put(language, new HeidelTimeWrapper(dat.getLanguage(language), DocumentType.NARRATIVES, OutputType.TIMEML, "/heideltime/config.props", POSTagger.NO, false));
+						htWrappers.put(language, new HeidelTimeWrapper(tc.getLanguage(language), DocumentType.NARRATIVES, OutputType.TIMEML, "/heideltime/config.props", POSTagger.NO, false));
 					}
 				}
 
@@ -203,9 +204,10 @@ public class Import {
 
 				
 				//set year
-				quoteLocale.setYear(dat.getYear(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
+				quoteLocale.setYear(tc.getYear(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
 				//set time
-				quoteLocale.setTime(dat.getTime(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
+				quoteLocale.setTime(tc.getTime(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
+		
 
 				/*
 				 * WORK

@@ -1,28 +1,40 @@
 package tiwolij.util;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
 
 import de.unihd.dbs.heideltime.standalone.exceptions.DocumentCreationTimeMissingException;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
 import tiwolij.domain.QuoteLocale;
 import tiwolij.domain.Work;
 
-public class tivoliChirp {
+@Component
+public class TivoliChirp {
 
-//	private Map<String, String> dayTimes = new HashMap<String, String>();
+	private Map<String, String> dayTimes = new HashMap<String, String>();
+//	private Map<String,String> months = new HashMap<String,String>(); 
 	
 //	private Map<String, String> times = new HashMap<String, String>();
 //	private Map<Integer, String> years = new HashMap<Integer, String>();
-
-//	public DateAndTime() {
-//		dayTimes.put("MO", "08:00");
-//		dayTimes.put("EV", "20:00");
-//		dayTimes.put("AF", "16:00");
-//		dayTimes.put("NI", "23:00");
-//		dayTimes.put("DT", "12:00");
-//	}
+//
+	public TivoliChirp() {
+		dayTimes.put("MO", "08:00");
+		dayTimes.put("EV", "20:00");
+		dayTimes.put("AF", "16:00");
+		dayTimes.put("NI", "23:00");
+		dayTimes.put("DT", "12:00");
+	}
+//	
+	@Autowired
+	private MessageSource messages;
 
 	public String getYear(QuoteLocale quote, HeidelTimeWrapper ht) {
 		String timeml;
@@ -106,5 +118,57 @@ public class tivoliChirp {
 		}
 	}
 	
-	
+	public String generateTwees(List<QuoteLocale> quotes){
+		StringBuffer sb = new StringBuffer();
+		String tweet;
+		String date;
+		String time;
+		String imgUrl;
+		String url;
+		String lang;
+		for (QuoteLocale quote : quotes) {
+			lang = quote.getLanguage();
+			url = "/view?id="+quote.getId()+"&lang="+lang;
+			imgUrl = "/image/flashcard?id="+quote.getId()+"&lang="+lang;
+			if(quote.getYear()!=null){
+				date = quote.getYear()+"-"+quote.getSchedule();
+			}
+			else{
+				date = "0000-"+quote.getSchedule();
+			}
+			tweet = getTweetContent(quote.getQuote().getWork(), lang, quote.getDay(), quote.getMonth(),url);
+			if(quote.getTime()==null){
+				time = TimeRandomizer.getRandomizedTime();
+			}
+			time = getTweetTime(quote.getTime());
+			sb.append(date+"\t"+time+"\t"+tweet+"\t"+imgUrl+"\t\t\n" );
+		}
+		return sb.toString();
+	}
+
+	private String getTweetTime(String time) {
+		if(dayTimes.get(time)!=null){
+			return dayTimes.get(time);
+		}
+		return time;
+	}
+
+	private String getTweetContent(Work work, String lang, String day, String month, String url) {
+		
+		month = messages.getMessage("months."+month, null, new Locale(lang));
+		StringBuffer sb = new StringBuffer();
+		if(lang.equals("de")){
+			sb.append("Der "+day+". "+month+" in der Weltliteratur: ");	
+		}
+		if(lang.equals("en")){
+			sb.append(month+" "+day+" in world literatur: ");
+		}
+		if(lang.equals("es")){
+			//TODO translate
+			sb.append(month+" "+day+" in world literatur: ");
+		}
+		sb.append(work.getAuthor().getLocales().get(lang)+" "+work.getAuthor().getLocales().get(lang)+": "+work.getLocales().get(lang)+". #tivoli "+url);
+		return sb.toString();
+
+	}
 }
