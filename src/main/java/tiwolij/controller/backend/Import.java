@@ -24,9 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import de.unihd.dbs.heideltime.standalone.DocumentType;
-import de.unihd.dbs.heideltime.standalone.OutputType;
-import de.unihd.dbs.heideltime.standalone.POSTagger;
 import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
 import tiwolij.domain.Quote;
@@ -66,8 +63,9 @@ public class Import {
 	}
 
 	@PostMapping({ "", "/" })
-	public ModelAndView root(@RequestParam("file") MultipartFile file, @RequestParam("encoding") String encoding,
-			@RequestParam("format") String format, @RequestParam(name = "forcelang", defaultValue = "") String language,
+	public ModelAndView root(@RequestParam("file") MultipartFile file,
+			@RequestParam(name = "forcelang", defaultValue = "") String forcelang,
+			@RequestParam("format") String format, @RequestParam("encoding") String encoding,
 			@RequestParam(name = "heideltag", defaultValue = "false") Boolean heideltag) throws Exception {
 
 		ModelAndView mv = new ModelAndView("backend/import/report");
@@ -140,11 +138,11 @@ public class Import {
 				quoteLocale.setSchedule(day + "-" + month);
 
 				// language
-				if (!language.isEmpty()) {
-					if (!languages.contains(language))
+				if (!forcelang.isEmpty()) {
+					if (!languages.contains(forcelang))
 						throw new ParseException("Missing language", lineno);
 
-					quoteLocale.setLanguage(language);
+					quoteLocale.setLanguage(forcelang);
 				}
 
 				else if (values.containsKey("language") && !values.get("language").isEmpty()) {
@@ -201,10 +199,9 @@ public class Import {
 				// heideltime tagging
 				if (heideltag) {
 					// create HeidelTimeWrapper for language
-					if (!htWrappers.containsKey(language)) {
-						htWrappers.put(language,
-								new HeidelTimeWrapper(tiwoliChirp.getLanguage(language), DocumentType.NARRATIVES,
-										OutputType.TIMEML, "/heideltime/config.props", POSTagger.NO, false));
+					if (!htWrappers.containsKey(quoteLocale.getLanguage())) {
+						htWrappers.put(quoteLocale.getLanguage(),
+								new HeidelTimeWrapper(tiwoliChirp.getLanguage(quoteLocale.getLanguage())));
 					}
 
 					// set year

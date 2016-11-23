@@ -21,7 +21,17 @@ import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
 public class HeidelTimeWrapper extends HeidelTimeStandalone {
 
 	public HeidelTimeWrapper() {
+	}
 
+	public HeidelTimeWrapper(Language language) {
+		setLanguage(language);
+		setDocumentType(DocumentType.NARRATIVES);
+		setOutputType(OutputType.TIMEML);
+		setPosTagger(POSTagger.NO);
+		readConfigFile("/heideltime/config.props");
+
+		initialize(language, DocumentType.NARRATIVES, OutputType.TIMEML, "/heideltime/config.props", POSTagger.NO,
+				false);
 	}
 
 	/**

@@ -40,7 +40,7 @@
 		<div class="checkbox">
 			<label>
 				<input th:id="${name}" th:name="${name}" type="checkbox" />
-				<span th:text="#{general.checkbox} + #{fields.heideltag}" th:remove="tag" />
+				<span th:text="#{general.checkbox} + #{'fields.' + ${name}}" th:remove="tag" />
 			</label>
 		</div>
 	</div>

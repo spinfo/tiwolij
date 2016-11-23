@@ -21,7 +21,7 @@ public class BaseEntity {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public int compareNaturalBy(BaseEntity that, String by) {
 		String s1 = this.get(by) == null ? "" : this.get(by).toString();
 		String s2 = that.get(by) == null ? "" : that.get(by).toString();

@@ -54,7 +54,13 @@
 					<a th:href="@{/tiwolij/import}" th:text="#{navbar.import}" />
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/export')} ? 'active'">
-					<a th:href="@{/tiwolij/export}" th:text="#{navbar.export}" />
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+						<span th:text="#{navbar.export}" th:remove="tag" />
+						<span class="caret" />
+					</a>
+					<ul class="dropdown-menu">
+						<li><a th:href="@{/tiwolij/export/tweets}" th:text="#{data.export.tweets}" /></li>
+					</ul>
 				</li>
 			</ul>
 		</div>
