@@ -23,6 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import de.unihd.dbs.heideltime.standalone.DocumentType;
+import de.unihd.dbs.heideltime.standalone.OutputType;
+import de.unihd.dbs.heideltime.standalone.POSTagger;
+import tiwolij.DateAndTime;
+import tiwolij.HeidelTimeWrapper;
 import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
 import tiwolij.domain.Quote;
@@ -71,6 +76,9 @@ public class Import {
 		Pattern regexDate = Pattern.compile("(\\d+)[./-](\\d+)");
 		Pattern regexLang = Pattern.compile("://(.{2})\\.wikipedia");
 		Pattern regexWDId = Pattern.compile("Q(\\d+)");
+		
+		Map<String, HeidelTimeWrapper> htWrappers = new HashMap<String,HeidelTimeWrapper>();
+		DateAndTime dat = new DateAndTime();
 
 		Quote quote;
 		QuoteLocale quoteLocale;
@@ -135,6 +143,11 @@ public class Import {
 						throw new ParseException("Missing language", lineno);
 
 					quoteLocale.setLanguage(language);
+					
+					//create HeidelTimeWrapper for language
+					if(!htWrappers.keySet().contains(language)){
+						htWrappers.put(language, new HeidelTimeWrapper(dat.getLanguage(language), DocumentType.NARRATIVES, OutputType.TIMEML, "/heideltime/config.props", POSTagger.TREETAGGER, false));
+					}
 				}
 
 				else if (values.containsKey("language") && !values.get("language").isEmpty()) {
@@ -187,6 +200,11 @@ public class Import {
 						quoteLocale.getLanguage()))
 					if (levenshteinDistance(l.getCorpus(), quoteLocale.getCorpus()) < 10)
 						throw new DuplicateKeyException("Duplicate entry");
+
+				//set year
+				quoteLocale.setYear(dat.getYear(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
+				//set time
+				quoteLocale.setTime(dat.getTime(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
 
 				/*
 				 * WORK
