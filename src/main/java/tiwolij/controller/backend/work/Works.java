@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.backend.work;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class Works {
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
 			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
-		ModelAndView mv = new ModelAndView("works/list");
+		ModelAndView mv = new ModelAndView("backend/work/work_list");
 		List<Work> list = new ArrayList<Work>();
 
 		if (authorId != 0) {
@@ -51,7 +51,7 @@ public class Works {
 
 	@GetMapping("/view")
 	public ModelAndView view(@RequestParam(name = "workId") Integer workId) {
-		ModelAndView mv = new ModelAndView("works/view");
+		ModelAndView mv = new ModelAndView("backend/work/work_view");
 
 		mv.addObject("work", works.getWork(workId));
 		return mv;
@@ -59,7 +59,7 @@ public class Works {
 
 	@GetMapping("/create")
 	public ModelAndView create(@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
-		ModelAndView mv = new ModelAndView("works/create");
+		ModelAndView mv = new ModelAndView("backend/work/work_create");
 		Work work = (authors.hasAuthor(authorId)) ? new Work(authors.getAuthor(authorId)) : new Work();
 
 		mv.addObject("work", work);
@@ -88,7 +88,7 @@ public class Works {
 
 	@GetMapping("/edit")
 	public ModelAndView edit(@RequestParam(name = "workId") Integer workId) {
-		ModelAndView mv = new ModelAndView("works/edit");
+		ModelAndView mv = new ModelAndView("backend/work/work_edit");
 
 		mv.addObject("work", works.getWork(workId));
 		mv.addObject("authors", authors.getAuthors());

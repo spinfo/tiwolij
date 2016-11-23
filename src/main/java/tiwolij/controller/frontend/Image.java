@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.frontend;
 
 import java.awt.Color;
 import java.awt.Font;

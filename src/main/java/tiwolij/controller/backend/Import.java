@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.backend;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -56,7 +56,7 @@ public class Import {
 
 	@GetMapping({ "", "/" })
 	public ModelAndView root() {
-		ModelAndView mv = new ModelAndView("backend/import");
+		ModelAndView mv = new ModelAndView("backend/import/import");
 
 		mv.addObject("formats", env.getProperty("tiwolij.import.format", String[].class));
 		mv.addObject("languages", env.getProperty("tiwolij.localizations", String[].class));
@@ -68,7 +68,7 @@ public class Import {
 			@RequestParam("format") String format, @RequestParam(name = "language", defaultValue = "") String language)
 			throws Exception {
 
-		ModelAndView mv = new ModelAndView("backend/report");
+		ModelAndView mv = new ModelAndView("backend/import/report");
 		Map<String, Exception> errors = new HashMap<String, Exception>();
 		Map<String, QuoteLocale> imports = new HashMap<String, QuoteLocale>();
 

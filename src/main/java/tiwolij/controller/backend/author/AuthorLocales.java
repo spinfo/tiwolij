@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.backend.author;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class AuthorLocales {
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
 			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
-		ModelAndView mv = new ModelAndView("authorLocales/list");
+		ModelAndView mv = new ModelAndView("backend/author/locale_list");
 		List<AuthorLocale> list = (authors.hasAuthor(authorId)) ? authors.getLocalesByAuthor(authorId)
 				: authors.getLocales();
 		list.sort((x, y) -> x.compareNaturalBy(y, order));
@@ -41,7 +41,7 @@ public class AuthorLocales {
 
 	@GetMapping("/view")
 	public ModelAndView view(@RequestParam(name = "localeId") Integer localeId) {
-		ModelAndView mv = new ModelAndView("authorLocales/view");
+		ModelAndView mv = new ModelAndView("backend/author/locale_view");
 
 		mv.addObject("locale", authors.getLocale(localeId));
 		return mv;
@@ -49,7 +49,7 @@ public class AuthorLocales {
 
 	@GetMapping("/create")
 	public ModelAndView create(@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
-		ModelAndView mv = new ModelAndView("authorLocales/create");
+		ModelAndView mv = new ModelAndView("backend/author/locale_create");
 		AuthorLocale locale = (authors.hasAuthor(authorId)) ? new AuthorLocale(authors.getAuthor(authorId))
 				: new AuthorLocale();
 
@@ -73,7 +73,7 @@ public class AuthorLocales {
 
 	@GetMapping("/edit")
 	public ModelAndView edit(@RequestParam(name = "localeId") Integer localeId) {
-		ModelAndView mv = new ModelAndView("authorLocales/edit");
+		ModelAndView mv = new ModelAndView("backend/author/locale_edit");
 
 		mv.addObject("locale", authors.getLocale(localeId));
 		mv.addObject("authors", authors.getAuthors());

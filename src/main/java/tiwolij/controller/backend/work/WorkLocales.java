@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.backend.work;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class WorkLocales {
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
 			@RequestParam(name = "id", defaultValue = "0") Integer workId) {
-		ModelAndView mv = new ModelAndView("workLocales/list");
+		ModelAndView mv = new ModelAndView("backend/work/locale_list");
 		List<WorkLocale> list = (works.hasWork(workId)) ? works.getLocalesByWork(workId) : works.getLocales();
 		list.sort((x, y) -> x.compareNaturalBy(y, order));
 
@@ -40,7 +40,7 @@ public class WorkLocales {
 
 	@GetMapping("/view")
 	public ModelAndView view(@RequestParam(name = "localeId") Integer localeId) {
-		ModelAndView mv = new ModelAndView("workLocales/view");
+		ModelAndView mv = new ModelAndView("backend/work/locale_view");
 
 		mv.addObject("locale", works.getLocale(localeId));
 		return mv;
@@ -48,7 +48,7 @@ public class WorkLocales {
 
 	@GetMapping("/create")
 	public ModelAndView create(@RequestParam(name = "workId", defaultValue = "0") Integer workId) {
-		ModelAndView mv = new ModelAndView("workLocales/create");
+		ModelAndView mv = new ModelAndView("backend/work/locale_create");
 		WorkLocale locale = (works.hasWork(workId)) ? new WorkLocale(works.getWork(workId)) : new WorkLocale();
 
 		mv.addObject("locale", locale);
@@ -70,7 +70,7 @@ public class WorkLocales {
 
 	@GetMapping("/edit")
 	public ModelAndView edit(@RequestParam(name = "localeId") Integer localeId) {
-		ModelAndView mv = new ModelAndView("workLocales/edit");
+		ModelAndView mv = new ModelAndView("backend/work/locale_edit");
 
 		mv.addObject("locale", works.getLocale(localeId));
 		mv.addObject("works", works.getWorks());

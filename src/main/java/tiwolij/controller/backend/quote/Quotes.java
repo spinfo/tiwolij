@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.backend.quote;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public class Quotes {
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
 			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId,
 			@RequestParam(name = "workId", defaultValue = "0") Integer workId) {
-		ModelAndView mv = new ModelAndView("quotes/list");
+		ModelAndView mv = new ModelAndView("backend/quote/quote_list");
 		List<Quote> list = new ArrayList<Quote>();
 
 		if (authorId != 0) {
@@ -55,7 +55,7 @@ public class Quotes {
 
 	@GetMapping("/view")
 	public ModelAndView view(@RequestParam(name = "quoteId") Integer quoteId) {
-		ModelAndView mv = new ModelAndView("quotes/view");
+		ModelAndView mv = new ModelAndView("backend/quote/quote_view");
 
 		mv.addObject("quote", quotes.getQuote(quoteId));
 		return mv;
@@ -63,7 +63,7 @@ public class Quotes {
 
 	@GetMapping("/create")
 	public ModelAndView create(@RequestParam(name = "workId", defaultValue = "0") Integer workId) {
-		ModelAndView mv = new ModelAndView("quotes/create");
+		ModelAndView mv = new ModelAndView("backend/quote/quote_create");
 		Quote quote = (works.hasWork(workId)) ? new Quote(works.getWork(workId)) : new Quote();
 
 		mv.addObject("quote", quote);
@@ -79,7 +79,7 @@ public class Quotes {
 
 	@GetMapping("/edit")
 	public ModelAndView edit(@RequestParam(name = "quoteId") Integer quoteId) {
-		ModelAndView mv = new ModelAndView("quotes/edit");
+		ModelAndView mv = new ModelAndView("backend/quote/quote_edit");
 
 		mv.addObject("quote", quotes.getQuote(quoteId));
 		mv.addObject("works", works.getWorks());

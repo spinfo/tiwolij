@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.frontend;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

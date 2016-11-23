@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.backend.quote;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class QuoteLocales {
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
 			@RequestParam(name = "quoteId", defaultValue = "0") Integer quoteId) throws Exception {
-		ModelAndView mv = new ModelAndView("quoteLocales/list");
+		ModelAndView mv = new ModelAndView("backend/quote/locale_list");
 		List<QuoteLocale> list = (quotes.hasQuote(quoteId)) ? quotes.getLocalesByQuote(quoteId) : quotes.getLocales();
 		list.sort((x, y) -> x.compareNaturalBy(y, order));
 
@@ -40,7 +40,7 @@ public class QuoteLocales {
 
 	@GetMapping("/view")
 	public ModelAndView view(@RequestParam(name = "localeId") Integer localeId) {
-		ModelAndView mv = new ModelAndView("quoteLocales/view");
+		ModelAndView mv = new ModelAndView("backend/quote/locale_view");
 
 		mv.addObject("locale", quotes.getLocale(localeId));
 		return mv;
@@ -48,7 +48,7 @@ public class QuoteLocales {
 
 	@GetMapping("/create")
 	public ModelAndView create(@RequestParam(name = "quoteId", defaultValue = "0") Integer quoteId) {
-		ModelAndView mv = new ModelAndView("quoteLocales/create");
+		ModelAndView mv = new ModelAndView("backend/quote/locale_create");
 		QuoteLocale locale = (quotes.hasQuote(quoteId)) ? new QuoteLocale(quotes.getQuote(quoteId)) : new QuoteLocale();
 
 		mv.addObject("locale", locale);
@@ -64,7 +64,7 @@ public class QuoteLocales {
 
 	@GetMapping("/edit")
 	public ModelAndView edit(@RequestParam(name = "localeId") Integer localeId) {
-		ModelAndView mv = new ModelAndView("quoteLocales/edit");
+		ModelAndView mv = new ModelAndView("backend/quote/locale_edit");
 
 		mv.addObject("locale", quotes.getLocale(localeId));
 		mv.addObject("quotes", quotes.getQuotes());

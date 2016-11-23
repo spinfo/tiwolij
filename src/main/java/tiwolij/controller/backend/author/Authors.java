@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.backend.author;
 
 import java.net.URL;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Authors {
 
 	@GetMapping("/list")
 	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order) {
-		ModelAndView mv = new ModelAndView("authors/list");
+		ModelAndView mv = new ModelAndView("backend/author/author_list");
 		List<Author> list = authors.getAuthors();
 		list.sort((x, y) -> x.compareNaturalBy(y, order));
 
@@ -40,7 +40,7 @@ public class Authors {
 
 	@GetMapping("/view")
 	public ModelAndView view(@RequestParam(name = "authorId") Integer authorId) {
-		ModelAndView mv = new ModelAndView("authors/view");
+		ModelAndView mv = new ModelAndView("backend/author/author_view");
 
 		mv.addObject("author", authors.getAuthor(authorId));
 		return mv;
@@ -48,7 +48,7 @@ public class Authors {
 
 	@GetMapping("/create")
 	public ModelAndView create() {
-		ModelAndView mv = new ModelAndView("authors/create");
+		ModelAndView mv = new ModelAndView("backend/author/author_create");
 
 		mv.addObject("author", new Author());
 		return mv;
@@ -73,7 +73,7 @@ public class Authors {
 
 	@GetMapping("/edit")
 	public ModelAndView edit(@RequestParam(name = "authorId") Integer authorId) {
-		ModelAndView mv = new ModelAndView("authors/edit");
+		ModelAndView mv = new ModelAndView("backend/author/author_edit");
 
 		mv.addObject("author", authors.getAuthor(authorId).setImage(new byte[0]));
 		return mv;

@@ -1,4 +1,4 @@
-package tiwolij.controller;
+package tiwolij.controller.backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,13 +20,13 @@ public class Backend {
 
 	@Autowired
 	private WorkService works;
-	
+
 	@Autowired
 	private QuoteService quotes;
-	
+
 	@GetMapping({ "", "/" })
 	public ModelAndView getRoot() {
-		ModelAndView mv = new ModelAndView("backend/summary");
+		ModelAndView mv = new ModelAndView("backend/index");
 
 		mv.addObject("authors", authors.count());
 		mv.addObject("authorLocales", authors.countLocales());
