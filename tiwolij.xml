@@ -41,42 +41,6 @@
 		<Arg>
 			<Ref refid='tiwolij' />
 		</Arg>
-		<Arg>tiwolij.import.regex.date</Arg>
-		<Arg type="java.lang.String">(\\d+)[./-](\\d+)</Arg>
-		<Arg type="boolean">true</Arg>
-	</New>
-
-	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
-		<Arg>
-			<Ref refid='tiwolij' />
-		</Arg>
-		<Arg>tiwolij.import.regex.lang</Arg>
-		<Arg type="java.lang.String">://(.{2})\\.wikipedia</Arg>
-		<Arg type="boolean">true</Arg>
-	</New>
-
-	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
-		<Arg>
-			<Ref refid='tiwolij' />
-		</Arg>
-		<Arg>tiwolij.import.regex.title</Arg>
-		<Arg type="java.lang.String">wiki/([^/]*)$</Arg>
-		<Arg type="boolean">true</Arg>
-	</New>
-
-	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
-		<Arg>
-			<Ref refid='tiwolij' />
-		</Arg>
-		<Arg>tiwolij.import.regex.wdid</Arg>
-		<Arg type="java.lang.String">Q(\\d+)</Arg>
-		<Arg type="boolean">true</Arg>
-	</New>
-
-	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
-		<Arg>
-			<Ref refid='tiwolij' />
-		</Arg>
 		<Arg>tiwolij.import.image.height</Arg>
 		<Arg type="java.lang.String">500</Arg>
 		<Arg type="boolean">true</Arg>
