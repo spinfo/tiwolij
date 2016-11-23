@@ -1,15 +1,15 @@
-package tiwolij;
+package tiwolij.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.unihd.dbs.heideltime.standalone.exceptions.DocumentCreationTimeMissingException;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
 import tiwolij.domain.QuoteLocale;
+import tiwolij.domain.Work;
 
-public class DateAndTime {
+public class tivoliChirp {
 
 //	private Map<String, String> dayTimes = new HashMap<String, String>();
 	
@@ -59,6 +59,7 @@ public class DateAndTime {
 		Matcher matcher = pattern.matcher(string);
 		if (matcher.find()) {
 			//times.put(matcher.group(1), string);
+			System.out.println(matcher.group(1));
 			return matcher.group(1);
 		}
 		regex = "type=\"TIME\" value=\"[0-9|X]{4}-[0-9|X]{2}-[0-9|X]{2}T([0-9|A-Z|:]+)\">";
@@ -66,6 +67,7 @@ public class DateAndTime {
 		matcher = pattern.matcher(string);
 		if (matcher.find()) {
 			//times.put(matcher.group(1),string);
+			System.out.println(matcher.group(1));
 			return matcher.group(1);
 		}
 		return null;
@@ -77,6 +79,7 @@ public class DateAndTime {
 		Matcher matcher = pattern.matcher(string);
 		if (matcher.find()) {
 			//years.put(Integer.parseInt(matcher.group(2)), string);
+			System.out.println(matcher.group(2));
 			return matcher.group(2);
 		}
 		regex = "type=\"(DATE|TIME)\" value=\"([0-9]{4})-";
@@ -84,6 +87,7 @@ public class DateAndTime {
 		matcher = pattern.matcher(string);
 		if (matcher.find()) {
 			//years.put(Integer.parseInt(matcher.group(2)), string);
+			System.out.println(matcher.group(2));
 			return matcher.group(2);
 		}
 		return null;
@@ -101,4 +105,6 @@ public class DateAndTime {
 			return Language.WILDCARD;
 		}
 	}
+	
+	
 }
