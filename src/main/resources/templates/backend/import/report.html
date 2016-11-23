@@ -78,13 +78,13 @@
 						<thead>
 							<tr>
 								<th th:text="#{fields.error}"/>
-								<th th:text="#{fields.line}" class="text-right" />
+								<th th:text="#{fields.line}" />
 							</tr>
 						</thead>
 						<tbody>
 							<tr th:each="error : ${errors}">
 								<th th:text="${error.value.message}" />
-								<td th:text="${error.key}" class="text-right" />
+								<td th:text="${error.key}" class="small" />
 							</tr>
 						</tbody>
 					</table>

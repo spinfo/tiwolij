@@ -27,7 +27,9 @@
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-2 control-label" />
 	<div class="col-sm-10">
 		<select th:id="${name}" th:name="${name}" th:required="${required}" class="form-control">
-			<option th:each="option : ${options}"  th:value="${option.get(value)}" th:text="${option.get(label)}" />
+			<option th:unless="${required}" th:text="#{fields.emptyOption}" disabled="true" selected="true" value="" />
+			<option th:each="option : ${options}" th:value="${#strings.isEmpty(value)} ? ${option} : ${option.get(value)}"
+				th:text="${#strings.isEmpty(label)} ? ${option} : ${option.get(label)}" />
 		</select>
 	</div>
 </div>
