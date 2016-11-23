@@ -9,6 +9,11 @@ import java.util.Random;
  */
 public class TimeRandomizer {
 	
+	/** Returns a randomized time between the specified times.
+	 * @param startTime
+	 * @param endTime
+	 * @return
+	 */
 	public static String getRandomizedTime(int startTime, int endTime){
 		
 		if(startTime<0||startTime>24){
