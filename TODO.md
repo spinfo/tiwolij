@@ -11,10 +11,10 @@
 
 ### TiwoliChirp
 - TEXT deutsch: “Der DD. MONATAUSGESCHRIEBEN in der Weltliteratur: AUTORVORNAME AUTORNACHNAME: WERKTITEL. #tiwoli LINK zur Seite” + angehangenes Bild (FlashCard, verbraucht keinen Platz mehr in den 140 Zeichen, Rest müsste eigentlich immer passen, zur Not Titel mit … abkürzen).
-- BILD Screenshots macht sich eigentlich ganz hübsch auf Twitter → Sind die irgendwie automatisch erzeugbar? Alternativ (aber nicht so schön): Einfach das Autorbild anhängen.
+- BILD FlashCard - automatisch erzeugter Screenshot mit etwas eingeschränkterer Optik. 
 - SPRACHE: Andere Sprachen, andere Twitter-Accounts? (JH) würde dafür plädieren. Wir können ja mal mit deutsch anfangen und dann sehen, wer uns so folgt.
-- UHRZEIT: In manchen Zitatschnipseln steht die Uhrzeit mit im Text, allerdings nicht analysiert, d.h. da müsste HeidelTime ein zweites Mal drüber. Die Uhrzeit könnte man für das Scheduling gebrauchen.
-- VERTEILUNG: Zitate mit Uhrzeit sind ja festgelegt, die anderen sollten über den Tag verteilt werden. Hat dazu Vorschläge?
+- UHRZEIT: Zitate sind inzwischen mit HeidelTime geparst, Uhrzeiten und Jahreszahlen werden mit in die DB importiert.
+- VERTEILUNG: Zitate mit Uhrzeit sind ja festgelegt, die anderen sollten über den Tag verteilt werden. JH macht mal einen Randomizer mit zufälliger Uhrzeit von 14-20 Uhr. 
 
 ### Pagination und verbesserte Navigation/Suche fürs Backend
 - derzeit werden alle DB-Objekte auf einer Seite angezeigt, die entsprechend lang ist
