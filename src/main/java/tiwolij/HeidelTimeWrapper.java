@@ -33,18 +33,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class HeidelTimeWrapper extends HeidelTimeStandalone {
 
-	@Value("${tiwolij.parser.treetagger}")
-	private String treetaggerProp;
+	
 
-	private  static String treetagger;
 
-	/**
-	 * get TreeTagger path
-	 */
-	@PostConstruct
-	public void initializeWrapper() {
-		HeidelTimeWrapper.treetagger = treetaggerProp;
-	}
+
 
 	
 	public HeidelTimeWrapper(){
@@ -90,7 +82,7 @@ public class HeidelTimeWrapper extends HeidelTimeStandalone {
 			configStream = HeidelTimeWrapper.class.getResourceAsStream(configPath);
 			Properties props = new Properties();
 			props.load(configStream);
-      props.setProperty("treeTaggerHome", treetagger);
+   //   props.setProperty("treeTaggerHome", treetagger);
 			Config.setProps(props);
 			configStream.close();
 		} catch (FileNotFoundException e) {

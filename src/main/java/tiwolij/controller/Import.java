@@ -146,7 +146,7 @@ public class Import {
 					
 					//create HeidelTimeWrapper for language
 					if(!htWrappers.keySet().contains(language)){
-						htWrappers.put(language, new HeidelTimeWrapper(dat.getLanguage(language), DocumentType.NARRATIVES, OutputType.TIMEML, "/heideltime/config.props", POSTagger.TREETAGGER, false));
+						htWrappers.put(language, new HeidelTimeWrapper(dat.getLanguage(language), DocumentType.NARRATIVES, OutputType.TIMEML, "/heideltime/config.props", POSTagger.NO, false));
 					}
 				}
 
