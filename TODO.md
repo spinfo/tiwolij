@@ -5,16 +5,8 @@
 
 ## Offene Punkte, Vorschläge und Diskussion
 
-### Bildattribution irreführend (FF)
-- unter das Autorenbild den Namen des Autors setzen und dann einen Link auf die Wikimedia Commons (nicht die Copyright-Info)
-	- denn das sieht in manchen Fällen so aus, als ob das der Abgebildete ist, etwa hier: https://tiwoli.spinfo.uni-koeln.de/view?id=341&lang=de
-
-### TiwoliChirp
-- TEXT deutsch: “Der DD. MONATAUSGESCHRIEBEN in der Weltliteratur: AUTORVORNAME AUTORNACHNAME: WERKTITEL. #tiwoli LINK zur Seite” + angehangenes Bild (FlashCard, verbraucht keinen Platz mehr in den 140 Zeichen, Rest müsste eigentlich immer passen, zur Not Titel mit … abkürzen).
-- BILD FlashCard - automatisch erzeugter Screenshot mit etwas eingeschränkterer Optik. 
-- SPRACHE: Andere Sprachen, andere Twitter-Accounts? (JH) würde dafür plädieren. Wir können ja mal mit deutsch anfangen und dann sehen, wer uns so folgt.
-- UHRZEIT: Zitate sind inzwischen mit HeidelTime geparst, Uhrzeiten und Jahreszahlen werden mit in die DB importiert.
-- VERTEILUNG: Zitate mit Uhrzeit sind ja festgelegt, die anderen sollten über den Tag verteilt werden. JH macht mal einen Randomizer mit zufälliger Uhrzeit von 14-20 Uhr. 
+### Export-Funktionalität
+- Export-Formate zur Aktualisierung der Android/iOS-App
 
 ### Pagination und verbesserte Navigation/Suche fürs Backend
 - derzeit werden alle DB-Objekte auf einer Seite angezeigt, die entsprechend lang ist
@@ -53,6 +45,26 @@
 - JH: Gleiches überlege ich mir für den 16. Juni / Bloomsday - Bei beidem Unterstützung gerne willkommen.
 
 ## Abgeschlossenes
+
+### Flashcard-Anpassungen
+- line-breaks werden nicht mitgemacht und nicht mal ein whitespace zwischen absatzende und absatzanfang gesetzt (FF)
+- PS: Absätze zu machen ist ziemlich untrivial; daher werden nun alle <br> durch ein whitespace ersetzt
+
+### Bildattribution irreführend (FF)
+- unter das Autorenbild den Namen des Autors setzen und dann einen Link auf die Wikimedia Commons (nicht die Copyright-Info)
+	- denn das sieht in manchen Fällen so aus, als ob das der Abgebildete ist, etwa hier: https://tiwoli.spinfo.uni-koeln.de/view?id=341&lang=de
+
+### TiwoliChirp / Export-Funktionalität
+- TEXT deutsch: “Der DD. MONATAUSGESCHRIEBEN in der Weltliteratur: AUTORVORNAME AUTORNACHNAME: WERKTITEL. #tiwoli LINK zur Seite” + angehangenes Bild (FlashCard, verbraucht keinen Platz mehr in den 140 Zeichen, Rest müsste eigentlich immer passen, zur Not Titel mit … abkürzen).
+- BILD FlashCard - automatisch erzeugter Screenshot mit etwas eingeschränkterer Optik.
+- SPRACHE: Andere Sprachen, andere Twitter-Accounts? (JH) würde dafür plädieren. Wir können ja mal mit deutsch anfangen und dann sehen, wer uns so folgt.
+- UHRZEIT: Zitate sind inzwischen mit HeidelTime geparst, Uhrzeiten und Jahreszahlen werden mit in die DB importiert.
+- VERTEILUNG: Zitate mit Uhrzeit sind ja festgelegt, die anderen sollten über den Tag verteilt werden. JH macht mal einen Randomizer mit zufälliger Uhrzeit von 14-20 Uhr.
+- Export als "GoogleDocs Style Import" für autoChirp
+- Exporte filtern, bspw.:
+	- Exportieren von quoteLocales nur, wenn "finalisiert"
+	- Exportieren von einer Sprache
+	- Exportieren von Datums-Ranges
 
 ### Datenbank-Anpassungen (FF)
 - Erscheinungsjahr des Werkes als VARCHAR
