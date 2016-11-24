@@ -51,7 +51,7 @@ public class Image {
 	@GetMapping("/author")
 	public void author(@RequestParam(name = "id") Integer authorId, HttpServletResponse response) throws Exception {
 		if (authors.getAuthor(authorId) != null && authors.getAuthor(authorId).getImage() != null) {
-			response.setContentType("image/jpeg, image/jpg, image/png, image/gif");
+			response.setContentType("image/jpeg");
 			response.getOutputStream().write(authors.getAuthor(authorId).getImage());
 			response.getOutputStream().close();
 		} else
@@ -187,6 +187,7 @@ public class Image {
 
 		// done
 		ImageIO.write(image, "png", stream);
+		response.setContentType("image/png");
 		response.getOutputStream().write(stream.toByteArray());
 		response.getOutputStream().close();
 	}
