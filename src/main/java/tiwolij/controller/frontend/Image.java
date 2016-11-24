@@ -122,7 +122,7 @@ public class Image {
 		FontRenderContext frc = graphic.getFontRenderContext();
 
 		// corpus
-		String corpus = quote.getCorpus().replaceAll("\\<[^>]*>", "").replaceAll("\\n", " ");
+		String corpus = quote.getCorpus().replaceAll("<br[^>]*>", " ").replaceAll("<[^>]*>", "");
 		
 		graphic.setColor(text);
 		attstr = new AttributedString(corpus);
