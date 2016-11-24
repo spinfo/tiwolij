@@ -148,7 +148,7 @@ public class TiwoliChirp {
 		String work = quoteLocale.getQuote().getWork().getLocales().get(language).getName();
 		String author = quoteLocale.getQuote().getWork().getAuthor().getLocales().get(language).getName();
 		String url = baseUrl + "/view?id=" + quoteLocale.getId() + "&lang=" + language;
-		
+
 		return prefix + day + delim + month + infix + author + ": " + work + ". #tiwoli " + url;
 	}
 
@@ -164,8 +164,9 @@ public class TiwoliChirp {
 
 			text = getTweetContent(q, baseUrl);
 			time = getTweetTime(q.getTime() == null ? TimeRandomizer.getRandomizedTime() : q.getTime());
-			date = q.getYear() == null ? Calendar.getInstance().get(Calendar.YEAR) + q.getSchedule()
-					: q.getYear() + "-" + q.getSchedule();
+			date = q.getYear() == null
+					? q.getSchedule().replace("-", ".") + "." + Calendar.getInstance().get(Calendar.YEAR)
+					: q.getSchedule().replace("-", ".") + "." + q.getYear();
 
 			sb.append(date + "\t" + time + "\t" + text + "\t" + imgUrl + "\t\t\n");
 		}
