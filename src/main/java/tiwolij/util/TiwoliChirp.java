@@ -140,28 +140,21 @@ public class TiwoliChirp {
 		String language = quoteLocale.getLanguage();
 		Locale locale = new Locale(language);
 
-		String start = messages.getMessage("data.export.tweet.start", null, locale);
+		String prefix = messages.getMessage("data.export.tweets.prefix", null, locale);
+		Integer day = Integer.parseInt(quoteLocale.getDay());
 		String delim = messages.getMessage("months.delim", null, locale);
 		String month = messages.getMessage("months." + quoteLocale.getMonth(), null, locale);
-		String tiwoli = messages.getMessage("data.export.tiwoli", null, locale);
-		String url = baseUrl + "/view?id=" + quoteLocale.getId() + "&lang=" + language;
+		String infix = messages.getMessage("data.export.tweets.infix", null, locale);
 		String work = quoteLocale.getQuote().getWork().getLocales().get(language).getName();
 		String author = quoteLocale.getQuote().getWork().getAuthor().getLocales().get(language).getName();
-
-		String day = quoteLocale.getDay(); 
-		if(day.charAt(0)=='0'){
-			day=day.substring(1);
-		}
+		String url = baseUrl + "/view?id=" + quoteLocale.getId() + "&lang=" + language;
 		
-		return start + " " + day + delim + month + tiwoli + author + ": " + work + ". #tiwoli " + url;
+		return prefix + day + delim + month + infix + author + ": " + work + ". #tiwoli " + url;
 	}
 
 	public String generateTwees(List<QuoteLocale> quoteLocales, String baseUrl) {
 		StringBuffer sb = new StringBuffer();
-		String text;
-		String date;
-		String time;
-		String imgUrl;
+		String text, date, time, imgUrl;
 
 		if (messages == null)
 			throw new BeanCreationException("Only callable when autowired");
