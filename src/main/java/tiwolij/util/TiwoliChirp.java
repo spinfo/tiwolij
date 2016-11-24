@@ -140,6 +140,7 @@ public class TiwoliChirp {
 		String language = quoteLocale.getLanguage();
 		Locale locale = new Locale(language);
 
+		String start = messages.getMessage("data.export.tweet.start", null, locale);
 		String delim = messages.getMessage("months.delim", null, locale);
 		String month = messages.getMessage("months." + quoteLocale.getMonth(), null, locale);
 		String tiwoli = messages.getMessage("data.export.tiwoli", null, locale);
@@ -147,7 +148,12 @@ public class TiwoliChirp {
 		String work = quoteLocale.getQuote().getWork().getLocales().get(language).getName();
 		String author = quoteLocale.getQuote().getWork().getAuthor().getLocales().get(language).getName();
 
-		return quoteLocale.getDay() + delim + month + tiwoli + author + ": " + work + ". #tiwoli " + url;
+		String day = quoteLocale.getDay(); 
+		if(day.charAt(0)=='0'){
+			day=day.substring(1);
+		}
+		
+		return start + " " + day + delim + month + tiwoli + author + ": " + work + ". #tiwoli " + url;
 	}
 
 	public String generateTwees(List<QuoteLocale> quoteLocales, String baseUrl) {
