@@ -1,5 +1,6 @@
 package tiwolij.util;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -158,13 +159,14 @@ public class TiwoliChirp {
 
 		if (messages == null)
 			throw new BeanCreationException("Only callable when autowired");
-		
+
 		for (QuoteLocale q : quoteLocales) {
 			imgUrl = baseUrl + "/image/flashcard?id=" + q.getId() + "&lang=" + q.getLanguage();
 
 			text = getTweetContent(q, baseUrl);
 			time = getTweetTime(q.getTime() == null ? TimeRandomizer.getRandomizedTime() : q.getTime());
-			date = q.getYear() == null ? "0000-" + q.getSchedule() : q.getYear() + "-" + q.getSchedule();
+			date = q.getYear() == null ? Calendar.getInstance().get(Calendar.YEAR) + q.getSchedule()
+					: q.getYear() + "-" + q.getSchedule();
 
 			sb.append(date + "\t" + time + "\t" + text + "\t" + imgUrl + "\t\t\n");
 		}
