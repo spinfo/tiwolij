@@ -93,7 +93,7 @@ public class QuoteLocale extends BaseEntity {
 	}
 
 	public Boolean getLocked() {
-		return locked;
+		return locked == null ? false : locked;
 	}
 
 	public String getCurator() {

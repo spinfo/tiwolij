@@ -3,7 +3,9 @@ package tiwolij.controller.backend;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,17 +57,27 @@ public class Export {
 	}
 
 	@PostMapping("/tweets")
-	public void tweets(HttpServletResponse response,
+	public void tweets(HttpServletRequest request, HttpServletResponse response,
 			@RequestParam(name = "onlyfinal", defaultValue = "false") Boolean onlyfinal,
 			@RequestParam(name = "onlylang", defaultValue = "") String onlylang,
 			@RequestParam(name = "onlymonth", defaultValue = "") String onlymonth) throws Exception {
 
-		List<QuoteLocale> locales = new ArrayList<QuoteLocale>();
+		List<QuoteLocale> locales = quotes.getLocales();
+		StringBuffer url = request.getRequestURL();
+		String uri = request.getRequestURI();
+		String ctx = request.getContextPath();
+		String baseUrl = url.substring(0, url.length() - uri.length() + ctx.length());
 
-		if (!onlyfinal && onlylang.isEmpty() && onlymonth.isEmpty())
-			locales = quotes.getLocales();
+		if (onlyfinal)
+			locales = locales.stream().filter(l -> l.getLocked()).collect(Collectors.toList());
 
-		String tweets = tiwoliChirp.generateTwees(locales);
+		if (!onlylang.isEmpty())
+			locales = locales.stream().filter(l -> l.getLanguage().equals(onlylang)).collect(Collectors.toList());
+
+		if (!onlymonth.isEmpty())
+			locales = locales.stream().filter(l -> l.getMonth().equals(onlymonth)).collect(Collectors.toList());
+
+		String tweets = tiwoliChirp.generateTwees(locales, baseUrl);
 
 		response.setContentType("application/tsv");
 		response.setHeader("Content-Disposition", "attachment; filename=tweets.tsv");

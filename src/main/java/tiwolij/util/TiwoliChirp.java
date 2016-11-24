@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,6 @@ import org.springframework.stereotype.Component;
 import de.unihd.dbs.heideltime.standalone.exceptions.DocumentCreationTimeMissingException;
 import de.unihd.dbs.uima.annotator.heideltime.resources.Language;
 import tiwolij.domain.QuoteLocale;
-import tiwolij.domain.Work;
 
 @Component
 public class TiwoliChirp {
@@ -24,16 +24,25 @@ public class TiwoliChirp {
 
 	private Map<String, String> dayTimes = new HashMap<String, String>();
 
-	// private Map<String,String> months = new HashMap<String,String>();
-	// private Map<String, String> times = new HashMap<String, String>();
-	// private Map<Integer, String> years = new HashMap<Integer, String>();
-
 	public TiwoliChirp() {
 		dayTimes.put("MO", "08:00");
 		dayTimes.put("EV", "20:00");
 		dayTimes.put("AF", "16:00");
 		dayTimes.put("NI", "23:00");
 		dayTimes.put("DT", "12:00");
+	}
+
+	public Language getLanguage(String language) {
+		switch (language) {
+		case "de":
+			return Language.GERMAN;
+		case "en":
+			return Language.ENGLISH;
+		case "es":
+			return Language.SPANISH;
+		default:
+			return Language.WILDCARD;
+		}
 	}
 
 	public String getYear(QuoteLocale quote, HeidelTimeWrapper ht) {
@@ -71,30 +80,6 @@ public class TiwoliChirp {
 		return toReturn;
 	}
 
-	private String parseTime(String string, int day, int month) {
-		String regex = "type=\"TIME\" value=\"[0-9|X]{4}-month-dayT([0-9|A-Z|:]+)\">";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(string);
-
-		if (matcher.find()) {
-			// times.put(matcher.group(1), string);
-			System.out.println(matcher.group(1));
-			return matcher.group(1);
-		}
-
-		regex = "type=\"TIME\" value=\"[0-9|X]{4}-[0-9|X]{2}-[0-9|X]{2}T([0-9|A-Z|:]+)\">";
-		pattern = Pattern.compile(regex);
-		matcher = pattern.matcher(string);
-
-		if (matcher.find()) {
-			// times.put(matcher.group(1),string);
-			System.out.println(matcher.group(1));
-			return matcher.group(1);
-		}
-
-		return null;
-	}
-
 	private String parseYear(String string, int day, int month) {
 		String regex = "type=\"(DATE|TIME)\" value=\"([0-9]{4})-" + month + "-" + day;
 		Pattern pattern = Pattern.compile(regex);
@@ -119,50 +104,28 @@ public class TiwoliChirp {
 		return null;
 	}
 
-	public Language getLanguage(String language) {
-		if (language.equals("de"))
-			return Language.GERMAN;
-		if (language.equals("en"))
-			return Language.ENGLISH;
-		if (language.equals("es"))
-			return Language.SPANISH;
-		else {
-			System.out.println("unknown language: " + language);
-			return Language.WILDCARD;
-		}
-	}
+	private String parseTime(String string, int day, int month) {
+		String regex = "type=\"TIME\" value=\"[0-9|X]{4}-month-dayT([0-9|A-Z|:]+)\">";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(string);
 
-	public String generateTwees(List<QuoteLocale> quotes) {
-		StringBuffer sb = new StringBuffer();
-		String tweet;
-		String date;
-		String time;
-		String imgUrl;
-		String url;
-		String lang;
-
-		for (QuoteLocale quote : quotes) {
-			lang = quote.getLanguage();
-			url = "/view?id=" + quote.getId() + "&lang=" + lang;
-			imgUrl = "/image/flashcard?id=" + quote.getId() + "&lang=" + lang;
-
-			if (quote.getYear() != null) {
-				date = quote.getYear() + "-" + quote.getSchedule();
-			} else {
-				date = "0000-" + quote.getSchedule();
-			}
-
-			tweet = getTweetContent(quote.getQuote().getWork(), lang, quote.getDay(), quote.getMonth(), url);
-
-			if (quote.getTime() == null) {
-				time = TimeRandomizer.getRandomizedTime();
-			}
-
-			time = getTweetTime(quote.getTime());
-			sb.append(date + "\t" + time + "\t" + tweet + "\t" + imgUrl + "\t\t\n");
+		if (matcher.find()) {
+			// times.put(matcher.group(1), string);
+			System.out.println(matcher.group(1));
+			return matcher.group(1);
 		}
 
-		return sb.toString();
+		regex = "type=\"TIME\" value=\"[0-9|X]{4}-[0-9|X]{2}-[0-9|X]{2}T([0-9|A-Z|:]+)\">";
+		pattern = Pattern.compile(regex);
+		matcher = pattern.matcher(string);
+
+		if (matcher.find()) {
+			// times.put(matcher.group(1),string);
+			System.out.println(matcher.group(1));
+			return matcher.group(1);
+		}
+
+		return null;
 	}
 
 	private String getTweetTime(String time) {
@@ -172,24 +135,41 @@ public class TiwoliChirp {
 		return time;
 	}
 
-	private String getTweetContent(Work work, String lang, String day, String month, String url) {
+	private String getTweetContent(QuoteLocale quoteLocale, String baseUrl) {
+		String language = quoteLocale.getLanguage();
+		Locale locale = new Locale(language);
+
+		String delim = messages.getMessage("months.delim", null, locale);
+		String month = messages.getMessage("months." + quoteLocale.getMonth(), null, locale);
+		String tiwoli = messages.getMessage("data.export.tiwoli", null, locale);
+		String url = baseUrl + "/view?id=" + quoteLocale.getId() + "&lang=" + language;
+		String work = quoteLocale.getQuote().getWork().getLocales().get(language).getName();
+		String author = quoteLocale.getQuote().getWork().getAuthor().getLocales().get(language).getName();
+
+		return quoteLocale.getDay() + delim + month + tiwoli + author + ": " + work + ". #tiwoli " + url;
+	}
+
+	public String generateTwees(List<QuoteLocale> quoteLocales, String baseUrl) {
 		StringBuffer sb = new StringBuffer();
-		month = messages.getMessage("months." + month, null, new Locale(lang));
+		String text;
+		String date;
+		String time;
+		String imgUrl;
 
-		if (lang.equals("de")) {
-			sb.append("Der " + day + ". " + month + " in der Weltliteratur: ");
-		}
-		if (lang.equals("en")) {
-			sb.append(month + " " + day + " in world literatur: ");
-		}
-		if (lang.equals("es")) {
-			// TODO translate
-			sb.append(month + " " + day + " in world literatur: ");
-		}
+		if (messages == null)
+			throw new BeanCreationException("Only callable when autowired");
+		
+		for (QuoteLocale q : quoteLocales) {
+			imgUrl = baseUrl + "/image/flashcard?id=" + q.getId() + "&lang=" + q.getLanguage();
 
-		sb.append(work.getAuthor().getLocales().get(lang) + " " + work.getAuthor().getLocales().get(lang) + ": "
-				+ work.getLocales().get(lang) + ". #tiwoli " + url);
+			text = getTweetContent(q, baseUrl);
+			time = getTweetTime(q.getTime() == null ? TimeRandomizer.getRandomizedTime() : q.getTime());
+			date = q.getYear() == null ? "0000-" + q.getSchedule() : q.getYear() + "-" + q.getSchedule();
+
+			sb.append(date + "\t" + time + "\t" + text + "\t" + imgUrl + "\t\t\n");
+		}
 
 		return sb.toString();
 	}
+
 }
