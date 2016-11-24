@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import tiwolij.domain.QuoteLocale;
 import tiwolij.service.quote.QuoteService;
@@ -63,10 +64,7 @@ public class Export {
 			@RequestParam(name = "onlymonth", defaultValue = "") String onlymonth) throws Exception {
 
 		List<QuoteLocale> locales = quotes.getLocales();
-		StringBuffer url = request.getRequestURL();
-		String uri = request.getRequestURI();
-		String ctx = request.getContextPath();
-		String baseUrl = url.substring(0, url.length() - uri.length() + ctx.length());
+		String baseUrl = ServletUriComponentsBuilder.fromContextPath(request).build().toString();
 
 		if (onlyfinal)
 			locales = locales.stream().filter(l -> l.getLocked()).collect(Collectors.toList());
