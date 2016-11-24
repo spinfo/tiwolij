@@ -90,8 +90,8 @@ public class Image {
 
 		// header
 		graphic.setColor(text);
-		graphic.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 18));
-		graphic.drawString(schedule + " - " + author.getName() + ": " + work.getName(), 35, 67);
+		graphic.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+		graphic.drawString(schedule + " - " + author.getName() + ": " + work.getName(), 35, 68);
 
 		// image box
 		graphic.setColor(darkgrey);
@@ -106,8 +106,8 @@ public class Image {
 			width = 290;
 			height = (width * img.getHeight()) / img.getWidth();
 		}
-		if (height > 440) {
-			height = 440;
+		if (height > 420) {
+			height = 420;
 			width = (height * img.getWidth()) / img.getHeight();
 		}
 
@@ -122,8 +122,10 @@ public class Image {
 		FontRenderContext frc = graphic.getFontRenderContext();
 
 		// corpus
+		String corpus = quote.getCorpus().replaceAll("\\<[^>]*>", "").replaceAll("\\n", " ");
+		
 		graphic.setColor(text);
-		attstr = new AttributedString(quote.getCorpus().replaceAll("\\<[^>]*>", ""));
+		attstr = new AttributedString(corpus);
 		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 		iter = attstr.getIterator();
 		measure = new LineBreakMeasurer(iter, frc);
@@ -139,16 +141,41 @@ public class Image {
 			y += layout.getDescent() + layout.getLeading();
 		}
 
-		// imageAttribution
-		graphic.setColor(textmuted);
-		attstr = new AttributedString(quote.getQuote().getWork().getAuthor().getImageAttribution());
-		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+		// author name
+		String name = author.getName();
+		
+		graphic.setColor(text);
+		attstr = new AttributedString(name);
+		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 16));
 		iter = attstr.getIterator();
 		measure = new LineBreakMeasurer(iter, frc);
 		measure.setPosition(iter.getBeginIndex());
 
 		x = 35f;
 		y = 130f + height;
+		bound = 290f;
+		while (measure.getPosition() < iter.getEndIndex()) {
+			TextLayout layout = measure.nextLayout(bound);
+			dx = x + (bound - layout.getAdvance()) / 2;
+			y += layout.getAscent();
+			layout.draw(graphic, dx, y);
+			y += layout.getDescent() + layout.getLeading();
+		}		
+		
+		
+		// imageAttribution
+		String attribution = quote.getQuote().getWork().getAuthor().getImageAttribution();
+		attribution = messages.getMessage("fields.imageAttribution", null, locale) + ": " + attribution;
+		
+		graphic.setColor(textmuted);
+		attstr = new AttributedString(attribution);
+		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+		iter = attstr.getIterator();
+		measure = new LineBreakMeasurer(iter, frc);
+		measure.setPosition(iter.getBeginIndex());
+
+		x = 35f;
+		y = 570f;
 		bound = 290f;
 		while (measure.getPosition() < iter.getEndIndex()) {
 			TextLayout layout = measure.nextLayout(bound);
