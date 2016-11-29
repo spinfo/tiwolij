@@ -149,7 +149,9 @@ public class TiwoliChirp {
 		String work = quoteLocale.getQuote().getWork().getLocales().get(language).getName();
 		String author = quoteLocale.getQuote().getWork().getAuthor().getLocales().get(language).getName();
 		String url = baseUrl + "/view?id=" + quoteLocale.getId() + "&lang=" + language;
-		return prefix + daySuffix+ delim  + month + infix + author + ": " + work + ". #tiwoli " + url;
+		String toReturn = prefix + daySuffix+ delim  + month + infix + author + ": " + work + ". #tiwoli " + url;
+		System.out.println(toReturn);
+		return toReturn;
 	
 	}
 
