@@ -5,6 +5,9 @@
 
 ## Offene Punkte, Vorschläge und Diskussion
 
+### Header-Zeile anpassen
+- Die Header-Zeile müsste an das neue Datumsformat angepasst werden - wie in Klasse TiwoliChirp (prefix + daySuffix+ delim  + month)
+
 ### Export-Funktionalität
 - Export-Formate zur Aktualisierung der Android/iOS-App
 
