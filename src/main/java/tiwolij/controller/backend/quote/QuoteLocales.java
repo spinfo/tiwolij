@@ -1,8 +1,8 @@
 package tiwolij.controller.backend.quote;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,13 +28,12 @@ public class QuoteLocales {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "quoteId", defaultValue = "0") Integer quoteId) throws Exception {
+	public ModelAndView list(Pageable pageable, @RequestParam(name = "quoteId", defaultValue = "0") Integer quoteId) {
 		ModelAndView mv = new ModelAndView("backend/quote/locale_list");
-		List<QuoteLocale> list = (quotes.hasQuote(quoteId)) ? quotes.getLocalesByQuote(quoteId) : quotes.getLocales();
-		list.sort((x, y) -> x.compareNaturalBy(y, order));
+		Page<QuoteLocale> page = quotes.hasQuote(quoteId) ? quotes.getLocalesByQuote(pageable, quoteId)
+				: quotes.getLocales(pageable);
 
-		mv.addObject("locales", list);
+		mv.addObject("locales", page);
 		return mv;
 	}
 

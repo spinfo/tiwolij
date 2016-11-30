@@ -2,12 +2,14 @@ package tiwolij.service.quote;
 
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-import tiwolij.domain.RecordId;
 import tiwolij.domain.QuoteLocale;
+import tiwolij.domain.RecordId;
 
-public interface QuoteLocaleRepository extends CrudRepository<QuoteLocale, Integer> {
+public interface QuoteLocaleRepository extends PagingAndSortingRepository<QuoteLocale, Integer> {
 
 	public QuoteLocale findTop1ById(Integer localeId);
 
@@ -26,5 +28,17 @@ public interface QuoteLocaleRepository extends CrudRepository<QuoteLocale, Integ
 	public List<RecordId> findAllByLanguage(String language);
 
 	public List<RecordId> findAllByScheduleAndLanguage(String schedule, String language);
+
+	// pagination
+
+	public Page<QuoteLocale> findAll(Pageable pageable);
+
+	public Page<QuoteLocale> findAllByQuoteId(Pageable pageable, Integer quoteId);
+
+	public Page<QuoteLocale> findAllBySchedule(Pageable pageable, String schedule);
+
+	public Page<QuoteLocale> findAllByLanguage(Pageable pageable, String language);
+
+	public Page<QuoteLocale> findAllByScheduleAndLanguage(Pageable pageable, String schedule, String language);
 
 }

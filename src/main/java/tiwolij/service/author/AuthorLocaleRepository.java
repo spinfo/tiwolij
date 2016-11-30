@@ -2,11 +2,13 @@ package tiwolij.service.author;
 
 import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import tiwolij.domain.AuthorLocale;
 
-public interface AuthorLocaleRepository extends CrudRepository<AuthorLocale, Integer> {
+public interface AuthorLocaleRepository extends PagingAndSortingRepository<AuthorLocale, Integer> {
 
 	public AuthorLocale findTop1ById(Integer localeId);
 
@@ -15,5 +17,11 @@ public interface AuthorLocaleRepository extends CrudRepository<AuthorLocale, Int
 	public List<AuthorLocale> findAll();
 
 	public List<AuthorLocale> findAllByAuthorId(Integer authorId);
+
+	// pagination
+
+	public Page<AuthorLocale> findAll(Pageable pageable);
+
+	public Page<AuthorLocale> findAllByAuthorId(Pageable pageable, Integer authorId);
 
 }

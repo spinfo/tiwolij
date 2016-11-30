@@ -1,8 +1,8 @@
 package tiwolij.controller.backend.author;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,14 +28,12 @@ public class AuthorLocales {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
+	public ModelAndView list(Pageable pageable, @RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
 		ModelAndView mv = new ModelAndView("backend/author/locale_list");
-		List<AuthorLocale> list = (authors.hasAuthor(authorId)) ? authors.getLocalesByAuthor(authorId)
-				: authors.getLocales();
-		list.sort((x, y) -> x.compareNaturalBy(y, order));
+		Page<AuthorLocale> page = authors.hasAuthor(authorId) ? authors.getLocalesByAuthor(pageable, authorId)
+				: authors.getLocales(pageable);
 
-		mv.addObject("locales", list);
+		mv.addObject("locales", page);
 		return mv;
 	}
 
@@ -89,7 +87,7 @@ public class AuthorLocales {
 	@GetMapping("/delete")
 	public String delete(@RequestParam(name = "localeId") Integer localeId) {
 		Author author = authors.getLocale(localeId).getAuthor();
-		
+
 		authors.delLocale(localeId);
 		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}

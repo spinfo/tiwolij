@@ -1,9 +1,8 @@
 package tiwolij.controller.backend.quote;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import tiwolij.domain.Quote;
-import tiwolij.domain.Work;
 import tiwolij.service.quote.QuoteService;
 import tiwolij.service.work.WorkService;
 
@@ -33,23 +31,13 @@ public class Quotes {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId,
+	public ModelAndView list(Pageable pageable, @RequestParam(name = "authorId", defaultValue = "0") Integer authorId,
 			@RequestParam(name = "workId", defaultValue = "0") Integer workId) {
 		ModelAndView mv = new ModelAndView("backend/quote/quote_list");
-		List<Quote> list = new ArrayList<Quote>();
+		Page<Quote> page = works.hasWork(workId) ? quotes.getQuotesByWork(pageable, workId)
+				: quotes.getQuotes(pageable);
 
-		if (authorId != 0) {
-			for (Work w : works.getWorksByAuthor(authorId))
-				list.addAll(quotes.getQuotesByWork(w.getId()));
-		} else if (workId != 0) {
-			list = quotes.getQuotesByWork(workId);
-		} else {
-			list = quotes.getQuotes();
-		}
-
-		list.sort((x, y) -> x.compareNaturalBy(y, order));
-		mv.addObject("quotes", list);
+		mv.addObject("quotes", page);
 		return mv;
 	}
 

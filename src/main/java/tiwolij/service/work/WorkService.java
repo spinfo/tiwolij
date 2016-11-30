@@ -2,6 +2,9 @@ package tiwolij.service.work;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import tiwolij.domain.Work;
 import tiwolij.domain.WorkLocale;
 
@@ -14,7 +17,7 @@ public interface WorkService {
 	public Work getWork(Integer workId);
 
 	public Work getWorkBySlug(String slug);
-	
+
 	public Work getWorkByWikidataId(Integer wikidataId);
 
 	public List<Work> getWorks();
@@ -28,6 +31,16 @@ public interface WorkService {
 	public List<WorkLocale> getLocales();
 
 	public List<WorkLocale> getLocalesByWork(Integer workId);
+
+	// pagination
+
+	public Page<Work> getWorks(Pageable pageable);
+
+	public Page<Work> getWorksByAuthor(Pageable pageable, Integer authorId);
+
+	public Page<WorkLocale> getLocales(Pageable pageable);
+
+	public Page<WorkLocale> getLocalesByWork(Pageable pageable, Integer workId);
 
 	/*
 	 * SETTERS
@@ -50,7 +63,7 @@ public interface WorkService {
 	 */
 
 	public Boolean hasWork(Integer workId);
-	
+
 	public Boolean hasWorkBySlug(String slug);
 
 	public Boolean hasWorkByWikidataId(Integer wikidataId);

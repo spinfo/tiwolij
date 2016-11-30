@@ -1,0 +1,13 @@
+<div th:fragment="pager" th:if="${page.totalPages} > 1" th:with="pages = ${page.totalPages} - 1" id="pager" class="text-center">
+	<ul class="pagination pagination-sm">
+		<li th:class="${page.number == 0} ? disabled">
+			<a th:href="${page.number == 0} ? '#' : '?page=' + (${page.number} - 1)">&laquo;</a>
+		</li>
+		<li th:each="p : ${#numbers.sequence(0, pages)}" th:class="${page.number == p} ? 'active'">
+			<a th:href="${page.number == p} ? '#' : '?page=' + ${p}" th:text="${p + 1}" />
+		</li>
+		<li th:class="${page.number == pages} ? disabled">
+			<a th:href="${page.number == pages} ? '#' : '?page=' + (${page.number} + 1)">&raquo;</a>
+		</li>
+	</ul>
+</div>

@@ -1,9 +1,8 @@
 package tiwolij.controller.backend.work;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,19 +32,12 @@ public class Works {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
+	public ModelAndView list(Pageable pageable, @RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
 		ModelAndView mv = new ModelAndView("backend/work/work_list");
-		List<Work> list = new ArrayList<Work>();
+		Page<Work> page = authors.hasAuthor(authorId) ? works.getWorksByAuthor(pageable, authorId)
+				: works.getWorks(pageable);
 
-		if (authorId != 0) {
-			list = works.getWorksByAuthor(authorId);
-		} else {
-			list = works.getWorks();
-		}
-
-		list.sort((x, y) -> x.compareNaturalBy(y, order));
-		mv.addObject("works", list);
+		mv.addObject("works", page);
 		return mv;
 	}
 
@@ -82,7 +74,7 @@ public class Works {
 		work = works.importWorkByWikidataId(work.getWikidataId());
 		works.importLocales(work.getId());
 		authors.importLocales(work.getAuthor().getId());
-		
+
 		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 

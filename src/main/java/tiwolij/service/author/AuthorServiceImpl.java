@@ -19,6 +19,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -99,6 +101,23 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public List<AuthorLocale> getLocalesByAuthor(Integer authorId) {
 		return locales.findAllByAuthorId(authorId);
+	}
+
+	// pagination
+
+	@Override
+	public Page<Author> getAuthors(Pageable pageable) {
+		return authors.findAll(pageable);
+	}
+
+	@Override
+	public Page<AuthorLocale> getLocales(Pageable pageable) {
+		return locales.findAll(pageable);
+	}
+
+	@Override
+	public Page<AuthorLocale> getLocalesByAuthor(Pageable pageable, Integer authorId) {
+		return locales.findAllByAuthorId(pageable, authorId);
 	}
 
 	/*
@@ -236,10 +255,10 @@ public class AuthorServiceImpl implements AuthorService {
 		// https://stackoverflow.com/questions/1228381
 		byte[] bytes = IOUtils.toByteArray(url.openStream());
 		BufferedImage input = ImageIO.read(new ByteArrayInputStream(bytes));
-		
+
 		if (input == null)
 			return author;
-		
+
 		Integer height = Integer.parseInt(env.getProperty("tiwolij.import.image.height"));
 		Integer width = (height * input.getWidth()) / input.getHeight();
 
@@ -278,7 +297,7 @@ public class AuthorServiceImpl implements AuthorService {
 	public AuthorLocale importLocale(Integer authorId, String language) throws Exception {
 		if (hasLocale(authorId, language))
 			return getLocaleByLang(authorId, language);
-		
+
 		Author author = getAuthor(authorId);
 		WikibaseDataFetcher data = WikibaseDataFetcher.getWikidataDataFetcher();
 		ItemDocument item = (ItemDocument) data.getEntityDocument("Q" + author.getWikidataId());

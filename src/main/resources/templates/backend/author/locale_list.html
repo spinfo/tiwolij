@@ -13,10 +13,10 @@
 					<table th:unless="${#lists.isEmpty(locales)}" class="table table-hover">
 						<thead>
 							<tr>
-								<th><span th:text="#{fields.id}" th:remove="tag"/> <a th:href="@{/tiwolij/authors/locales/list?order=id}"><span class="caret" /></a></th>
-								<th><span th:text="#{fields.author}" th:remove="tag"/> <a th:href="@{/tiwolij/authors/locales/list?order=author}"><span class="caret" /></a></th>
-								<th><span th:text="#{fields.language}" th:remove="tag"/> <a th:href="@{/tiwolij/authors/locales/list?order=language}"><span class="caret" /></a></th>
-								<th><span th:text="#{fields.name}" th:remove="tag"/> <a th:href="@{/tiwolij/authors/locales/list?order=name}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.id}" th:remove="tag"/> <a th:href="@{/tiwolij/authors/locales/list?sort=id}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.author}" th:remove="tag"/> <a th:href="@{/tiwolij/authors/locales/list?sort=author}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.language}" th:remove="tag"/> <a th:href="@{/tiwolij/authors/locales/list?sort=language}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.name}" th:remove="tag"/> <a th:href="@{/tiwolij/authors/locales/list?sort=name}"><span class="caret" /></a></th>
 								<th th:text="#{fields.source}" class="text-center" />
 								<th th:text="#{actions}" class="text-right" />
 							</tr>
@@ -38,6 +38,7 @@
 					</table>
 					<div th:if="${#lists.isEmpty(locales)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 				</div>
+				<div th:unless="${#lists.isEmpty(locales)}" th:replace="../elements/paginate (page=${locales})" />
 			</div>
 		</section>
 	</div>

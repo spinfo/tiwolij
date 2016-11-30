@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -129,6 +131,38 @@ public class QuoteServiceImpl implements QuoteService {
 		list.stream().forEach(l -> all.add(locales.findTop1ById(l.getId())));
 
 		return all;
+	}
+
+	// pagination
+
+	@Override
+	public Page<Quote> getQuotes(Pageable pageable) {
+		return quotes.findAll(pageable);
+	}
+
+	@Override
+	public Page<Quote> getQuotesByWork(Pageable pageable, Integer workId) {
+		return quotes.findAllByWorkId(pageable, workId);
+	}
+
+	@Override
+	public Page<QuoteLocale> getLocales(Pageable pageable) {
+		return locales.findAll(pageable);
+	}
+
+	@Override
+	public Page<QuoteLocale> getLocalesByQuote(Pageable pageable, Integer quoteId) {
+		return locales.findAllByQuoteId(pageable, quoteId);
+	}
+
+	@Override
+	public Page<QuoteLocale> getLocalesBySchedule(Pageable pageable, String schedule) {
+		return locales.findAllBySchedule(pageable, schedule);
+	}
+
+	@Override
+	public Page<QuoteLocale> getLocalesByScheduleAndLang(Pageable pageable, String schedule, String language) {
+		return locales.findAllByScheduleAndLanguage(pageable, schedule, language);
 	}
 
 	/*

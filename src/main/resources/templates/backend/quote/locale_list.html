@@ -13,10 +13,10 @@
 					<table th:unless="${#lists.isEmpty(locales)}" class="table table-hover">
 						<thead>
 							<tr>
-								<th><span th:text="#{fields.id}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?order=id}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.id}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?sort=id}"><span class="caret" /></a></th>
 								<th th:text="#{fields.quote}" />
-								<th><span th:text="#{fields.language}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?order=language}"><span class="caret" /></a></th>
-								<th><span th:text="#{fields.schedule}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?order=schedule}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.language}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?sort=language}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.schedule}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/locales/list?sort=schedule}"><span class="caret" /></a></th>
 								<th th:text="#{fields.corpus}" />
 								<th th:text="#{fields.source}" class="text-center" />
 								<th th:text="#{fields.meta}" />
@@ -42,6 +42,7 @@
 					</table>
 					<div th:if="${#lists.isEmpty(locales)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
 				</div>
+				<div th:unless="${#lists.isEmpty(locales)}" th:replace="../elements/paginate (page=${locales})" />
 			</div>
 		</section>
 	</div>

@@ -2,6 +2,9 @@ package tiwolij.service.quote;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import tiwolij.domain.Quote;
 import tiwolij.domain.QuoteLocale;
 
@@ -39,6 +42,20 @@ public interface QuoteService {
 	public List<QuoteLocale> getLocalesBySchedule(String schedule);
 
 	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language);
+
+	// pagination
+
+	public Page<Quote> getQuotes(Pageable pageable);
+
+	public Page<Quote> getQuotesByWork(Pageable pageable, Integer workId);
+
+	public Page<QuoteLocale> getLocales(Pageable pageable);
+
+	public Page<QuoteLocale> getLocalesByQuote(Pageable pageable, Integer quoteId);
+
+	public Page<QuoteLocale> getLocalesBySchedule(Pageable pageable, String schedule);
+
+	public Page<QuoteLocale> getLocalesByScheduleAndLang(Pageable pageable, String schedule, String language);
 
 	/*
 	 * SETTERS

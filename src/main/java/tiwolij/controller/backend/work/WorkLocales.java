@@ -1,8 +1,8 @@
 package tiwolij.controller.backend.work;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -28,13 +28,12 @@ public class WorkLocales {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order,
-			@RequestParam(name = "id", defaultValue = "0") Integer workId) {
+	public ModelAndView list(Pageable pageable, @RequestParam(name = "id", defaultValue = "0") Integer workId) {
 		ModelAndView mv = new ModelAndView("backend/work/locale_list");
-		List<WorkLocale> list = (works.hasWork(workId)) ? works.getLocalesByWork(workId) : works.getLocales();
-		list.sort((x, y) -> x.compareNaturalBy(y, order));
+		Page<WorkLocale> page = works.hasWork(workId) ? works.getLocalesByWork(pageable, workId)
+				: works.getLocales(pageable);
 
-		mv.addObject("locales", list);
+		mv.addObject("locales", page);
 		return mv;
 	}
 

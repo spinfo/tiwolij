@@ -3,6 +3,9 @@ package tiwolij.service.author;
 import java.net.URL;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
 
@@ -27,6 +30,14 @@ public interface AuthorService {
 	public List<AuthorLocale> getLocales();
 
 	public List<AuthorLocale> getLocalesByAuthor(Integer authorId);
+	
+	// pagination
+	
+	public Page<Author> getAuthors(Pageable pageable);
+	
+	public Page<AuthorLocale> getLocales(Pageable pageable);
+
+	public Page<AuthorLocale> getLocalesByAuthor(Pageable pageable, Integer authorId);
 	
 	/*
 	 * SETTERS

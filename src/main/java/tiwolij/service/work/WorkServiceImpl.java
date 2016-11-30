@@ -11,6 +11,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
@@ -101,6 +103,28 @@ public class WorkServiceImpl implements WorkService {
 	@Override
 	public List<WorkLocale> getLocalesByWork(Integer workId) {
 		return locales.findAllByWorkId(workId);
+	}
+
+	// pagination
+
+	@Override
+	public Page<Work> getWorks(Pageable pageable) {
+		return works.findAll(pageable);
+	}
+
+	@Override
+	public Page<Work> getWorksByAuthor(Pageable pageable, Integer authorId) {
+		return works.findAllByAuthorId(pageable, authorId);
+	}
+
+	@Override
+	public Page<WorkLocale> getLocales(Pageable pageable) {
+		return locales.findAll(pageable);
+	}
+
+	@Override
+	public Page<WorkLocale> getLocalesByWork(Pageable pageable, Integer workId) {
+		return locales.findAllByWorkId(pageable, workId);
 	}
 
 	/*

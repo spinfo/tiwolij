@@ -1,9 +1,10 @@
 package tiwolij.controller.backend.author;
 
 import java.net.URL;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -29,12 +30,11 @@ public class Authors {
 	}
 
 	@GetMapping("/list")
-	public ModelAndView list(@RequestParam(name = "order", defaultValue = "id") String order) {
+	public ModelAndView list(Pageable pageable) {
 		ModelAndView mv = new ModelAndView("backend/author/author_list");
-		List<Author> list = authors.getAuthors();
-		list.sort((x, y) -> x.compareNaturalBy(y, order));
+		Page<Author> page = authors.getAuthors(pageable);
 
-		mv.addObject("authors", list);
+		mv.addObject("authors", page);
 		return mv;
 	}
 
