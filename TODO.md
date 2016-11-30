@@ -5,23 +5,12 @@
 
 ## Offene Punkte, Vorschläge und Diskussion
 
-### Header-Zeile anpassen
-- Die Header-Zeile müsste an das neue Datumsformat angepasst werden - wie in Klasse TiwoliChirp (prefix + daySuffix+ delim  + month)
-
-### Export-Funktionalität
-- Export-Formate zur Aktualisierung der Android/iOS-App
-
 ### Pagination und verbesserte Navigation/Suche fürs Backend
 - derzeit werden alle DB-Objekte auf einer Seite angezeigt, die entsprechend lang ist
 - wenn man ein bestimmtes Zitat suchen will, muss man bisher die Browsersuche nutzen, das kann man einfacher übers Backend lösen
 
 ### Export-Funktionalität
-- Export als "GoogleDocs Style Import" für autoChirp
 - Export-Formate zur Aktualisierung der Android/iOS-App
-- Exporte filtern, bspw.:
-	- Exportieren von quoteLocales nur, wenn "finalisiert"
-	- Exportieren von einer Sprache
-	- Exportieren von Datums-Ranges
 
 ### Spanische Lokalisierung des Interface
 - im Projekt unter src/main/resources/locales liegen die verschiedenen Lokalisierungen der Applikation, Spanisch fehlt
@@ -49,9 +38,22 @@
 
 ## Abgeschlossenes
 
+### Header-Zeile anpassen
+- Die Header-Zeile müsste an das neue Datumsformat angepasst werden - wie in Klasse TiwoliChirp (prefix + daySuffix+ delim  + month)
+- PS: Auch Header-Zeile auf Flashcards angepasst
+
+### Export-Funktionalität
+- Export als "GoogleDocs Style Import" für autoChirp
+- Export-Formate zur Aktualisierung der Android/iOS-App
+- Exporte filtern, bspw.:
+	- Exportieren von quoteLocales nur, wenn "finalisiert"
+	- Exportieren von einer Sprache
+	- Exportieren von Datums-Ranges
+
 ### Flashcard-Anpassungen
 - line-breaks werden nicht mitgemacht und nicht mal ein whitespace zwischen absatzende und absatzanfang gesetzt (FF)
 - PS: Absätze zu machen ist ziemlich untrivial; daher werden nun alle <br> durch ein whitespace ersetzt
+- PS: Doch trivialer als gedacht; <br> auf Flashcards durch tatsächliche newlines ersetzt. Pls test!
 
 ### Bildattribution irreführend (FF)
 - unter das Autorenbild den Namen des Autors setzen und dann einen Link auf die Wikimedia Commons (nicht die Copyright-Info)
