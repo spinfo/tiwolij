@@ -71,8 +71,10 @@ public class Image {
 		AuthorLocale author = authors.getLocaleByLang(work.getWork().getAuthor().getId(), language);
 
 		Locale locale = new Locale(language);
-		String month = messages.getMessage("months." + quote.getSchedule().split("-")[1], null, locale);
-		String schedule = quote.getSchedule().split("-")[0] + messages.getMessage("months.delim", null, locale) + month;
+		String day = messages.getMessage("day." + quote.getDay(), null, locale);
+		String delim = messages.getMessage("months.delim", null, locale);
+		String month = messages.getMessage("months." + quote.getMonth(), null, locale);
+		String schedule = day + delim + month;
 
 		// colors
 		Color text = new Color(51, 51, 51);
@@ -122,28 +124,30 @@ public class Image {
 		FontRenderContext frc = graphic.getFontRenderContext();
 
 		// corpus
-		String corpus = quote.getCorpus().replaceAll("<br[^>]*>", " ").replaceAll("<[^>]*>", "");
-		
-		graphic.setColor(text);
-		attstr = new AttributedString(corpus);
-		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 20));
-		iter = attstr.getIterator();
-		measure = new LineBreakMeasurer(iter, frc);
-		measure.setPosition(iter.getBeginIndex());
+		String corpus[] = quote.getCorpus().split("<br[^>]*>");
 
-		x = 360f;
 		y = 120f;
-		bound = 510f;
-		while (measure.getPosition() < iter.getEndIndex()) {
-			TextLayout layout = measure.nextLayout(bound);
-			y += layout.getAscent();
-			layout.draw(graphic, x, y);
-			y += layout.getDescent() + layout.getLeading();
+		for (String c : corpus) {
+			graphic.setColor(text);
+			attstr = new AttributedString(c.replaceAll("<[^>]*>", ""));
+			attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 20));
+			iter = attstr.getIterator();
+			measure = new LineBreakMeasurer(iter, frc);
+			measure.setPosition(iter.getBeginIndex());
+
+			x = 360f;
+			bound = 510f;
+			while (measure.getPosition() < iter.getEndIndex()) {
+				TextLayout layout = measure.nextLayout(bound);
+				y += layout.getAscent();
+				layout.draw(graphic, x, y);
+				y += layout.getDescent() + layout.getLeading();
+			}
 		}
 
 		// author name
 		String name = author.getName();
-		
+
 		graphic.setColor(text);
 		attstr = new AttributedString(name);
 		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 16));
@@ -160,13 +164,12 @@ public class Image {
 			y += layout.getAscent();
 			layout.draw(graphic, dx, y);
 			y += layout.getDescent() + layout.getLeading();
-		}		
-		
-		
+		}
+
 		// imageAttribution
 		String attribution = quote.getQuote().getWork().getAuthor().getImageAttribution();
 		attribution = messages.getMessage("fields.imageAttribution", null, locale) + ": " + attribution;
-		
+
 		graphic.setColor(textmuted);
 		attstr = new AttributedString(attribution);
 		attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 14));
