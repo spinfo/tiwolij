@@ -41,4 +41,8 @@ public interface QuoteLocaleRepository extends PagingAndSortingRepository<QuoteL
 
 	public Page<QuoteLocale> findAllByScheduleAndLanguage(Pageable pageable, String schedule, String language);
 
+	// search
+
+	public List<QuoteLocale> findAllByCorpusContainingIgnoreCase(String corpus);
+
 }

@@ -1,0 +1,105 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title=#{backend.searchresults})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{fields.authors}" class="panel-heading" />
+					<table th:unless="${#lists.isEmpty(authors)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th th:text="#{fields.id}" />
+								<th th:text="#{fields.wikidataId}" />
+								<th th:text="#{fields.slug}" />
+								<th th:text="#{fields.names}" />
+								<th th:text="#{fields.image}" class="text-center" />
+								<th th:text="#{fields.works}" class="text-center" />
+								<th th:text="#{actions}" class="text-right" />
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="author : ${authors}">
+								<th th:text="'#' + ${author.id}" />
+								<td><a th:unless="${#strings.isEmpty(author.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${author.wikidataId}" th:text="'Q' + ${author.wikidataId}" /></td>
+								<td th:text="${#strings.abbreviate(author.slug, 25)}" />
+								<td class="child-enum"><div th:each="locale : ${author.locales}" th:text="${locale.value.name} + ' (' + ${locale.key} + ')'" /></td>
+								<td class="text-center"><a th:unless="${#lists.isEmpty(author.image)}" target="_blank" th:text="#{actions.view}" th:href="@{/image/author(id=${author.id})}" /></td>
+								<td class="text-center"><a th:href="@{/tiwolij/works/list(authorId=${author.id})}" th:text="#{actions.list}" /></td>
+								<td class="text-right"><a th:text="#{actions.view}" th:href="@{/tiwolij/authors/view(authorId=${author.id})}" role="button" class="btn btn-xs btn-default" /></td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${#lists.isEmpty(authors)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
+				</div>
+			</div>
+		</section>
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{fields.works}" class="panel-heading" />
+					<table th:unless="${#lists.isEmpty(works)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th th:text="#{fields.id}" />
+								<th th:text="#{fields.wikidataId}" />
+								<th th:text="#{fields.author}" />
+								<th th:text="#{fields.slug}" />
+								<th th:text="#{fields.names}" />
+								<th th:text="#{fields.quotes}" class="text-center" />
+								<th th:text="#{actions}" class="text-right" />
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="work : ${works}">
+								<th th:text="'#' + ${work.id}" />
+								<td><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${work.wikidataId}" th:text="'Q' + ${work.wikidataId}" /></td>
+								<td><a th:href="@{/tiwolij/authors/view(authorId=${work.author.id})}" th:text="${#strings.abbreviate(work.author.slug, 25)}" /></td>
+								<td th:text="${#strings.abbreviate(work.slug, 25)}" />
+								<td class="child-enum"><div th:each="locale : ${work.locales}" th:text="${#strings.abbreviate(locale.value.name, 25)} + ' (' + ${locale.key} + ')'" /></td>
+								<td class="text-center"><a th:text="#{actions.list}" th:href="@{/tiwolij/quotes/list(workId=${work.id})}" /></td>
+								<td class="text-right"><a th:text="#{actions.view}" th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default" /></td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${#lists.isEmpty(works)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
+				</div>
+			</div>
+		</section>
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{fields.quotes}" class="panel-heading" />
+					<table th:unless="${#lists.isEmpty(quotes)}" class="table table-hover">
+						<thead>
+							<tr>
+								<th th:text="#{fields.id}" />
+								<th th:text="#{fields.author}" />
+								<th th:text="#{fields.work}" />
+								<th th:text="#{fields.locales}" />
+								<th th:text="#{actions}" class="text-right" />
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="quote : ${quotes}">
+								<th th:text="'#' + ${quote.id}" />
+								<td><a th:href="@{/tiwolij/authors/view(authorId=${quote.work.author.id})}" th:text="${#strings.abbreviate(quote.work.author.slug, 25)}" /></td>
+								<td><a th:href="@{/tiwolij/works/view(workId=${quote.work.id})}" th:text="${#strings.abbreviate(quote.work.slug, 25)}" /></td>
+								<td class="child-enum"><div th:each="locale : ${quote.locales}" th:text="${#strings.abbreviate(locale.value.corpus, 50)} + ' (' + ${locale.key} + ')'" /></td>
+								<td class="text-right"><a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default" /></td>
+							</tr>
+						</tbody>
+					</table>
+					<div th:if="${#lists.isEmpty(quotes)}" class="panel-body"><p th:text="#{general.empty}" class="text-danger" /></div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>

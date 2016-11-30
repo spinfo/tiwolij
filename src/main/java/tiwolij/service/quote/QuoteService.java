@@ -57,6 +57,10 @@ public interface QuoteService {
 
 	public Page<QuoteLocale> getLocalesByScheduleAndLang(Pageable pageable, String schedule, String language);
 
+	// search
+
+	public List<Quote> search(String term);
+
 	/*
 	 * SETTERS
 	 */

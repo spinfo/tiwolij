@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -118,6 +119,20 @@ public class AuthorServiceImpl implements AuthorService {
 	@Override
 	public Page<AuthorLocale> getLocalesByAuthor(Pageable pageable, Integer authorId) {
 		return locales.findAllByAuthorId(pageable, authorId);
+	}
+
+	// search
+
+	@Override
+	public List<Author> search(String term) {
+		List<AuthorLocale> found = locales.findAllByNameContainingIgnoreCase(term);
+		List<Author> result = new ArrayList<Author>();
+
+		for (AuthorLocale l : found)
+			if (!result.contains(l.getAuthor()))
+				result.add(l.getAuthor());
+
+		return result;
 	}
 
 	/*

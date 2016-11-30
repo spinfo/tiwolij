@@ -42,6 +42,10 @@ public interface WorkService {
 
 	public Page<WorkLocale> getLocalesByWork(Pageable pageable, Integer workId);
 
+	// search
+	
+	public List<Work> search(String term);
+	
 	/*
 	 * SETTERS
 	 */

@@ -11,8 +11,20 @@ body {
  * BACKEND
  */
 
-.child-enum>:not(:last-child)::after {
+#backend .child-enum>:not(:last-child)::after {
     content: ',';
+}
+#backend .navbar .navbar-form {
+    opacity: 0.25;
+    transition: 1s;
+}
+#backend .navbar .navbar-form:hover {
+    opacity: 1;
+}
+#backend .navbar .navbar-form input {
+	border-color: none;
+	box-shadow: none;
+	background-color: white;
 }
 #backend form input:invalid, #backend form select:invalid, #backend textarea:invalid {
     border-color: #8a6d3b;

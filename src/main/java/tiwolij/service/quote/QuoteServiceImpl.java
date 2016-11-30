@@ -165,6 +165,20 @@ public class QuoteServiceImpl implements QuoteService {
 		return locales.findAllByScheduleAndLanguage(pageable, schedule, language);
 	}
 
+	// search
+
+	@Override
+	public List<Quote> search(String term) {
+		List<QuoteLocale> found = locales.findAllByCorpusContainingIgnoreCase(term);
+		List<Quote> result = new ArrayList<Quote>();
+
+		for (QuoteLocale l : found)
+			if (!result.contains(l.getQuote()))
+				result.add(l.getQuote());
+
+		return result;
+	}
+
 	/*
 	 * SETTERS
 	 */

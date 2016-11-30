@@ -24,4 +24,8 @@ public interface AuthorLocaleRepository extends PagingAndSortingRepository<Autho
 
 	public Page<AuthorLocale> findAllByAuthorId(Pageable pageable, Integer authorId);
 
+	// search
+
+	public List<AuthorLocale> findAllByNameContainingIgnoreCase(String name);
+
 }

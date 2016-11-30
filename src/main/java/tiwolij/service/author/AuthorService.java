@@ -39,6 +39,10 @@ public interface AuthorService {
 
 	public Page<AuthorLocale> getLocalesByAuthor(Pageable pageable, Integer authorId);
 	
+	// search
+	
+	public List<Author> search(String term);
+	
 	/*
 	 * SETTERS
 	 */

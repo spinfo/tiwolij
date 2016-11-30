@@ -24,4 +24,8 @@ public interface WorkLocaleRepository extends PagingAndSortingRepository<WorkLoc
 
 	public Page<WorkLocale> findAllByWorkId(Pageable pageable, Integer workId);
 
+	// search
+
+	public List<WorkLocale> findAllByNameContainingIgnoreCase(String name);
+
 }

@@ -2,6 +2,7 @@ package tiwolij.service.work;
 
 import java.net.URL;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -125,6 +126,20 @@ public class WorkServiceImpl implements WorkService {
 	@Override
 	public Page<WorkLocale> getLocalesByWork(Pageable pageable, Integer workId) {
 		return locales.findAllByWorkId(pageable, workId);
+	}
+
+	// search
+
+	@Override
+	public List<Work> search(String term) {
+		List<WorkLocale> found = locales.findAllByNameContainingIgnoreCase(term);
+		List<Work> result = new ArrayList<Work>();
+
+		for (WorkLocale l : found)
+			if (!result.contains(l.getWork()))
+				result.add(l.getWork());
+
+		return result;
 	}
 
 	/*
