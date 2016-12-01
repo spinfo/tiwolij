@@ -1,13 +1,31 @@
-<div th:fragment="pager" th:if="${page.totalPages} > 1" th:with="pages = ${page.totalPages} - 1" id="pager" class="text-center">
-	<ul class="pagination pagination-sm">
+<div th:fragment="pager" th:if="${page.totalPages} > 1" th:with="pages=${page.totalPages}-1" id="pager" class="text-center">
+	<ul class="pagination" th:with="sort = ${#httpServletRequest.getParameter('sort')},
+			start = (${page.number} - 5) lt 0 ? 0 : (${page.number} - 5),
+			end = (${page.number} + 5) gt ${pages} ? ${pages} : (${page.number} + 5)">
 		<li th:class="${page.number == 0} ? disabled">
-			<a th:href="${page.number == 0} ? '#' : '?page=' + (${page.number} - 1)">&laquo;</a>
+			<a th:href="${page.number == 0} ? '#' : '?page=' + 0 + (${sort} != null ? '&amp;sort=' + ${sort} : '')">
+				<span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
+			</a>
 		</li>
-		<li th:each="p : ${#numbers.sequence(0, pages)}" th:class="${page.number == p} ? 'active'">
-			<a th:href="${page.number == p} ? '#' : '?page=' + ${p}" th:text="${p + 1}" />
+		<li th:class="${page.number == 0} ? disabled">
+			<a th:href="${page.number == 0} ? '#' : '?page=' + (${page.number} - 1) + (${sort} != null ? '&amp;sort=' + ${sort} : '')">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+			</a>
+		</li>
+		<li th:if="${start} gt 0" class="disabled"><a href="#">&hellip;</a></li>
+		<li th:each="p : ${#numbers.sequence(start, end)}" th:class="${page.number == p} ? 'active'">
+			<a th:href="${page.number == p} ? '#' : '?page=' + ${p} + (${sort} != null ? '&amp;sort=' + ${sort} : '')" th:text="${p + 1}" />
+		</li>
+		<li th:if="${end} lt ${pages}" class="disabled"><a href="#">&hellip;</a></li>
+		<li th:class="${page.number == pages} ? disabled">
+			<a th:href="${page.number == pages} ? '#' : '?page=' + (${page.number} + 1) + (${sort} != null ? '&amp;sort=' + ${sort} : '')">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			</a>
 		</li>
 		<li th:class="${page.number == pages} ? disabled">
-			<a th:href="${page.number == pages} ? '#' : '?page=' + (${page.number} + 1)">&raquo;</a>
+			<a th:href="${page.number == pages} ? '#' : '?page=' + ${pages} + (${sort} != null ? '&amp;sort=' + ${sort} : '')">
+				<span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span>
+			</a>
 		</li>
 	</ul>
 </div>
