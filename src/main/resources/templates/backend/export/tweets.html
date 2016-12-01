@@ -11,7 +11,7 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div th:text="#{data.export.tweets}" class="panel-heading" />
-					<form class="form-horizontal" method="post" onsubmit="document.getElementById('submit').disabled=true">
+					<form class="form-horizontal" method="post">
 						<div class="panel-body">
 							<div th:replace="../elements/fields :: boxcheck('onlyfinal')" />
 							<div th:replace="../elements/fields :: pulldown('onlylang', false, ${languages}, '', '')" />
