@@ -38,8 +38,13 @@ public class Frontend {
 	private QuoteService quotes;
 
 	@GetMapping({ "", "/" })
-	public ModelAndView root() {
-		ModelAndView mv = new ModelAndView("frontend/index");
+	public String root() {
+		return "redirect:/view";
+	}
+
+	@GetMapping("/home")
+	public ModelAndView home() {
+		ModelAndView mv = new ModelAndView("frontend/home");
 		String language = LocaleContextHolder.getLocale().getLanguage();
 
 		mv.addObject("lang", language);
