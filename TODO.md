@@ -5,6 +5,10 @@
 
 ## Offene Punkte, Vorschläge und Diskussion
 
+### Neues Importformat 
+- Format: WerkWikiDataID - Schedule/Date - Schedule/Time - Lang - Text - Source 
+- Wenn Jahr in Date angegeben --> speichern
+
 ### Pagination und verbesserte Navigation/Suche fürs Backend
 - derzeit werden alle DB-Objekte auf einer Seite angezeigt, die entsprechend lang ist
 - wenn man ein bestimmtes Zitat suchen will, muss man bisher die Browsersuche nutzen, das kann man einfacher übers Backend lösen
