@@ -5,6 +5,9 @@
 
 ## Offene Punkte, Vorschläge und Diskussion
 
+### Issues statt ToDo
+- Oder spricht was dagegen?
+
 ### Neues Importformat 
 - Format: WerkWikiDataID - Schedule/Date - Schedule/Time - Lang - Text - Source 
 - Wenn Jahr in Date angegeben --> speichern
@@ -21,7 +24,7 @@
 - sobald alle Strings in Deutsch/Englisch vorhanden sind bräuchten wir einmal einen Spanischsprechenden zum Übersetzen
 	- JH: Kann Francisco fragen (Chilene, der bei uns arbeitet)
 
-### Import-Benutzermeh
+### Transaction History / Rollbacks
 - Wenn man beim Import die falsche Lokalisierung angibt, werden gnadenlos alle Autoren mit der falschen Lokalisierung importiert. Hier täte ein Panic-Knopf mit Rollback gut (ja, ich weiß, hat auch Nachteile, aber ich habe mir gerade die ganze DB verhunzt und muss jetzt alles noch einmal neu importieren. (jh)
 	- PS: Haben kurz drüber geredet, ist nahezu unschaffbar ohne Transaction-History etc. - ich denke, da sollten die Kuratoren anfangs Vorsicht walten lassen und später können wir aushandeln, ob dieses Feature an eine etwaige Nutzerverwaltung gehängt wird oder seperat implementiert werden soll; marke es erstmal als medium-prio.
 
