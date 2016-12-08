@@ -15,7 +15,7 @@
 							<div th:replace="../elements/fields :: view('work', *{work.slug}, @{/tiwolij/works/view(workId=${locale.work.id})}, false)" />
 							<div th:replace="../elements/fields :: view('language', *{language}, '', false)" />
 							<div th:replace="../elements/fields :: view('name', *{name}, '', false)" />
-							<div th:replace="../elements/fields :: view('href', #{actions.view}, '*{href}', true)" th:unless="${#strings.isEmpty(locale.href)}" />
+							<div th:unless="${#strings.isEmpty(locale.href)}"><div th:replace="../elements/fields :: view('href', #{actions.view}, '*{href}', true)" /></div>
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{locales.work.edit}" th:href="@{/tiwolij/works/locales/edit(localeId=*{id})}" role="button" class="btn btn-sm btn-primary" />

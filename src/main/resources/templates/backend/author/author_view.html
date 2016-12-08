@@ -12,10 +12,10 @@
 					<div th:text="#{authors.view} + ' #' + ${author.id}" class="panel-heading" />
 					<form th:unless="${#strings.isEmpty(author)}" th:object="${author}" class="form-horizontal">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: view('wikidataId', 'Q' + *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" th:unless="${#strings.isEmpty(author.wikidataId)}" />
+							<div th:unless="${#strings.isEmpty(author.wikidataId)}"><div th:replace="../elements/fields :: view('wikidataId', 'Q' + *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" /></div>
 							<div th:replace="../elements/fields :: view('slug', *{slug}, '', false)" />
-							<div th:replace="../elements/fields :: view('image', #{actions.view}, @{/image/author(id=*{id})}, true)" th:unless="${#lists.isEmpty(author.image)}" />
-							<div th:replace="../elements/fields :: view('imageAttribution', *{imageAttribution}, '', false)" th:unless="${#lists.isEmpty(author.image)}" />
+							<div th:unless="${#lists.isEmpty(author.image)}"><div th:replace="../elements/fields :: view('image', #{actions.view}, @{/image/author(id=*{id})}, true)" /></div>
+							<div th:unless="${#lists.isEmpty(author.image)}"><div th:replace="../elements/fields :: view('imageAttribution', *{imageAttribution}, '', false)" /></div>
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{authors.edit}" th:href="@{/tiwolij/authors/edit(authorId=*{id})}" role="button" class="btn btn-sm btn-primary" />

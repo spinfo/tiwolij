@@ -1,4 +1,4 @@
-package tiwolij.controller.backend;
+package tiwolij.controller.backend.data;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -36,7 +36,7 @@ import tiwolij.service.work.WorkService;
 import tiwolij.util.Heideltimer;
 
 @Controller
-@RequestMapping("/tiwolij/import")
+@RequestMapping("/tiwolij/data/import")
 public class Import {
 
 	@Autowired
@@ -53,7 +53,7 @@ public class Import {
 
 	@GetMapping({ "", "/" })
 	public ModelAndView root() {
-		ModelAndView mv = new ModelAndView("backend/import/import");
+		ModelAndView mv = new ModelAndView("backend/data/import");
 
 		mv.addObject("encodings", new String[] { "UTF-8", "UTF-16", "US-ASCII", "cp1252" });
 		mv.addObject("formats", env.getProperty("tiwolij.import.format", String[].class));
@@ -67,7 +67,7 @@ public class Import {
 			@RequestParam("format") String format, @RequestParam("encoding") String encoding,
 			@RequestParam(name = "heideltag", defaultValue = "false") Boolean heideltag) throws Exception {
 
-		ModelAndView mv = new ModelAndView("backend/import/report");
+		ModelAndView mv = new ModelAndView("backend/data/report");
 		Map<String, Exception> errors = new HashMap<String, Exception>();
 		Map<String, QuoteLocale> imports = new HashMap<String, QuoteLocale>();
 

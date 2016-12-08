@@ -12,7 +12,7 @@
 					<div th:text="#{works.view} + ' #' + ${work.id}" class="panel-heading" />
 					<form th:object="${work}" class="form-horizontal">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: view('wikidataId', *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" th:unless="*{#strings.isEmpty(wikidataId)}" />
+							<div th:unless="*{#strings.isEmpty(wikidataId)}"><div th:replace="../elements/fields :: view('wikidataId', *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" /></div>
 							<div th:replace="../elements/fields :: view('author', *{author.slug}, @{/tiwolij/authors/view(authorId=${work.author.id})}, false)" />
 							<div th:replace="../elements/fields :: view('slug', *{slug}, @{/tiwolij/authors/view(authorId=${work.author.id})}, false)" />
 						</div>

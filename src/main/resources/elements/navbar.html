@@ -56,16 +56,15 @@
 						<li><a th:href="@{/tiwolij/quotes/locales/list}" th:text="#{navbar.quotes.locales}" /></li>
 					</ul>
 				</li>
-				<li th:classappend="${uri.startsWith(path + '/tiwolij/import')} ? 'active'">
-					<a th:href="@{/tiwolij/import}" th:text="#{navbar.import}" />
-				</li>
-				<li th:classappend="${uri.startsWith(path + '/tiwolij/export')} ? 'active'">
+				<li th:classappend="${uri.startsWith(path + '/tiwolij/data')} ? 'active'">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						<span th:text="#{navbar.export}" th:remove="tag" />
+						<span th:text="#{navbar.data}" th:remove="tag" />
 						<span class="caret" />
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/export/tweets}" th:text="#{data.export.tweets}" /></li>
+						<li><a th:href="@{/tiwolij/data/export/tweets}" th:text="#{data.export.tweets}" /></li>
+						<li><a th:href="@{/tiwolij/data/import}" th:text="#{data.import.locales}" /></li>
+						<li><a th:href="@{/tiwolij/data/heideltag}" th:text="#{data.heideltag}" /></li>
 					</ul>
 				</li>
 			</ul>

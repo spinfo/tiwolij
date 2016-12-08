@@ -12,7 +12,7 @@
 					<div th:text="#{works.edit} + ' #' + ${work.id}" class="panel-heading" />
 					<form th:object="${work}" class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: view('wikidataId', *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" th:unless="*{#strings.isEmpty(wikidataId)}" />
+							<div th:unless="*{#strings.isEmpty(wikidataId)}"><div th:replace="../elements/fields :: view('wikidataId', *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" /></div>
 							<div th:replace="../elements/fields :: pulldown('author', true, ${authors}, 'id', 'slug')" />
 							<div th:replace="../elements/fields :: putin('slug', true, 'text', 255, '', 'Discipline_and_Punish')" />
 						</div>

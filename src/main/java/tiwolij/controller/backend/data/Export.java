@@ -1,4 +1,4 @@
-package tiwolij.controller.backend;
+package tiwolij.controller.backend.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import tiwolij.util.DataContainer;
 import tiwolij.util.TiwoliChirp;
 
 @Controller
-@RequestMapping("/tiwolij/export")
+@RequestMapping("/tiwolij/data/export")
 public class Export {
 
 	@Autowired
@@ -43,7 +43,7 @@ public class Export {
 
 	@GetMapping("/tweets")
 	public ModelAndView tweets() {
-		ModelAndView mv = new ModelAndView("backend/export/tweets");
+		ModelAndView mv = new ModelAndView("backend/data/export_tweets");
 		Locale locale = LocaleContextHolder.getLocale();
 
 		List<DataContainer> months = new ArrayList<DataContainer>();
@@ -52,7 +52,6 @@ public class Export {
 					String.format("%02d", i)));
 
 		mv.addObject("months", months);
-		mv.addObject("formats", env.getProperty("tiwolij.export.format", String[].class));
 		mv.addObject("languages", env.getProperty("tiwolij.localizations", String[].class));
 		return mv;
 	}

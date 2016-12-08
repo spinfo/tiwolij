@@ -12,7 +12,7 @@
 					<div th:text="#{authors.edit} + ' #' + ${author.id}" class="panel-heading" />
 					<form th:object="${author}" class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: view('wikidataId', *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" th:unless="*{#strings.isEmpty(wikidataId)}" />
+							<div th:unless="*{#strings.isEmpty(wikidataId)}"><div th:replace="../elements/fields :: view('wikidataId', *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" /></div>
 							<div th:replace="../elements/fields :: putin('slug', true, 'text', 255, '', 'Max_Scheler')" />
 							<div th:replace="../elements/fields :: putin('image', false, 'url', 255, '', 'http://www.maxscheler.com/images/Scheler_3_1.jpg')" />
 							<div th:replace="../elements/fields :: putin('imageAttribution', false, 'text', 255, '', 'CC-PD-Mark')" />

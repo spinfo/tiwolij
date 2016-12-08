@@ -13,9 +13,9 @@
 					<table th:unless="${#lists.isEmpty(quotes)}" class="table table-hover">
 						<thead>
 							<tr>
-								<th><span th:text="#{fields.id}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/list?sort=id}"><span class="caret" /></a></th>
-								<th><span th:text="#{fields.author}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/list?sort=author}"><span class="caret" /></a></th>
-								<th><span th:text="#{fields.work}" th:remove="tag"/> <a th:href="@{/tiwolij/quotes/list?sort=work}"><span class="caret" /></a></th>
+								<th><span th:text="#{fields.id}" th:remove="tag" /> <a th:href="@{/tiwolij/quotes/list?sort=id}"><span class="caret" /></a></th>
+								<th th:text="#{fields.author}" />
+								<th th:text="#{fields.work}" />
 								<th th:text="#{fields.locales}" />
 								<th th:text="#{actions}" class="text-right" />
 							</tr>

@@ -40,7 +40,7 @@ public class Backend {
 	
 	@GetMapping("search")
 	public ModelAndView search(@RequestParam("term") String term) {
-		ModelAndView mv = new ModelAndView("backend/search/result");
+		ModelAndView mv = new ModelAndView("backend/search");
 		mv.addObject("authors", authors.search(term));
 		mv.addObject("works", works.search(term));
 		mv.addObject("quotes", quotes.search(term));
