@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import tiwolij.service.author.AuthorService;
@@ -34,6 +35,15 @@ public class Backend {
 		mv.addObject("workLocales", works.countLocales());
 		mv.addObject("quotes", quotes.getCount());
 		mv.addObject("quoteLocales", quotes.getLocaleCount());
+		return mv;
+	}
+	
+	@GetMapping("search")
+	public ModelAndView search(@RequestParam("term") String term) {
+		ModelAndView mv = new ModelAndView("backend/search/result");
+		mv.addObject("authors", authors.search(term));
+		mv.addObject("works", works.search(term));
+		mv.addObject("quotes", quotes.search(term));
 		return mv;
 	}
 
