@@ -33,8 +33,7 @@ import tiwolij.domain.WorkLocale;
 import tiwolij.service.author.AuthorService;
 import tiwolij.service.quote.QuoteService;
 import tiwolij.service.work.WorkService;
-import tiwolij.util.HeidelTimeWrapper;
-import tiwolij.util.TiwoliChirp;
+import tiwolij.util.Heideltimer;
 
 @Controller
 @RequestMapping("/tiwolij/import")
@@ -77,8 +76,7 @@ public class Import {
 		Pattern regexLang = Pattern.compile("://(.{2})\\.wikipedia");
 		Pattern regexWDId = Pattern.compile("Q(\\d+)");
 
-		TiwoliChirp tiwoliChirp = new TiwoliChirp();
-		Map<String, HeidelTimeWrapper> htWrappers = new HashMap<String, HeidelTimeWrapper>();
+		Heideltimer ht = new Heideltimer();
 
 		Quote quote;
 		QuoteLocale quoteLocale;
@@ -198,17 +196,11 @@ public class Import {
 
 				// heideltime tagging
 				if (heideltag) {
-					// create HeidelTimeWrapper for language
-					if (!htWrappers.containsKey(quoteLocale.getLanguage())) {
-						htWrappers.put(quoteLocale.getLanguage(),
-								new HeidelTimeWrapper(tiwoliChirp.getLanguage(quoteLocale.getLanguage())));
-					}
-
 					// set year
-					quoteLocale.setYear(tiwoliChirp.getYear(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
+					quoteLocale.setYear(ht.getYear(quoteLocale));
 
 					// set time
-					quoteLocale.setTime(tiwoliChirp.getTime(quoteLocale, htWrappers.get(quoteLocale.getLanguage())));
+					quoteLocale.setTime(ht.getTime(quoteLocale));
 				}
 
 				/*
