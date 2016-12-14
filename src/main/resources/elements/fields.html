@@ -29,6 +29,7 @@
 		<select th:id="${name}" th:name="${name}" th:required="${required}" class="form-control">
 			<option th:unless="${required}" th:text="#{fields.emptyOption}" selected="true" value="" />
 			<option th:each="option : ${options}" th:value="${#strings.isEmpty(value)} ? ${option} : ${option.get(value)}"
+				th:selected="${#object instanceof T(tiwolij.domain.BaseEntity) and #object.has(name)} ? (${#object.get(name) == option})"
 				th:text="${#strings.isEmpty(label)} ? ${option} : ${option.get(label)}" />
 		</select>
 	</div>

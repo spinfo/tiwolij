@@ -2,6 +2,18 @@ package tiwolij.domain;
 
 public class BaseEntity {
 
+	public Boolean has(String field) {
+		Boolean result;
+		
+		try {
+			result = getClass().getDeclaredField(field) != null;
+		} catch (Exception e) {
+			result = false;
+		}
+		
+		return result;
+	}
+	
 	public Object get(String field) {
 		Object result = null;
 
