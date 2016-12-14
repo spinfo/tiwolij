@@ -72,7 +72,7 @@ public class Import {
 		Map<String, QuoteLocale> imports = new HashMap<String, QuoteLocale>();
 
 		List<String> languages = Arrays.asList(env.getProperty("tiwolij.localizations", String[].class));
-		Pattern regexDate = Pattern.compile("(\\d+)[./-](\\d+)");
+		Pattern regexDate = Pattern.compile("(\\d{2}[./-]\\d{2})([./-](\\d{4}))?[^ ]*( \\d{2}:\\d{2}(:\\d{2})?)?");
 		Pattern regexLang = Pattern.compile("://(.{2})\\.wikipedia");
 		Pattern regexWDId = Pattern.compile("Q(\\d+)");
 
@@ -131,9 +131,17 @@ public class Import {
 				if (!schedule.find())
 					throw new ParseException("Missing schedule", lineno);
 
-				String day = String.format("%02d", Integer.parseInt(schedule.group(1)));
-				String month = String.format("%02d", Integer.parseInt(schedule.group(2)));
-				quoteLocale.setSchedule(day + "-" + month);
+				quoteLocale.setSchedule(schedule.group(1));
+
+				// year
+				if (schedule.group(3) != null && !schedule.group(3).isEmpty())
+					quoteLocale.setYear(schedule.group(3));
+
+				// time
+				if (schedule.group(4) != null && !schedule.group(4).trim().isEmpty())
+					quoteLocale.setTime(
+							schedule.group(4) + (schedule.group(5) != null && !schedule.group(5).trim().isEmpty()
+									? schedule.group(5).trim() : ":00"));
 
 				// language
 				if (!forcelang.isEmpty()) {
@@ -328,6 +336,7 @@ public class Import {
 
 				imports.put(line, quoteLocale);
 			} catch (Exception error) {
+				error.printStackTrace();
 				errors.put(line, error);
 			}
 		}
