@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -68,11 +69,11 @@ public class Import {
 			@RequestParam(name = "heideltag", defaultValue = "false") Boolean heideltag) throws Exception {
 
 		ModelAndView mv = new ModelAndView("backend/data/report");
-		Map<String, Exception> errors = new HashMap<String, Exception>();
-		Map<String, QuoteLocale> imports = new HashMap<String, QuoteLocale>();
+		Map<String, Exception> errors = new LinkedHashMap<String, Exception>();
+		Map<String, QuoteLocale> imports = new LinkedHashMap<String, QuoteLocale>();
 
 		List<String> languages = Arrays.asList(env.getProperty("tiwolij.localizations", String[].class));
-		Pattern regexDate = Pattern.compile("(\\d{2}[./-]\\d{2})([./-](\\d{4}))?[^ ]*( \\d{2}:\\d{2}(:\\d{2})?)?");
+		Pattern regexDate = Pattern.compile("(\\d+)[./-](\\d+)([./-](\\d{4}))?[^ ]*( \\d{2}:\\d{2}(:\\d{2})?)?");
 		Pattern regexLang = Pattern.compile("://(.{2})\\.wikipedia");
 		Pattern regexWDId = Pattern.compile("Q(\\d+)");
 
@@ -131,17 +132,20 @@ public class Import {
 				if (!schedule.find())
 					throw new ParseException("Missing schedule", lineno);
 
-				quoteLocale.setSchedule(schedule.group(1));
+				String day = String.format("%02d", Integer.parseInt(schedule.group(1)));
+				String month = String.format("%02d", Integer.parseInt(schedule.group(2)));
+				quoteLocale.setSchedule(day + "-" + month);
 
 				// year
-				if (schedule.group(3) != null && !schedule.group(3).isEmpty())
-					quoteLocale.setYear(schedule.group(3));
+				if (schedule.group(3) != null && !schedule.group(4).isEmpty())
+					quoteLocale.setYear(schedule.group(4));
 
 				// time
-				if (schedule.group(4) != null && !schedule.group(4).trim().isEmpty())
-					quoteLocale.setTime(
-							schedule.group(4) + (schedule.group(5) != null && !schedule.group(5).trim().isEmpty()
-									? schedule.group(5).trim() : ":00"));
+				if (schedule.group(5) != null && !schedule.group(5).trim().isEmpty()) {
+					String time = schedule.group(5);
+					String secs = schedule.group(6) == null ? ":00" : "";
+					quoteLocale.setTime(time + secs);
+				}
 
 				// language
 				if (!forcelang.isEmpty()) {
@@ -336,7 +340,6 @@ public class Import {
 
 				imports.put(line, quoteLocale);
 			} catch (Exception error) {
-				error.printStackTrace();
 				errors.put(line, error);
 			}
 		}
