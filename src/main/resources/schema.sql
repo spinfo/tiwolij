@@ -57,7 +57,7 @@ CREATE TABLE quotes_locales (
 	`meta` VARCHAR(255),
 	`year` VARCHAR(20),
 	`time` VARCHAR(20),
-	`locked` BOOLEAN DEFAULT 1,
+	`locked` BOOLEAN NOT NULL DEFAULT 0,
 	`curator` VARCHAR(50),
 	PRIMARY KEY (`id`),
 	CONSTRAINT `FK_QUOTES_LOCALES` FOREIGN KEY (`quote_id`) REFERENCES `quotes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
