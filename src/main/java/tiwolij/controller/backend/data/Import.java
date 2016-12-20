@@ -412,6 +412,7 @@ public class Import {
 	}
 
 	private void save(QuoteLocale quoteLocale) throws Exception {
+		quoteLocale.setId(null);
 		Quote quote = quoteLocale.getQuote();
 		Work work = quote.getWork();
 		Author author = work.getAuthor();
