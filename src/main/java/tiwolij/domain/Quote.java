@@ -43,7 +43,7 @@ public class Quote extends BaseEntity {
 	}
 
 	public Map<String, QuoteLocale> getLocales() {
-		return locales.stream().collect(Collectors.toMap(QuoteLocale::getLanguage, l -> l));
+		return locales != null ? locales.stream().collect(Collectors.toMap(QuoteLocale::getLanguage, l -> l)) : null;
 	}
 
 	public Quote setId(Integer id) {

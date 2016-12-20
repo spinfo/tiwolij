@@ -65,7 +65,7 @@ public class Author extends BaseEntity {
 	}
 
 	public Map<String, AuthorLocale> getLocales() {
-		return locales.stream().collect(Collectors.toMap(AuthorLocale::getLanguage, l -> l));
+		return locales != null ? locales.stream().collect(Collectors.toMap(AuthorLocale::getLanguage, l -> l)) : null;
 	}
 
 	public Author setId(Integer id) {

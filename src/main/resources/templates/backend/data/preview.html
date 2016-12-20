@@ -1,0 +1,94 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/header (title=#{locales.preview})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{locales.preview}" class="panel-heading" />
+					<div class="panel-body form-horizontal">
+						<div th:unless="${#strings.isEmpty(format)}"><div th:replace="../elements/fields :: view('format', ${format}, '', false)" /></div>
+						<div th:unless="${#maps.isEmpty(quotes)}"><div th:replace="../elements/fields :: view('quotes', ${#maps.size(quotes)}, '', false)" /></div>
+						<div th:unless="${#maps.isEmpty(errors)}"><div th:replace="../elements/fields :: view('errors', ${#maps.size(errors)}, '', false)" /></div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section th:unless="${#maps.isEmpty(quotes)}" class="row">
+			<div class="col-md-12">
+				<div class="panel panel-success">
+					<div th:text="#{fields.quotes}" class="panel-heading" />
+					<form th:object="${locale}" class="form-horizontal" method="post">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th th:text="#{actions.save}" />
+									<th th:text="#{fields.line}" />
+									<th th:text="#{fields.language}" />
+									<th th:text="#{fields.schedule}" />
+									<th th:text="#{fields.author}" />
+									<th th:text="#{fields.work}" />
+									<th th:text="#{fields.corpus}" />
+									<th th:text="#{fields.source}" class="text-center" />
+									<th th:text="#{fields.meta}" />
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="element : ${quotes}" th:with="
+									quote=${element.value},
+									work=${element.value.quote.work},
+									workName=${#strings.isEmpty(element.value.quote.work.wikidataId)} ? ${element.value.quote.work.slug} : ('Q' + ${element.value.quote.work.wikidataId}),
+									author=${element.value.quote.work.author},
+									authorName=${#strings.isEmpty(element.value.quote.work.author.wikidataId)} ? ${element.value.quote.work.author.slug} : ('Q' + ${element.value.quote.work.author.wikidataId}),
+									year=${#strings.isEmpty(element.value.year)} ? '' : '-' + ${element.value.year},
+									time=${#strings.isEmpty(element.value.time)} ? '' : ' ' + ${element.value.time}">
+									<th><input th:value="${quote.id}" id="lines[]" name="lines[]" type="checkbox" checked="true" /></th>
+									<td th:text="${quote.id}" />
+									<td th:text="${quote.language}" />
+									<td th:text="${quote.schedule} + ${year} + ${time}" />
+									<td><a th:href="@{https://www.wikidata.org/wiki/Q} + ${author.wikidataId}" th:text="${authorName}" target="_blank" /></td>
+									<td><a th:href="@{https://www.wikidata.org/wiki/Q} + ${work.wikidataId}" th:text="${workName}" target="_blank" /></td>
+									<td th:text="${#strings.abbreviate(quote.corpus, 50)}" />
+									<td class="text-center"><a th:unless="${#strings.isEmpty(quote.href)}" th:text="#{actions.view}" th:href="${quote.href}" target="_blank" /></td>
+									<td th:text="${quote.meta}" />
+								</tr>
+							</tbody>
+						</table>
+						<div class="panel-footer text-right">
+							<input th:value="${format}" id="format" name="format" type="hidden" />
+							<button th:text="#{data.import.locales}" th:formaction="@{/tiwolij/data/import/}" type="submit" class="btn btn-sm btn-success" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+		<section class="row" th:unless="${#maps.isEmpty(errors)}">
+			<div class="col-md-12">
+				<div class="panel panel-danger">
+					<div th:text="#{fields.errors}" class="panel-heading" />
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th th:text="#{fields.error}" />
+								<th th:text="#{fields.line}" />
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="error : ${errors}">
+								<th th:text="${error.value.message}" />
+								<td th:text="${error.key}" class="small" />
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/footer" />
+</body>
+
+</html>

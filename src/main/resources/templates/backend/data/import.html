@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html class="no-js" lang="en">
 
@@ -17,10 +16,11 @@
 							<div th:replace="../elements/fields :: pulldown('encoding', true, ${encodings}, '', '')" />
 							<div th:replace="../elements/fields :: pulldown('format', true, ${formats}, '', '')" />
 							<div th:replace="../elements/fields :: boxcheck('heideltag')" />
+							<div th:replace="../elements/fields :: boxcheck('review')" />
 							<div th:replace="../elements/fields :: pulldown('forcelang', false, ${languages}, '', '')" />
 						</div>
 						<div class="panel-footer text-right">
-							<button id="submit" th:text="#{data.import.locales}" th:formaction="@{/tiwolij/data/import}" type="submit" class="btn btn-sm btn-success" />
+							<button id="submit" th:text="#{data.import.locales}" th:formaction="@{/tiwolij/data/import/preview}" type="submit" class="btn btn-sm btn-success" />
 						</div>
 					</form>
 				</div>

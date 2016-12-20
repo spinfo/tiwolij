@@ -18,7 +18,7 @@
 <div th:fragment="areatext(name, required, rows, maxlength, placeholder)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-4 control-label" />
 	<div class="col-sm-8">
-		<textarea th:value="${#object.get(name) instanceof T(java.lang.String)} ? ${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}"
+		<textarea th:text="${#object.get(name) instanceof T(java.lang.String)} ? ${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}"
 			th:rows="${rows}" th:maxlength="${maxlength}" th:placeholder="${placeholder}" class="form-control" />
 	</div>
 </div>

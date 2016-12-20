@@ -29,8 +29,7 @@
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/quotes/edit(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-danger"
-										th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-danger" data-action="deleteRow" />
 								</td>
 							</tr>
 						</tbody>

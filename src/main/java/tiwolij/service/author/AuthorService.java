@@ -18,7 +18,7 @@ public interface AuthorService {
 	public Author getAuthor(Integer authorId);
 
 	public Author getAuthorBySlug(String slug);
-	
+
 	public Author getAuthorByWikidataId(Integer wikidataId);
 
 	public List<Author> getAuthors();
@@ -30,19 +30,19 @@ public interface AuthorService {
 	public List<AuthorLocale> getLocales();
 
 	public List<AuthorLocale> getLocalesByAuthor(Integer authorId);
-	
+
 	// pagination
-	
+
 	public Page<Author> getAuthors(Pageable pageable);
-	
+
 	public Page<AuthorLocale> getLocales(Pageable pageable);
 
 	public Page<AuthorLocale> getLocalesByAuthor(Pageable pageable, Integer authorId);
-	
+
 	// search
-	
+
 	public List<Author> search(String term);
-	
+
 	/*
 	 * SETTERS
 	 */
@@ -66,7 +66,7 @@ public interface AuthorService {
 	public Boolean hasAuthor(Integer authorId);
 
 	public Boolean hasAuthorBySlug(String slug);
-	
+
 	public Boolean hasAuthorByWikidataId(Integer wikidataId);
 
 	public Boolean hasLocale(Integer authorId, String language);
@@ -76,9 +76,9 @@ public interface AuthorService {
 	 */
 
 	public Long count();
-	
+
 	public Long countLocales();
-	
+
 	/*
 	 * IMPORTERS
 	 */

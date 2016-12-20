@@ -37,7 +37,7 @@ public class QuoteLocale extends BaseEntity {
 
 	protected String time;
 
-	protected Boolean locked;
+	protected Boolean locked = false;
 
 	protected String curator;
 

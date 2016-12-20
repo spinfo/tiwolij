@@ -13,13 +13,12 @@
 					<form th:object="${locale}" class="form-horizontal">
 						<div class="panel-body">
 							<div th:replace="../elements/fields :: view('quote', *{quote.id}, @{/tiwolij/quotes/view(quoteId=*{quote.id})}, false)" />
-							<div th:replace="../elements/fields :: view('language', *{language}, '', false)" />
+							<div th:replace="../elements/fields :: view('language', *{language} + (*{#strings.isEmpty(year)} ? '' : '-' + *{year}) + (*{#strings.isEmpty(time)} ? '' : ' ' + *{time}), '', false)" />
 							<div th:replace="../elements/fields :: view('schedule', *{schedule}, '', false)" />
 							<div th:replace="../elements/fields :: view('corpus', *{corpus}, '', false)" />
 							<div th:unless="*{#strings.isEmpty(href)}"><div th:replace="../elements/fields :: view('href', #{actions.view}, *{href}, true)" /></div>
 							<div th:unless="*{#strings.isEmpty(meta)}"><div th:replace="../elements/fields :: view('meta', *{meta}, '', false)" /></div>
-							<div th:unless="*{#strings.isEmpty(year)}"><div th:replace="../elements/fields :: view('year', *{year}, '', false)" /></div>
-							<div th:unless="*{#strings.isEmpty(time)}"><div th:replace="../elements/fields :: view('time', *{time}, '', false)" /></div>
+							<div th:replace="../elements/fields :: view('locked', *{locked} ? 'True' : 'False', '', false)" />
 						</div>
 						<div class="panel-footer text-right">
 							<a th:text="#{locales.quote.preview}" th:href="@{/view(id=${locale.quote.id}, lang=*{language})}" target="_blank" role="button" class="btn btn-sm btn-default" />

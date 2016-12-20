@@ -20,6 +20,7 @@
 								<th th:text="#{fields.corpus}" />
 								<th th:text="#{fields.source}" class="text-center" />
 								<th th:text="#{fields.meta}" />
+								<th th:text="#{fields.locked}" />
 								<th th:text="#{actions}" class="text-right" />
 							</tr>
 						</thead>
@@ -35,10 +36,11 @@
 								<td th:text="${#strings.abbreviate(locale.corpus, 50)}" />
 								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:text="#{actions.view}" th:href="${locale.href}" target="_blank" /></td>
 								<td th:text="${locale.meta}" />
+								<td class="text-center"><span th:if="${locale.locked}" class="glyphicon glyphicon-star" aria-hidden="true" /></td>
 								<td class="text-right">
 									<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default" />
 									<a th:text="#{actions.edit}" th:href="@{/tiwolij/quotes/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary" />
-									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(\'' + #{general.confirm} + '\')'" />
+									<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" data-action="deleteRow" />
 								</td>
 							</tr>
 						</tbody>

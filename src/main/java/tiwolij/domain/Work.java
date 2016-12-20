@@ -64,7 +64,7 @@ public class Work extends BaseEntity {
 	}
 
 	public Map<String, WorkLocale> getLocales() {
-		return locales.stream().collect(Collectors.toMap(WorkLocale::getLanguage, l -> l));
+		return locales != null ? locales.stream().collect(Collectors.toMap(WorkLocale::getLanguage, l -> l)) : null;
 	}
 
 	public Work setId(Integer id) {
