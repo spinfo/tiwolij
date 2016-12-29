@@ -10,16 +10,14 @@ import tiwolij.domain.Author;
 
 public interface AuthorRepository extends CrudRepository<Author, Integer> {
 
+	public List<Author> findAll();
+
+	public Page<Author> findAll(Pageable pageable);
+
 	public Author findTop1ById(Integer authorId);
 
 	public Author findTop1BySlug(String slug);
 
 	public Author findTop1ByWikidataId(Integer wikidataId);
-
-	public List<Author> findAll();
-
-	// pagination
-
-	public Page<Author> findAll(Pageable pageable);
 
 }

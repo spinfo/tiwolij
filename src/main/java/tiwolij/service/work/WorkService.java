@@ -10,9 +10,27 @@ import tiwolij.domain.WorkLocale;
 
 public interface WorkService {
 
-	/*
-	 * GETTERS
-	 */
+	public Long count();
+
+	public Long countByAuthorId(Integer authorId);
+
+	public Long countLocales();
+
+	public void delLocale(Integer localeId);
+
+	public void delWork(Integer workId);
+
+	public WorkLocale getLocale(Integer localeId);
+
+	public WorkLocale getLocaleByLang(Integer workId, String language);
+
+	public List<WorkLocale> getLocales();
+
+	public Page<WorkLocale> getLocales(Pageable pageable);
+
+	public List<WorkLocale> getLocalesByWork(Integer workId);
+
+	public Page<WorkLocale> getLocalesByWork(Pageable pageable, Integer workId);
 
 	public Work getWork(Integer workId);
 
@@ -22,49 +40,13 @@ public interface WorkService {
 
 	public List<Work> getWorks();
 
-	public List<Work> getWorksByAuthor(Integer authorId);
-
-	public WorkLocale getLocale(Integer localeId);
-
-	public WorkLocale getLocaleByLang(Integer workId, String language);
-
-	public List<WorkLocale> getLocales();
-
-	public List<WorkLocale> getLocalesByWork(Integer workId);
-
-	// pagination
-
 	public Page<Work> getWorks(Pageable pageable);
+
+	public List<Work> getWorksByAuthor(Integer authorId);
 
 	public Page<Work> getWorksByAuthor(Pageable pageable, Integer authorId);
 
-	public Page<WorkLocale> getLocales(Pageable pageable);
-
-	public Page<WorkLocale> getLocalesByWork(Pageable pageable, Integer workId);
-
-	// search
-	
-	public List<Work> search(String term);
-	
-	/*
-	 * SETTERS
-	 */
-
-	public Work setWork(Work work);
-
-	public WorkLocale setLocale(WorkLocale locale);
-
-	/*
-	 * DELETERS
-	 */
-
-	public void delWork(Integer workId);
-
-	public void delLocale(Integer localeId);
-
-	/*
-	 * CHECKERS
-	 */
+	public Boolean hasLocale(Integer workId, String language);
 
 	public Boolean hasWork(Integer workId);
 
@@ -72,28 +54,10 @@ public interface WorkService {
 
 	public Boolean hasWorkByWikidataId(Integer wikidataId);
 
-	public Boolean hasLocale(Integer workId, String language);
+	public List<Work> search(String term);
 
-	/*
-	 * COUNTERS
-	 */
+	public WorkLocale setLocale(WorkLocale locale);
 
-	public Long count();
-
-	public Long countByAuthorId(Integer authorId);
-
-	public Long countLocales();
-
-	/*
-	 * IMPORTERS
-	 */
-
-	public Work importWorkByWikidataId(Integer wikidataId) throws Exception;
-
-	public Work importWorkByArticle(String article) throws Exception;
-
-	public WorkLocale importLocale(Integer workId, String language) throws Exception;
-
-	public List<WorkLocale> importLocales(Integer workId) throws Exception;
+	public Work setWork(Work work);
 
 }

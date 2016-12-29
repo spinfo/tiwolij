@@ -32,28 +32,23 @@ public class Frontend {
 	private AuthorService authors;
 
 	@Autowired
-	private WorkService works;
-
-	@Autowired
 	private QuoteService quotes;
 
-	@GetMapping({ "", "/" })
-	public String root() {
-		return "redirect:/view";
-	}
+	@Autowired
+	private WorkService works;
 
-	@GetMapping("/home")
-	public ModelAndView home() {
-		ModelAndView mv = new ModelAndView("frontend/home");
+	@GetMapping("/about")
+	public ModelAndView about() {
+		ModelAndView mv = new ModelAndView("frontend/about");
 		String language = LocaleContextHolder.getLocale().getLanguage();
 
 		mv.addObject("lang", language);
 		return mv;
 	}
 
-	@GetMapping("/about")
-	public ModelAndView about() {
-		ModelAndView mv = new ModelAndView("frontend/about");
+	@GetMapping("/home")
+	public ModelAndView home() {
+		ModelAndView mv = new ModelAndView("frontend/home");
 		String language = LocaleContextHolder.getLocale().getLanguage();
 
 		mv.addObject("lang", language);
@@ -88,6 +83,22 @@ public class Frontend {
 		mv.addObject("lang", language);
 		mv.addObject("schedule", schedule);
 		return mv;
+	}
+
+	@GetMapping("/random")
+	public String random() {
+		String language = LocaleContextHolder.getLocale().getLanguage();
+
+		if (!quotes.hasLocaleByLang(language))
+			return "redirect:/view?lang=" + language;
+
+		QuoteLocale random = quotes.getLocaleRandomByLang(language);
+		return "redirect:/view?id=" + random.getQuote().getId() + "&lang=" + language;
+	}
+
+	@GetMapping({ "", "/" })
+	public String root() {
+		return "redirect:/view";
 	}
 
 	@GetMapping("/view")
@@ -142,17 +153,6 @@ public class Frontend {
 
 		mv.addObject("list", quotes.getLocalesByScheduleAndLang(schedule, language));
 		return mv;
-	}
-
-	@GetMapping("/random")
-	public String random() {
-		String language = LocaleContextHolder.getLocale().getLanguage();
-
-		if (!quotes.hasLocaleByLang(language))
-			return "redirect:/view?lang=" + language;
-
-		QuoteLocale random = quotes.getLocaleRandomByLang(language);
-		return "redirect:/view?id=" + random.getQuote().getId() + "&lang=" + language;
 	}
 
 }

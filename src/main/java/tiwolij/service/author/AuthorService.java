@@ -1,6 +1,5 @@
 package tiwolij.service.author;
 
-import java.net.URL;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -11,9 +10,13 @@ import tiwolij.domain.AuthorLocale;
 
 public interface AuthorService {
 
-	/*
-	 * GETTERS
-	 */
+	public Long count();
+
+	public Long countLocales();
+
+	public void delAuthor(Integer authorId);
+
+	public void delLocale(Integer localeId);
 
 	public Author getAuthor(Integer authorId);
 
@@ -23,45 +26,19 @@ public interface AuthorService {
 
 	public List<Author> getAuthors();
 
+	public Page<Author> getAuthors(Pageable pageable);
+
 	public AuthorLocale getLocale(Integer localeId);
 
 	public AuthorLocale getLocaleByLang(Integer authorId, String language);
 
 	public List<AuthorLocale> getLocales();
 
-	public List<AuthorLocale> getLocalesByAuthor(Integer authorId);
-
-	// pagination
-
-	public Page<Author> getAuthors(Pageable pageable);
-
 	public Page<AuthorLocale> getLocales(Pageable pageable);
 
+	public List<AuthorLocale> getLocalesByAuthor(Integer authorId);
+
 	public Page<AuthorLocale> getLocalesByAuthor(Pageable pageable, Integer authorId);
-
-	// search
-
-	public List<Author> search(String term);
-
-	/*
-	 * SETTERS
-	 */
-
-	public Author setAuthor(Author author);
-
-	public AuthorLocale setLocale(AuthorLocale locale);
-
-	/*
-	 * DELETERS
-	 */
-
-	public void delAuthor(Integer authorId);
-
-	public void delLocale(Integer localeId);
-
-	/*
-	 * CHECKERS
-	 */
 
 	public Boolean hasAuthor(Integer authorId);
 
@@ -71,28 +48,9 @@ public interface AuthorService {
 
 	public Boolean hasLocale(Integer authorId, String language);
 
-	/*
-	 * COUNTERS
-	 */
+	public List<Author> search(String term);
 
-	public Long count();
+	public Author setAuthor(Author author);
 
-	public Long countLocales();
-
-	/*
-	 * IMPORTERS
-	 */
-
-	public Author importAuthorByWikidataId(Integer wikidataId) throws Exception;
-
-	public Author importAuthorByArticle(String article) throws Exception;
-
-	public Author importImage(Integer authorId, URL url) throws Exception;
-
-	public Author importImageAttribution(Integer authorId, String image) throws Exception;
-
-	public AuthorLocale importLocale(Integer authorId, String language) throws Exception;
-
-	public List<AuthorLocale> importLocales(Integer authorId);
-
+	public AuthorLocale setLocale(AuthorLocale locale);
 }

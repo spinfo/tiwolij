@@ -14,6 +14,7 @@ import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
 
 import tiwolij.domain.Work;
 import tiwolij.service.author.AuthorService;
+import tiwolij.service.work.WorkWikidataSource;
 import tiwolij.service.work.WorkService;
 
 @Controller
@@ -24,30 +25,10 @@ public class Works {
 	private AuthorService authors;
 
 	@Autowired
+	private WorkWikidataSource importer;
+
+	@Autowired
 	private WorkService works;
-
-	@GetMapping({ "", "/" })
-	public String root() {
-		return "redirect:/tiwolij/works/list";
-	}
-
-	@GetMapping("/list")
-	public ModelAndView list(Pageable pageable, @RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
-		ModelAndView mv = new ModelAndView("backend/work/work_list");
-		Page<Work> page = authors.hasAuthor(authorId) ? works.getWorksByAuthor(pageable, authorId)
-				: works.getWorks(pageable);
-
-		mv.addObject("works", page);
-		return mv;
-	}
-
-	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "workId") Integer workId) {
-		ModelAndView mv = new ModelAndView("backend/work/work_view");
-
-		mv.addObject("work", works.getWork(workId));
-		return mv;
-	}
 
 	@GetMapping("/create")
 	public ModelAndView create(@RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
@@ -62,20 +43,13 @@ public class Works {
 	@PostMapping("/create")
 	public String create(@ModelAttribute Work work) {
 		work = works.setWork(work);
-
 		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 
-	@PostMapping("/import")
-	public String imp0rt(@ModelAttribute Work work) throws Exception {
-		if (work.getWikidataId() == null)
-			throw new NoSuchEntityErrorException("No Wikidata ID given");
-
-		work = works.importWorkByWikidataId(work.getWikidataId());
-		works.importLocales(work.getId());
-		authors.importLocales(work.getAuthor().getId());
-
-		return "redirect:/tiwolij/works/view?workId=" + work.getId();
+	@GetMapping("/delete")
+	public String delete(@RequestParam(name = "workId") Integer workId) {
+		works.delWork(workId);
+		return "redirect:/tiwolij/works/list";
 	}
 
 	@GetMapping("/edit")
@@ -93,10 +67,38 @@ public class Works {
 		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 
-	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "workId") Integer workId) {
-		works.delWork(workId);
+	@PostMapping("/import")
+	public String imp0rt(@ModelAttribute Work work) throws Exception {
+		if (work.getWikidataId() == null)
+			throw new NoSuchEntityErrorException("No Wikidata ID given");
+
+		work = importer.byWikidataId(work.getWikidataId());
+		work = works.setWork(work);
+
+		return "redirect:/tiwolij/works/view?workId=" + work.getId();
+	}
+
+	@GetMapping("/list")
+	public ModelAndView list(Pageable pageable, @RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
+		ModelAndView mv = new ModelAndView("backend/work/work_list");
+		Page<Work> page = authors.hasAuthor(authorId) ? works.getWorksByAuthor(pageable, authorId)
+				: works.getWorks(pageable);
+
+		mv.addObject("works", page);
+		return mv;
+	}
+
+	@GetMapping({ "", "/" })
+	public String root() {
 		return "redirect:/tiwolij/works/list";
+	}
+
+	@GetMapping("/view")
+	public ModelAndView view(@RequestParam(name = "workId") Integer workId) {
+		ModelAndView mv = new ModelAndView("backend/work/work_view");
+
+		mv.addObject("work", works.getWork(workId));
+		return mv;
 	}
 
 }

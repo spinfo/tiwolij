@@ -41,13 +41,13 @@ public class Image {
 	private AuthorService authors;
 
 	@Autowired
-	private WorkService works;
+	private MessageSource messages;
 
 	@Autowired
 	private QuoteService quotes;
 
 	@Autowired
-	private MessageSource messages;
+	private WorkService works;
 
 	@GetMapping("/author")
 	public void author(@RequestParam(name = "id") Integer authorId, HttpServletResponse response) throws Exception {
@@ -57,12 +57,6 @@ public class Image {
 			response.getOutputStream().close();
 		} else
 			response.sendRedirect("/img/tiwoli.png");
-	}
-
-	@GetMapping("/textcard")
-	public void textcard(@RequestParam(name = "id") Integer quoteId, @RequestParam(name = "lang") String language,
-			HttpServletResponse response) throws Exception {
-		flashcard(quoteId, language, true, response);
 	}
 
 	@GetMapping("/flashcard")
@@ -223,6 +217,12 @@ public class Image {
 		response.setContentType("image/png");
 		response.getOutputStream().write(stream.toByteArray());
 		response.getOutputStream().close();
+	}
+
+	@GetMapping("/textcard")
+	public void textcard(@RequestParam(name = "id") Integer quoteId, @RequestParam(name = "lang") String language,
+			HttpServletResponse response) throws Exception {
+		flashcard(quoteId, language, true, response);
 	}
 
 }

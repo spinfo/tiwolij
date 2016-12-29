@@ -1,6 +1,7 @@
 package tiwolij.controller.backend.author;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
+import tiwolij.service.author.AuthorWikidataSource;
 import tiwolij.service.author.AuthorService;
 
 @Controller
@@ -22,27 +24,16 @@ public class AuthorLocales {
 	@Autowired
 	private AuthorService authors;
 
-	@GetMapping({ "", "/" })
-	public String root() {
-		return "redirect:/tiwolij/authors/locales/list";
-	}
+	@Autowired
+	private Environment env;
 
-	@GetMapping("/list")
-	public ModelAndView list(Pageable pageable, @RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
-		ModelAndView mv = new ModelAndView("backend/author/locale_list");
-		Page<AuthorLocale> page = authors.hasAuthor(authorId) ? authors.getLocalesByAuthor(pageable, authorId)
-				: authors.getLocales(pageable);
+	@Autowired
+	private AuthorWikidataSource importer;
 
-		mv.addObject("locales", page);
-		return mv;
-	}
-
-	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "localeId") Integer localeId) {
-		ModelAndView mv = new ModelAndView("backend/author/locale_view");
-
-		mv.addObject("locale", authors.getLocale(localeId));
-		return mv;
+	@PostMapping("/create")
+	public String create(@ModelAttribute AuthorLocale locale) {
+		authors.setLocale(locale);
+		return "redirect:/tiwolij/authors/locales/view?localeId=" + locale.getId();
 	}
 
 	@GetMapping("/create")
@@ -56,17 +47,18 @@ public class AuthorLocales {
 		return mv;
 	}
 
-	@PostMapping("/create")
-	public String create(@ModelAttribute AuthorLocale locale) {
-		authors.setLocale(locale);
-		return "redirect:/tiwolij/authors/locales/view?localeId=" + locale.getId();
+	@GetMapping("/delete")
+	public String delete(@RequestParam(name = "localeId") Integer localeId) {
+		Author author = authors.getLocale(localeId).getAuthor();
+
+		authors.delLocale(localeId);
+		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 
-	@GetMapping("/import")
-	public String imp0rt(@RequestParam(name = "authorId") Integer authorId) throws Exception {
-		authors.importLocales(authorId);
-
-		return "redirect:/tiwolij/authors/view?authorId=" + authorId;
+	@PostMapping("/edit")
+	public String edit(@ModelAttribute AuthorLocale locale) {
+		authors.setLocale(locale);
+		return "redirect:/tiwolij/authors/locales/view?localeId=" + locale.getId();
 	}
 
 	@GetMapping("/edit")
@@ -78,18 +70,39 @@ public class AuthorLocales {
 		return mv;
 	}
 
-	@PostMapping("/edit")
-	public String edit(@ModelAttribute AuthorLocale locale) {
-		authors.setLocale(locale);
-		return "redirect:/tiwolij/authors/locales/view?localeId=" + locale.getId();
+	@GetMapping("/import")
+	public String imp0rt(@RequestParam(name = "authorId") Integer authorId) throws Exception {
+		Author author = authors.getAuthor(authorId);
+		String[] allowedLanguages = env.getProperty("tiwolij.locales.allowed", String[].class);
+
+		for (String language : allowedLanguages)
+			if (!authors.hasLocale(authorId, language))
+				authors.setLocale(importer.locale(author.getWikidataId(), language).setAuthor(author));
+
+		return "redirect:/tiwolij/authors/view?authorId=" + authorId;
 	}
 
-	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "localeId") Integer localeId) {
-		Author author = authors.getLocale(localeId).getAuthor();
+	@GetMapping("/list")
+	public ModelAndView list(Pageable pageable, @RequestParam(name = "authorId", defaultValue = "0") Integer authorId) {
+		ModelAndView mv = new ModelAndView("backend/author/locale_list");
+		Page<AuthorLocale> page = authors.hasAuthor(authorId) ? authors.getLocalesByAuthor(pageable, authorId)
+				: authors.getLocales(pageable);
 
-		authors.delLocale(localeId);
-		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
+		mv.addObject("locales", page);
+		return mv;
+	}
+
+	@GetMapping({ "", "/" })
+	public String root() {
+		return "redirect:/tiwolij/authors/locales/list";
+	}
+
+	@GetMapping("/view")
+	public ModelAndView view(@RequestParam(name = "localeId") Integer localeId) {
+		ModelAndView mv = new ModelAndView("backend/author/locale_view");
+
+		mv.addObject("locale", authors.getLocale(localeId));
+		return mv;
 	}
 
 }

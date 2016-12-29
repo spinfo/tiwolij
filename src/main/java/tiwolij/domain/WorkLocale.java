@@ -1,5 +1,6 @@
 package tiwolij.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,13 +13,11 @@ import javax.persistence.Table;
 @Table(name = "works_locales")
 public class WorkLocale extends BaseEntity {
 
+	protected String href;
+
 	@Id
 	@GeneratedValue
 	protected Integer id;
-
-	@ManyToOne
-	@JoinColumn(name = "work_id", nullable = false)
-	protected Work work;
 
 	@Column(nullable = false)
 	protected String language;
@@ -26,7 +25,9 @@ public class WorkLocale extends BaseEntity {
 	@Column(nullable = false)
 	protected String name;
 
-	protected String href;
+	@ManyToOne
+	@JoinColumn(name = "work_id", nullable = false)
+	protected Work work;
 
 	public WorkLocale() {
 	}
@@ -35,12 +36,12 @@ public class WorkLocale extends BaseEntity {
 		this.work = work;
 	}
 
-	public Integer getId() {
-		return id;
+	public String getHref() {
+		return href;
 	}
 
-	public Work getWork() {
-		return work;
+	public Integer getId() {
+		return id;
 	}
 
 	public String getLanguage() {
@@ -51,17 +52,17 @@ public class WorkLocale extends BaseEntity {
 		return name;
 	}
 
-	public String getHref() {
-		return href;
+	public Work getWork() {
+		return work;
+	}
+
+	public WorkLocale setHref(String href) {
+		this.href = href;
+		return this;
 	}
 
 	public WorkLocale setId(Integer id) {
 		this.id = id;
-		return this;
-	}
-
-	public WorkLocale setWork(Work work) {
-		this.work = work;
 		return this;
 	}
 
@@ -75,8 +76,8 @@ public class WorkLocale extends BaseEntity {
 		return this;
 	}
 
-	public WorkLocale setHref(String href) {
-		this.href = href;
+	public WorkLocale setWork(Work work) {
+		this.work = work;
 		return this;
 	}
 

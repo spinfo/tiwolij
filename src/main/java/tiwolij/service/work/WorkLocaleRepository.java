@@ -10,22 +10,18 @@ import tiwolij.domain.WorkLocale;
 
 public interface WorkLocaleRepository extends PagingAndSortingRepository<WorkLocale, Integer> {
 
-	public WorkLocale findTop1ById(Integer localeId);
-
-	public WorkLocale findTop1ByWorkIdAndLanguage(Integer workId, String language);
-
 	public List<WorkLocale> findAll();
-
-	public List<WorkLocale> findAllByWorkId(Integer workId);
-
-	// pagination
 
 	public Page<WorkLocale> findAll(Pageable pageable);
 
+	public List<WorkLocale> findAllByNameContainingIgnoreCase(String name);
+
+	public List<WorkLocale> findAllByWorkId(Integer workId);
+
 	public Page<WorkLocale> findAllByWorkId(Pageable pageable, Integer workId);
 
-	// search
+	public WorkLocale findTop1ById(Integer localeId);
 
-	public List<WorkLocale> findAllByNameContainingIgnoreCase(String name);
+	public WorkLocale findTop1ByWorkIdAndLanguage(Integer workId, String language);
 
 }

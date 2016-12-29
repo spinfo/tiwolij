@@ -2,38 +2,6 @@ package tiwolij.domain;
 
 public class BaseEntity {
 
-	public Boolean has(String field) {
-		Boolean result;
-		
-		try {
-			result = getClass().getDeclaredField(field) != null;
-		} catch (Exception e) {
-			result = false;
-		}
-		
-		return result;
-	}
-	
-	public Object get(String field) {
-		Object result = null;
-
-		try {
-			result = getClass().getDeclaredField(field).get(this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	public void set(String field, String value) {
-		try {
-			getClass().getDeclaredField(field).set(this, value);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public int compareNaturalBy(BaseEntity that, String by) {
 		String s1 = this.get(by) == null ? "" : this.get(by).toString();
 		String s2 = that.get(by) == null ? "" : that.get(by).toString();
@@ -78,6 +46,38 @@ public class BaseEntity {
 
 		// No digits
 		return (c1 - c2);
+	}
+
+	public Object get(String field) {
+		Object result = null;
+
+		try {
+			result = getClass().getDeclaredField(field).get(this);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public Boolean has(String field) {
+		Boolean result;
+
+		try {
+			result = getClass().getDeclaredField(field) != null;
+		} catch (Exception e) {
+			result = false;
+		}
+
+		return result;
+	}
+
+	public void set(String field, String value) {
+		try {
+			getClass().getDeclaredField(field).set(this, value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

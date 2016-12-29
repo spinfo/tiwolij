@@ -10,16 +10,14 @@ import tiwolij.domain.Quote;
 
 public interface QuoteRepository extends PagingAndSortingRepository<Quote, Integer> {
 
-	public Quote findTop1ById(Integer quoteId);
-
 	public List<Quote> findAll();
-
-	public List<Quote> findAllByWorkId(Integer workId);
-
-	// pagination
 
 	public Page<Quote> findAll(Pageable pageable);
 
+	public List<Quote> findAllByWorkId(Integer workId);
+
 	public Page<Quote> findAllByWorkId(Pageable pageable, Integer workId);
+
+	public Quote findTop1ById(Integer quoteId);
 
 }

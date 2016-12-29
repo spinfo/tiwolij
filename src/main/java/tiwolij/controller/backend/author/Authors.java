@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
 
 import tiwolij.domain.Author;
+import tiwolij.service.author.AuthorWikidataSource;
 import tiwolij.service.author.AuthorService;
 
 @Controller
@@ -24,27 +25,8 @@ public class Authors {
 	@Autowired
 	private AuthorService authors;
 
-	@GetMapping({ "", "/" })
-	public String root() {
-		return "redirect:/tiwolij/authors/list";
-	}
-
-	@GetMapping("/list")
-	public ModelAndView list(Pageable pageable) {
-		ModelAndView mv = new ModelAndView("backend/author/author_list");
-		Page<Author> page = authors.getAuthors(pageable);
-
-		mv.addObject("authors", page);
-		return mv;
-	}
-
-	@GetMapping("/view")
-	public ModelAndView view(@RequestParam(name = "authorId") Integer authorId) {
-		ModelAndView mv = new ModelAndView("backend/author/author_view");
-
-		mv.addObject("author", authors.getAuthor(authorId));
-		return mv;
-	}
+	@Autowired
+	private AuthorWikidataSource importer;
 
 	@GetMapping("/create")
 	public ModelAndView create() {
@@ -60,14 +42,24 @@ public class Authors {
 		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 
-	@PostMapping("/import")
-	public String imp0rt(@ModelAttribute Author author) throws Exception {
-		if (author.getWikidataId() == null)
-			throw new NoSuchEntityErrorException("No Wikidata ID given");
+	@GetMapping("/delete")
+	public String delete(@RequestParam(name = "authorId") Integer authorId) {
+		authors.delAuthor(authorId);
+		return "redirect:/tiwolij/authors/list";
+	}
 
-		author = authors.importAuthorByWikidataId(author.getWikidataId());
-		authors.importLocales(author.getId());
+	@PostMapping("/edit")
+	public String edit(@ModelAttribute Author author) throws Exception {
+		Author old = authors.getAuthor(author.getId());
+		String url = new String(author.getImage());
 
+		if (!url.isEmpty()) {
+			importer.image(author, new URL(url));
+		} else {
+			author.setImage(old.getImage());
+		}
+
+		authors.setAuthor(author);
 		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 
@@ -79,20 +71,37 @@ public class Authors {
 		return mv;
 	}
 
-	@PostMapping("/edit")
-	public String edit(@ModelAttribute Author author) throws Exception {
-		String url = new String(author.getImage());
-		author = (!url.isEmpty()) ? authors.importImage(author.getId(), new URL(url))
-				: author.setImage(authors.getAuthor(author.getId()).getImage());
+	@PostMapping("/import")
+	public String imp0rt(@ModelAttribute Author author) throws Exception {
+		if (author.getWikidataId() == null)
+			throw new NoSuchEntityErrorException("No Wikidata ID given");
 
-		authors.setAuthor(author);
+		author = importer.byWikidataId(author.getWikidataId());
+		author = authors.setAuthor(author);
+
 		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 
-	@GetMapping("/delete")
-	public String delete(@RequestParam(name = "authorId") Integer authorId) {
-		authors.delAuthor(authorId);
+	@GetMapping("/list")
+	public ModelAndView list(Pageable pageable) {
+		ModelAndView mv = new ModelAndView("backend/author/author_list");
+		Page<Author> page = authors.getAuthors(pageable);
+
+		mv.addObject("authors", page);
+		return mv;
+	}
+
+	@GetMapping({ "", "/" })
+	public String root() {
 		return "redirect:/tiwolij/authors/list";
+	}
+
+	@GetMapping("/view")
+	public ModelAndView view(@RequestParam(name = "authorId") Integer authorId) {
+		ModelAndView mv = new ModelAndView("backend/author/author_view");
+
+		mv.addObject("author", authors.getAuthor(authorId));
+		return mv;
 	}
 
 }

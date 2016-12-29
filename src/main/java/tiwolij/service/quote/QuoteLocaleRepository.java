@@ -11,38 +11,34 @@ import tiwolij.domain.RecordId;
 
 public interface QuoteLocaleRepository extends PagingAndSortingRepository<QuoteLocale, Integer> {
 
-	public QuoteLocale findTop1ById(Integer localeId);
-
-	public QuoteLocale findTop1BySchedule(String schedule);
-
-	public QuoteLocale findTop1ByScheduleAndLanguage(String schedule, String language);
-
-	public QuoteLocale findTop1ByQuoteIdAndLanguage(Integer quoteId, String language);
-
 	public List<QuoteLocale> findAll();
 
-	public List<QuoteLocale> findAllByQuoteId(Integer quoteId);
+	public Page<QuoteLocale> findAll(Pageable pageable);
 
-	public List<QuoteLocale> findAllBySchedule(String schedule);
+	public List<QuoteLocale> findAllByCorpusContainingIgnoreCase(String corpus);
+
+	public Page<QuoteLocale> findAllByLanguage(Pageable pageable, String language);
 
 	public List<RecordId> findAllByLanguage(String language);
 
-	public List<RecordId> findAllByScheduleAndLanguage(String schedule, String language);
-
-	// pagination
-
-	public Page<QuoteLocale> findAll(Pageable pageable);
+	public List<QuoteLocale> findAllByQuoteId(Integer quoteId);
 
 	public Page<QuoteLocale> findAllByQuoteId(Pageable pageable, Integer quoteId);
 
 	public Page<QuoteLocale> findAllBySchedule(Pageable pageable, String schedule);
 
-	public Page<QuoteLocale> findAllByLanguage(Pageable pageable, String language);
+	public List<QuoteLocale> findAllBySchedule(String schedule);
 
 	public Page<QuoteLocale> findAllByScheduleAndLanguage(Pageable pageable, String schedule, String language);
 
-	// search
+	public List<RecordId> findAllByScheduleAndLanguage(String schedule, String language);
 
-	public List<QuoteLocale> findAllByCorpusContainingIgnoreCase(String corpus);
+	public QuoteLocale findTop1ById(Integer localeId);
+
+	public QuoteLocale findTop1ByQuoteIdAndLanguage(Integer quoteId, String language);
+
+	public QuoteLocale findTop1BySchedule(String schedule);
+
+	public QuoteLocale findTop1ByScheduleAndLanguage(String schedule, String language);
 
 }

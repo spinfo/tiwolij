@@ -1,5 +1,6 @@
 package tiwolij.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,34 +13,34 @@ import javax.persistence.Table;
 @Table(name = "quotes_locales")
 public class QuoteLocale extends BaseEntity {
 
+	@Column(nullable = false, columnDefinition = "TEXT")
+	protected String corpus;
+
+	protected String curator;
+
+	protected String href;
+
 	@Id
 	@GeneratedValue
 	protected Integer id;
+
+	@Column(nullable = false)
+	protected String language;
+
+	protected Boolean locked = false;
+
+	protected String meta;
 
 	@ManyToOne
 	@JoinColumn(name = "quote_id", nullable = false)
 	protected Quote quote;
 
 	@Column(nullable = false)
-	protected String language;
-
-	@Column(nullable = false)
 	protected String schedule;
-
-	@Column(nullable = false, columnDefinition = "TEXT")
-	protected String corpus;
-
-	protected String href;
-
-	protected String meta;
-
-	protected String year;
 
 	protected String time;
 
-	protected Boolean locked = false;
-
-	protected String curator;
+	protected String year;
 
 	public QuoteLocale() {
 	}
@@ -48,80 +49,65 @@ public class QuoteLocale extends BaseEntity {
 		this.quote = quote;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public Quote getQuote() {
-		return quote;
-	}
-
-	public String getLanguage() {
-		return language;
-	}
-
-	public String getSchedule() {
-		return schedule;
-	}
-
-	public String getDay() {
-		return schedule.split("-")[0];
-	}
-
-	public String getMonth() {
-		return schedule.split("-")[1];
-	}
-
 	public String getCorpus() {
 		return corpus;
-	}
-
-	public String getHref() {
-		return href;
-	}
-
-	public String getMeta() {
-		return meta;
-	}
-
-	public String getYear() {
-		return year;
-	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public Boolean getLocked() {
-		return locked == null ? false : locked;
 	}
 
 	public String getCurator() {
 		return curator;
 	}
 
-	public QuoteLocale setId(Integer id) {
-		this.id = id;
-		return this;
+	public String getDay() {
+		return schedule.split("-")[0];
 	}
 
-	public QuoteLocale setQuote(Quote quote) {
-		this.quote = quote;
-		return this;
+	public String getHref() {
+		return href;
 	}
 
-	public QuoteLocale setLanguage(String language) {
-		this.language = language;
-		return this;
+	public Integer getId() {
+		return id;
 	}
 
-	public QuoteLocale setSchedule(String schedule) {
-		this.schedule = schedule;
-		return this;
+	public String getLanguage() {
+		return language;
+	}
+
+	public Boolean getLocked() {
+		return locked == null ? false : locked;
+	}
+
+	public String getMeta() {
+		return meta;
+	}
+
+	public String getMonth() {
+		return schedule.split("-")[1];
+	}
+
+	public Quote getQuote() {
+		return quote;
+	}
+
+	public String getSchedule() {
+		return schedule;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public String getYear() {
+		return year;
 	}
 
 	public QuoteLocale setCorpus(String corpus) {
 		this.corpus = corpus;
+		return this;
+	}
+
+	public QuoteLocale setCurator(String curator) {
+		this.curator = curator;
 		return this;
 	}
 
@@ -130,18 +116,13 @@ public class QuoteLocale extends BaseEntity {
 		return this;
 	}
 
-	public QuoteLocale setMeta(String meta) {
-		this.meta = meta;
+	public QuoteLocale setId(Integer id) {
+		this.id = id;
 		return this;
 	}
 
-	public QuoteLocale setYear(String year) {
-		this.year = year;
-		return this;
-	}
-
-	public QuoteLocale setTime(String time) {
-		this.time = time;
+	public QuoteLocale setLanguage(String language) {
+		this.language = language;
 		return this;
 	}
 
@@ -150,8 +131,28 @@ public class QuoteLocale extends BaseEntity {
 		return this;
 	}
 
-	public QuoteLocale setCurator(String curator) {
-		this.curator = curator;
+	public QuoteLocale setMeta(String meta) {
+		this.meta = meta;
+		return this;
+	}
+
+	public QuoteLocale setQuote(Quote quote) {
+		this.quote = quote;
+		return this;
+	}
+
+	public QuoteLocale setSchedule(String schedule) {
+		this.schedule = schedule;
+		return this;
+	}
+
+	public QuoteLocale setTime(String time) {
+		this.time = time;
+		return this;
+	}
+
+	public QuoteLocale setYear(String year) {
+		this.year = year;
 		return this;
 	}
 

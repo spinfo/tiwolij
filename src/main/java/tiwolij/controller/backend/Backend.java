@@ -15,20 +15,18 @@ import tiwolij.service.work.WorkService;
 @RequestMapping({ "/tiwolij", "/tiwolij/" })
 public class Backend {
 
-
 	@Autowired
 	private AuthorService authors;
 
 	@Autowired
-	private WorkService works;
+	private QuoteService quotes;
 
 	@Autowired
-	private QuoteService quotes;
+	private WorkService works;
 
 	@GetMapping({ "", "/" })
 	public ModelAndView getRoot() {
 		ModelAndView mv = new ModelAndView("backend/index");
-
 		mv.addObject("authors", authors.count());
 		mv.addObject("authorLocales", authors.countLocales());
 		mv.addObject("works", works.count());
@@ -37,7 +35,7 @@ public class Backend {
 		mv.addObject("quoteLocales", quotes.getLocaleCount());
 		return mv;
 	}
-	
+
 	@GetMapping("search")
 	public ModelAndView search(@RequestParam("term") String term) {
 		ModelAndView mv = new ModelAndView("backend/search");

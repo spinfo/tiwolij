@@ -10,22 +10,18 @@ import tiwolij.domain.AuthorLocale;
 
 public interface AuthorLocaleRepository extends PagingAndSortingRepository<AuthorLocale, Integer> {
 
-	public AuthorLocale findTop1ById(Integer localeId);
-
-	public AuthorLocale findTop1ByAuthorIdAndLanguage(Integer authorId, String language);
-
 	public List<AuthorLocale> findAll();
-
-	public List<AuthorLocale> findAllByAuthorId(Integer authorId);
-
-	// pagination
 
 	public Page<AuthorLocale> findAll(Pageable pageable);
 
+	public List<AuthorLocale> findAllByAuthorId(Integer authorId);
+
 	public Page<AuthorLocale> findAllByAuthorId(Pageable pageable, Integer authorId);
 
-	// search
-
 	public List<AuthorLocale> findAllByNameContainingIgnoreCase(String name);
+
+	public AuthorLocale findTop1ByAuthorIdAndLanguage(Integer authorId, String language);
+
+	public AuthorLocale findTop1ById(Integer localeId);
 
 }

@@ -10,7 +10,7 @@
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div th:text="#{data.import.locales}" class="panel-heading" />
-					<form enctype="multipart/form-data" class="form-horizontal" method="post" onsubmit="document.getElementById('submit').disabled=true">
+					<form enctype="multipart/form-data" class="form-horizontal" method="post">
 						<div class="panel-body">
 							<div th:replace="../elements/fields :: putin('file', true, 'file', '', '', 'My_Quotes.tsv')" />
 							<div th:replace="../elements/fields :: pulldown('encoding', true, ${encodings}, '', '')" />
@@ -20,7 +20,7 @@
 							<div th:replace="../elements/fields :: pulldown('forcelang', false, ${languages}, '', '')" />
 						</div>
 						<div class="panel-footer text-right">
-							<button id="submit" th:text="#{data.import.locales}" th:formaction="@{/tiwolij/data/import/preview}" type="submit" class="btn btn-sm btn-success" />
+							<button id="submit" th:text="#{data.import.locales}" th:formaction="@{/tiwolij/data/import}" type="submit" class="btn btn-sm btn-success" />
 						</div>
 					</form>
 				</div>

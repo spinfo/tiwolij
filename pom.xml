@@ -6,7 +6,7 @@
 
 	<groupId>de.uk.spinfo</groupId>
 	<artifactId>TiwoliJ</artifactId>
-	<version>0.2.1</version>
+	<version>0.3.0-testing</version>
 
 	<properties>
 		<java.version>1.8</java.version>

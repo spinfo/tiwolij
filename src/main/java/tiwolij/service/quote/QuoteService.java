@@ -10,23 +10,17 @@ import tiwolij.domain.QuoteLocale;
 
 public interface QuoteService {
 
-	/*
-	 * GETTERS
-	 */
+	public void delLocale(Integer localeId);
+
+	public void delQuote(Integer quoteId);
 
 	public Long getCount();
-
-	public Quote getQuote(Integer quoteId);
-
-	public List<Quote> getQuotes();
-
-	public List<Quote> getQuotesByWork(Integer workId);
-
-	public Long getLocaleCount();
 
 	public QuoteLocale getLocale(Integer localeId);
 
 	public QuoteLocale getLocaleByQuoteAndLang(Integer quoteId, String language);
+
+	public Long getLocaleCount();
 
 	public QuoteLocale getLocaleRandomByLang(String language);
 
@@ -37,56 +31,44 @@ public interface QuoteService {
 
 	public List<QuoteLocale> getLocales();
 
-	public List<QuoteLocale> getLocalesByQuote(Integer quoteId);
-
-	public List<QuoteLocale> getLocalesBySchedule(String schedule);
-
-	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language);
-
-	// pagination
-
-	public Page<Quote> getQuotes(Pageable pageable);
-
-	public Page<Quote> getQuotesByWork(Pageable pageable, Integer workId);
-
 	public Page<QuoteLocale> getLocales(Pageable pageable);
+
+	public List<QuoteLocale> getLocalesByQuote(Integer quoteId);
 
 	public Page<QuoteLocale> getLocalesByQuote(Pageable pageable, Integer quoteId);
 
 	public Page<QuoteLocale> getLocalesBySchedule(Pageable pageable, String schedule);
 
+	// pagination
+
+	public List<QuoteLocale> getLocalesBySchedule(String schedule);
+
 	public Page<QuoteLocale> getLocalesByScheduleAndLang(Pageable pageable, String schedule, String language);
 
-	// search
+	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language);
 
-	public List<Quote> search(String term);
+	public Quote getQuote(Integer quoteId);
 
-	/*
-	 * SETTERS
-	 */
+	public List<Quote> getQuotes();
 
-	public Quote setQuote(Quote quote);
+	public Page<Quote> getQuotes(Pageable pageable);
 
-	public QuoteLocale setLocale(QuoteLocale locale);
+	public List<Quote> getQuotesByWork(Integer workId);
 
-	/*
-	 * DELETERS
-	 */
-
-	public void delQuote(Integer quoteId);
-
-	public void delLocale(Integer localeId);
-
-	/*
-	 * CHECKERS
-	 */
-
-	public Boolean hasQuote(Integer quoteId);
+	public Page<Quote> getQuotesByWork(Pageable pageable, Integer workId);
 
 	public Boolean hasLocale(Integer quoteId, String language);
 
 	public Boolean hasLocaleByLang(String language);
 
 	public Boolean hasLocaleByScheduleAndLang(String schedule, String language);
+
+	public Boolean hasQuote(Integer quoteId);
+
+	public List<Quote> search(String term);
+
+	public QuoteLocale setLocale(QuoteLocale locale);
+
+	public Quote setQuote(Quote quote);
 
 }

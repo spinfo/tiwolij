@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,24 +18,24 @@ import javax.persistence.Table;
 @Table(name = "works")
 public class Work extends BaseEntity {
 
+	@ManyToOne
+	@JoinColumn(name = "author_id", nullable = false)
+	protected Author author;
+
 	@Id
 	@GeneratedValue
 	protected Integer id;
 
-	@ManyToOne
-	@JoinColumn(name = "author_id", nullable = false)
-	protected Author author;
+	@OneToMany(mappedBy = "work")
+	protected List<WorkLocale> locales;
+
+	@OneToMany(mappedBy = "work")
+	protected List<Quote> quotes;
 
 	@Column(nullable = false)
 	protected String slug;
 
 	protected Integer wikidataId;
-
-	@OneToMany(mappedBy = "work")
-	protected List<Quote> quotes;
-
-	@OneToMany(mappedBy = "work")
-	protected List<WorkLocale> locales;
 
 	public Work() {
 	}
@@ -43,12 +44,20 @@ public class Work extends BaseEntity {
 		this.author = author;
 	}
 
+	public Author getAuthor() {
+		return author;
+	}
+
 	public Integer getId() {
 		return id;
 	}
 
-	public Author getAuthor() {
-		return author;
+	public Map<String, WorkLocale> getLocales() {
+		return locales != null ? locales.stream().collect(Collectors.toMap(WorkLocale::getLanguage, l -> l)) : null;
+	}
+
+	public List<Quote> getQuotes() {
+		return quotes;
 	}
 
 	public String getSlug() {
@@ -59,12 +68,9 @@ public class Work extends BaseEntity {
 		return wikidataId;
 	}
 
-	public List<Quote> getQuotes() {
-		return quotes;
-	}
-
-	public Map<String, WorkLocale> getLocales() {
-		return locales != null ? locales.stream().collect(Collectors.toMap(WorkLocale::getLanguage, l -> l)) : null;
+	public Work setAuthor(Author author) {
+		this.author = author;
+		return this;
 	}
 
 	public Work setId(Integer id) {
@@ -72,8 +78,13 @@ public class Work extends BaseEntity {
 		return this;
 	}
 
-	public Work setAuthor(Author author) {
-		this.author = author;
+	public Work setLocales(List<WorkLocale> locales) {
+		this.locales = locales;
+		return this;
+	}
+
+	public Work setQuotes(List<Quote> quotes) {
+		this.quotes = quotes;
 		return this;
 	}
 
@@ -84,16 +95,6 @@ public class Work extends BaseEntity {
 
 	public Work setWikidataId(Integer wikidataId) {
 		this.wikidataId = wikidataId;
-		return this;
-	}
-
-	public Work setQuotes(List<Quote> quotes) {
-		this.quotes = quotes;
-		return this;
-	}
-
-	public Work setLocales(List<WorkLocale> locales) {
-		this.locales = locales;
 		return this;
 	}
 

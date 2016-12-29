@@ -19,42 +19,29 @@ import tiwolij.domain.RecordId;
 @Component
 @Transactional
 public class QuoteServiceImpl implements QuoteService {
-	private final QuoteRepository quotes;
 
 	private final QuoteLocaleRepository locales;
 
-	public QuoteServiceImpl(QuoteRepository quotes, QuoteLocaleRepository locales) {
-		this.quotes = quotes;
+	private final QuoteRepository quotes;
+
+	public QuoteServiceImpl(QuoteLocaleRepository locales, QuoteRepository quotes) {
 		this.locales = locales;
+		this.quotes = quotes;
 	}
 
-	/*
-	 * GETTERS
-	 */
+	@Override
+	public void delLocale(Integer localeId) {
+		locales.delete(localeId);
+	}
+
+	@Override
+	public void delQuote(Integer quoteId) {
+		quotes.delete(quoteId);
+	}
 
 	@Override
 	public Long getCount() {
 		return quotes.count();
-	}
-
-	@Override
-	public Quote getQuote(Integer quoteId) {
-		return quotes.findTop1ById(quoteId);
-	}
-
-	@Override
-	public List<Quote> getQuotes() {
-		return quotes.findAll();
-	}
-
-	@Override
-	public List<Quote> getQuotesByWork(Integer workId) {
-		return quotes.findAllByWorkId(workId);
-	}
-
-	@Override
-	public Long getLocaleCount() {
-		return locales.count();
 	}
 
 	@Override
@@ -68,6 +55,11 @@ public class QuoteServiceImpl implements QuoteService {
 			return null;
 
 		return locales.findTop1ByQuoteIdAndLanguage(quoteId, language);
+	}
+
+	@Override
+	public Long getLocaleCount() {
+		return locales.count();
 	}
 
 	@Override
@@ -114,40 +106,13 @@ public class QuoteServiceImpl implements QuoteService {
 	}
 
 	@Override
-	public List<QuoteLocale> getLocalesByQuote(Integer quoteId) {
-		return locales.findAllByQuoteId(quoteId);
-	}
-
-	@Override
-	public List<QuoteLocale> getLocalesBySchedule(String schedule) {
-		return locales.findAllBySchedule(schedule);
-	}
-
-	@Override
-	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language) {
-		List<QuoteLocale> all = new ArrayList<QuoteLocale>();
-		List<RecordId> list = locales.findAllByScheduleAndLanguage(schedule, language);
-
-		list.stream().forEach(l -> all.add(locales.findTop1ById(l.getId())));
-
-		return all;
-	}
-
-	// pagination
-
-	@Override
-	public Page<Quote> getQuotes(Pageable pageable) {
-		return quotes.findAll(pageable);
-	}
-
-	@Override
-	public Page<Quote> getQuotesByWork(Pageable pageable, Integer workId) {
-		return quotes.findAllByWorkId(pageable, workId);
-	}
-
-	@Override
 	public Page<QuoteLocale> getLocales(Pageable pageable) {
 		return locales.findAll(pageable);
+	}
+
+	@Override
+	public List<QuoteLocale> getLocalesByQuote(Integer quoteId) {
+		return locales.findAllByQuoteId(quoteId);
 	}
 
 	@Override
@@ -161,59 +126,48 @@ public class QuoteServiceImpl implements QuoteService {
 	}
 
 	@Override
+	public List<QuoteLocale> getLocalesBySchedule(String schedule) {
+		return locales.findAllBySchedule(schedule);
+	}
+
+	@Override
 	public Page<QuoteLocale> getLocalesByScheduleAndLang(Pageable pageable, String schedule, String language) {
 		return locales.findAllByScheduleAndLanguage(pageable, schedule, language);
 	}
 
-	// search
-
 	@Override
-	public List<Quote> search(String term) {
-		List<QuoteLocale> found = locales.findAllByCorpusContainingIgnoreCase(term);
-		List<Quote> result = new ArrayList<Quote>();
+	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language) {
+		List<QuoteLocale> all = new ArrayList<QuoteLocale>();
+		List<RecordId> list = locales.findAllByScheduleAndLanguage(schedule, language);
 
-		for (QuoteLocale l : found)
-			if (!result.contains(l.getQuote()))
-				result.add(l.getQuote());
+		list.stream().forEach(l -> all.add(locales.findTop1ById(l.getId())));
 
-		return result;
-	}
-
-	/*
-	 * SETTERS
-	 */
-
-	@Override
-	public Quote setQuote(Quote quote) {
-		return quotes.save(quote);
+		return all;
 	}
 
 	@Override
-	public QuoteLocale setLocale(QuoteLocale locale) {
-		return locales.save(locale);
-	}
-
-	/*
-	 * DELETERS
-	 */
-
-	@Override
-	public void delQuote(Integer quoteId) {
-		quotes.delete(quoteId);
+	public Quote getQuote(Integer quoteId) {
+		return quotes.findTop1ById(quoteId);
 	}
 
 	@Override
-	public void delLocale(Integer localeId) {
-		locales.delete(localeId);
+	public List<Quote> getQuotes() {
+		return quotes.findAll();
 	}
 
-	/*
-	 * CHECKERS
-	 */
+	@Override
+	public Page<Quote> getQuotes(Pageable pageable) {
+		return quotes.findAll(pageable);
+	}
 
 	@Override
-	public Boolean hasQuote(Integer quoteId) {
-		return quotes.exists(quoteId);
+	public List<Quote> getQuotesByWork(Integer workId) {
+		return quotes.findAllByWorkId(workId);
+	}
+
+	@Override
+	public Page<Quote> getQuotesByWork(Pageable pageable, Integer workId) {
+		return quotes.findAllByWorkId(pageable, workId);
 	}
 
 	@Override
@@ -229,6 +183,33 @@ public class QuoteServiceImpl implements QuoteService {
 	@Override
 	public Boolean hasLocaleByScheduleAndLang(String schedule, String language) {
 		return locales.findTop1ByScheduleAndLanguage(schedule, language) != null;
+	}
+
+	@Override
+	public Boolean hasQuote(Integer quoteId) {
+		return quotes.exists(quoteId);
+	}
+
+	@Override
+	public List<Quote> search(String term) {
+		List<QuoteLocale> found = locales.findAllByCorpusContainingIgnoreCase(term);
+		List<Quote> result = new ArrayList<Quote>();
+
+		for (QuoteLocale l : found)
+			if (!result.contains(l.getQuote()))
+				result.add(l.getQuote());
+
+		return result;
+	}
+
+	@Override
+	public QuoteLocale setLocale(QuoteLocale locale) {
+		return locales.save(locale);
+	}
+
+	@Override
+	public Quote setQuote(Quote quote) {
+		return quotes.save(quote);
 	}
 
 }

@@ -6,15 +6,24 @@
 <body id="backend">
 	<div class="container">
 		<nav th:replace="../elements/navbar" />
-		<section class="row">
+		<section class="row" th:unless="${#maps.isEmpty(errors)}">
 			<div class="col-md-12">
-				<div class="panel panel-default">
-					<div th:text="#{locales.report}" class="panel-heading" />
-					<div class="panel-body form-horizontal">
-						<div th:unless="${#strings.isEmpty(format)}"><div th:replace="../elements/fields :: view('format', ${format}, '', false)" /></div>
-						<div th:unless="${#maps.isEmpty(quotes)}"><div th:replace="../elements/fields :: view('quotes', ${#maps.size(quotes)}, '', false)" /></div>
-						<div th:unless="${#maps.isEmpty(errors)}"><div th:replace="../elements/fields :: view('errors', ${#maps.size(errors)}, '', false)" /></div>
-					</div>
+				<div class="panel panel-danger">
+					<div th:text="#{fields.errors}" class="panel-heading" />
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th th:text="#{fields.line}" />
+								<th th:text="#{fields.error}" />
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="error : ${errors}">
+								<th th:text="${error.key}" />
+								<td th:text="${error.value.message}" class="small" />
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</section>
@@ -46,27 +55,6 @@
 								<td th:text="${#strings.abbreviate(quote.value.corpus, 50)}" />
 								<td class="text-center"><a th:unless="${#strings.isEmpty(quote.value.href)}" th:text="#{actions.view}" th:href="${quote.value.href}" target="_blank" /></td>
 								<td th:text="${quote.value.meta}" />
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</section>
-		<section class="row" th:unless="${#maps.isEmpty(errors)}">
-			<div class="col-md-12">
-				<div class="panel panel-danger">
-					<div th:text="#{fields.errors}" class="panel-heading" />
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th th:text="#{fields.error}" />
-								<th th:text="#{fields.line}" />
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="error : ${errors}">
-								<th th:text="${error.value.message}" />
-								<td th:text="${error.key}" class="small" />
 							</tr>
 						</tbody>
 					</table>
