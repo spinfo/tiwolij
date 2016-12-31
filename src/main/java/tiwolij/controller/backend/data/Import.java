@@ -135,7 +135,8 @@ public class Import {
 		String language = quoteLocale.getLanguage();
 
 		for (QuoteLocale l : quotes.getLocalesByScheduleAndLang(quoteLocale.getSchedule(), language))
-			if (LevenshteinDistance.get(l.getCorpus(), quoteLocale.getCorpus()) < 10)
+			if (LevenshteinDistance.get(l.getCorpus(), quoteLocale.getCorpus()) < Integer
+					.parseInt(env.getProperty("tiwolij.import.levenshtein")))
 				throw new DuplicateKeyException("Duplicate entry");
 
 		Quote quote = quoteLocale.getQuote();
