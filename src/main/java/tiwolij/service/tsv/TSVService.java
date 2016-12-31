@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import tiwolij.domain.Author;
@@ -30,6 +31,9 @@ import tiwolij.util.RegularExpressions;
 @Component
 public class TSVService {
 
+	@Autowired
+	private Environment env;
+	
 	@Autowired
 	private WikidataService wikidata;
 
@@ -276,8 +280,11 @@ public class TSVService {
 		}
 
 		for (QuoteLocale l : quoteLocales.values()) {
-			if (!l.equals(quoteLocale()) && LevenshteinDistance.get(l.getCorpus(), quoteLocale().getCorpus()) < 10) {
-				throw new ParseException("Duplicate entry", lineno);
+			if (!quoteLocale().equals(l) && quoteLocale().getDay().equals(l.getDay())) {
+				if (LevenshteinDistance.get(l.getCorpus(), quoteLocale().getCorpus()) < Integer
+						.parseInt(env.getProperty("tiwolij.import.levenshtein"))) {
+					throw new ParseException("Duplicate entry", lineno);
+				}
 			}
 		}
 	}
