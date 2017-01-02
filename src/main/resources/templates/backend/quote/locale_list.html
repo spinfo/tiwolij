@@ -33,7 +33,7 @@
 								<td><a th:href="@{/tiwolij/quotes/view(quoteId=${locale.quote.id})}" th:text="${#strings.abbreviate(slug, 25)}" /></td>
 								<td th:text="${locale.language}" />
 								<td th:text="${locale.schedule} + ${year} + ${time}" />
-								<td th:text="${#strings.abbreviate(locale.corpus, 50)}" />
+								<td th:text="${#strings.abbreviate(locale.corpus, 25)}" />
 								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.href)}" th:text="#{actions.view}" th:href="${locale.href}" target="_blank" /></td>
 								<td th:text="${locale.meta}" />
 								<td class="text-center"><span th:if="${locale.locked}" class="glyphicon glyphicon-star" aria-hidden="true" /></td>

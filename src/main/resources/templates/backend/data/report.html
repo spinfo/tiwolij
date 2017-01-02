@@ -52,7 +52,7 @@
 								<td><a th:href="@{/tiwolij/quotes/view(quoteId=${quote.value.quote.id})}" th:text="${#strings.abbreviate(slug, 25)}" /></td>
 								<td th:text="${quote.value.language}" />
 								<td th:text="${quote.value.schedule} + ${year} + ${time}" />
-								<td th:text="${#strings.abbreviate(quote.value.corpus, 50)}" />
+								<td th:text="${#strings.abbreviate(quote.value.corpus, 25)}" />
 								<td class="text-center"><a th:unless="${#strings.isEmpty(quote.value.href)}" th:text="#{actions.view}" th:href="${quote.value.href}" target="_blank" /></td>
 								<td th:text="${quote.value.meta}" />
 							</tr>

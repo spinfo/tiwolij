@@ -46,7 +46,7 @@
 								<th th:text="'#' + ${locale.value.id}" />
 								<td th:text="${locale.key}" />
 								<td th:text="${locale.value.schedule}" />
-								<td th:text="${#strings.abbreviate(locale.value.corpus, 50)}" />
+								<td th:text="${#strings.abbreviate(locale.value.corpus, 25)}" />
 								<td class="text-center"><a th:unless="${#strings.isEmpty(locale.value.href)}" th:text="#{actions.view}" th:href="${locale.value.href}" target="_blank" /></td>
 								<td th:text="${locale.value.meta}" />
 								<td class="text-right">

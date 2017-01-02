@@ -62,7 +62,7 @@
 									<td th:text="${quote.schedule} + ${year} + ${time}" />
 									<td><a th:remove="${#strings.isEmpty(author.wikidataId)} ? tag" th:href="@{https://www.wikidata.org/wiki/Q} + ${author.wikidataId}" th:text="${authorName}" target="_blank" /></td>
 									<td><a th:remove="${#strings.isEmpty(work.wikidataId)} ? tag" th:href="@{https://www.wikidata.org/wiki/Q} + ${work.wikidataId}" th:text="${workName}" target="_blank" /></td>
-									<td th:text="${#strings.abbreviate(quote.corpus, 50)}" />
+									<td th:text="${#strings.abbreviate(quote.corpus, 25)}" />
 									<td class="text-center"><a th:unless="${#strings.isEmpty(quote.href)}" th:text="#{actions.view}" th:href="${quote.href}" target="_blank" /></td>
 									<td th:text="${quote.meta}" />
 								</tr>
