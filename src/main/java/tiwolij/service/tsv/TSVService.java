@@ -33,7 +33,7 @@ public class TSVService {
 
 	@Autowired
 	private Environment env;
-	
+
 	@Autowired
 	private WikidataService wikidata;
 
@@ -229,11 +229,11 @@ public class TSVService {
 			break;
 		case "author_slug":
 			if (author().getSlug() == null || author().getSlug().isEmpty())
-				author().setSlug(value);
+				author().setSlug(value.replace(" ", "_"));
 			break;
 		case "work_slug":
 			if (work().getSlug() == null || work().getSlug().isEmpty())
-				work().setSlug(value);
+				work().setSlug(value.replace(" ", "_"));
 			break;
 		case "source [meta]":
 			if (value.indexOf(" ") == -1) {

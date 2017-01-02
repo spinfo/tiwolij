@@ -1,5 +1,7 @@
 package tiwolij.domain;
 
+import java.text.Normalizer;
+
 public class BaseEntity {
 
 	public int compareNaturalBy(BaseEntity that, String by) {
@@ -78,6 +80,10 @@ public class BaseEntity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected String esc(String str) {
+		return Normalizer.normalize(str.replace(" ", "_"), Normalizer.Form.NFD).replaceAll("[^\\x00-\\x7F]", "");
 	}
 
 }
