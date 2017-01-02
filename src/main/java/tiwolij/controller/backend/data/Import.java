@@ -111,22 +111,24 @@ public class Import {
 		tsv = (TSVService) session.getAttribute("import");
 		session.removeAttribute("import");
 
-		Map<Integer, QuoteLocale> results = new LinkedHashMap<Integer, QuoteLocale>();
+		Map<Integer, QuoteLocale> results = (LinkedHashMap<Integer, QuoteLocale>) tsv.getResults();
+		Map<Integer, QuoteLocale> imports = new LinkedHashMap<Integer, QuoteLocale>();
 		Map<Integer, Exception> errors = new LinkedHashMap<Integer, Exception>(tsv.getErrors());
 
 		if (lines.isEmpty())
-			lines = tsv.getResults().keySet();
+			lines = results.keySet();
 
 		for (Integer line : lines) {
 			try {
-				results.put(line, imp0rt(tsv.getResults().get(line)));
+				imports.put(line, imp0rt(results.get(line)));
 				entityManager.clear();
 			} catch (Exception e) {
 				errors.put(line, e);
+				e.printStackTrace();
 			}
 		}
 
-		mv.addObject("quotes", results);
+		mv.addObject("quotes", imports);
 		mv.addObject("errors", errors);
 		return mv;
 	}
@@ -159,9 +161,17 @@ public class Import {
 				author = authorImporter.byWikidataId(author.getWikidataId());
 				authorLocale = authorImporter.locale(author.getWikidataId(), language);
 			}
-		} else if (author.getSlug() != null) {
+		}
+
+		if (author.getId() == null && author.getSlug() != null) {
 			if (authors.hasAuthorBySlug(author.getSlug())) {
-				author = authors.getAuthorBySlug(author.getSlug());
+				Author known = authors.getAuthorBySlug(author.getSlug());
+
+				if (known.getWikidataId() == null && author.getWikidataId() != null) {
+					work.setId(known.getId());
+				} else {
+					author = known;
+				}
 
 				if (authors.hasLocale(author.getId(), language)) {
 					authorLocale = authors.getLocaleByLang(author.getId(), language);
@@ -182,9 +192,17 @@ public class Import {
 				work = workImporter.byWikidataId(work.getWikidataId());
 				workLocale = workImporter.locale(work.getWikidataId(), language);
 			}
-		} else if (work.getSlug() != null) {
+		}
+
+		if (work.getId() == null && work.getSlug() != null) {
 			if (works.hasWorkBySlug(work.getSlug())) {
-				work = works.getWorkBySlug(work.getSlug());
+				Work known = works.getWorkBySlug(work.getSlug());
+
+				if (known.getWikidataId() == null && work.getWikidataId() != null) {
+					work.setId(known.getId());
+				} else {
+					work = known;
+				}
 
 				if (works.hasLocale(work.getId(), language)) {
 					workLocale = works.getLocaleByLang(work.getId(), language);
