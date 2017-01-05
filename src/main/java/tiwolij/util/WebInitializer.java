@@ -1,7 +1,9 @@
-package tiwolij;
+package tiwolij.util;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+
+import tiwolij.TiwoliJ;
 
 public class WebInitializer extends SpringBootServletInitializer {
 
