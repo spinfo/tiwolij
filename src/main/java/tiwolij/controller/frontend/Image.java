@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import tiwolij.domain.Author;
 import tiwolij.domain.AuthorLocale;
 import tiwolij.domain.QuoteLocale;
 import tiwolij.domain.WorkLocale;
@@ -51,9 +52,12 @@ public class Image {
 
 	@GetMapping("/author")
 	public void author(@RequestParam(name = "id") Integer authorId, HttpServletResponse response) throws Exception {
-		if (authors.getAuthor(authorId) != null && authors.getAuthor(authorId).getImage().length > 0) {
+		Author author = null;
+		byte[] image = null;
+
+		if ((author = authors.getAuthor(authorId)) != null && (image = author.getImage()) != null && image.length > 0) {
 			response.setContentType("image/jpeg");
-			response.getOutputStream().write(authors.getAuthor(authorId).getImage());
+			response.getOutputStream().write(image);
 			response.getOutputStream().close();
 		} else
 			response.sendRedirect("/img/tiwoli.png");

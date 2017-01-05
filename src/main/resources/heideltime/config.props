@@ -2,6 +2,7 @@ considerDate = true
 considerDuration = true
 considerSet = true
 considerTime = true
+considerTemponym = false
 
 config_path =
 hunpos_path =
@@ -11,8 +12,8 @@ pos_model_path =
 sent_model_path =
 word_model_path =
 
-treeTaggerHome = /treetagger
 typeSystemHome = heideltime/typesystem.xml
+treeTaggerHome =
 chineseTokenizerPath =
 
 uimaVarDate = Date
@@ -20,4 +21,5 @@ uimaVarDuration = Duration
 uimaVarLanguage = Language
 uimaVarSet = Set
 uimaVarTime = Time
+uimaVarTemponym = Temponym
 uimaVarTypeToProcess = Type

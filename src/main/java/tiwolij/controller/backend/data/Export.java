@@ -52,7 +52,7 @@ public class Export {
 					String.format("%02d", i)));
 
 		mv.addObject("months", months);
-		mv.addObject("languages", env.getProperty("tiwolij.localizations", String[].class));
+		mv.addObject("languages", env.getProperty("tiwolij.locales.allowed", String[].class));
 		return mv;
 	}
 
