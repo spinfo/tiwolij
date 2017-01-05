@@ -16,7 +16,7 @@
 							<div th:replace="../elements/fields :: putin('language', true, 'text', 2, '^[a-z]{2}$', 'de')" />
 							<div th:replace="../elements/fields :: putin('schedule', true, 'text', 5, '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$', '14-04')" />
 							<div th:replace="../elements/fields :: putin('year', false, 'text', 10, '', '1838')" />
-							<div th:replace="../elements/fields :: putin('time', false, 'text', 8, '^([0-1][0-9]|2[0-3])(:[0-5][0-9]){2}$', '06:00:00')" />
+							<div th:replace="../elements/fields :: putin('time', false, 'text', 8, '^([0-1][0-9]|2[0-3])(:[0-5][0-9]){1,2}$', '06:00:00')" />
 							<div th:replace="../elements/fields :: areatext('corpus', true, 5, '', '&lt;b&gt;Heute, d. 14. April&lt;/b&gt; 1838, morgens um 6 Uhr, ward meine liebe Frau Elisabeth, geb. Kr&ouml;ger, mit Gottes gn&auml;diger Hilfe aufs gl&uuml;cklichste von einem T&ouml;chterchen entbunden, welches in der hl. Taufe den Namen Clara empfangen soll.')" />
 							<div th:replace="../elements/fields :: putin('href', false, 'url', 255, '', 'http://d-nb.info/970666128')" />
 							<div th:replace="../elements/fields :: putin('meta', false, 'text', 255, '', 'Seite 56')" />
