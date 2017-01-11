@@ -123,8 +123,12 @@ body {
 }
 #frontend #index .intro, #frontend #view .corpus {
     position: relative;
+		padding-bottom: 20px;
     flex-basis: 0;
     flex-grow: 2;
+}
+#frontend #index .intro, #frontend #view .corpus p + p {
+	padding-top: 20px;
 }
 #frontend #index .image img, #frontend #view .image img {
     max-height: 500px;
