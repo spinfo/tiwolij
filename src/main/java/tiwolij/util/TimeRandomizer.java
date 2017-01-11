@@ -62,7 +62,7 @@ public class TimeRandomizer {
 	 * @return
 	 */
 	public static String getRandomizedTime() {
-		return getRandomizedTime(14, 20);
+		return getRandomizedTime(9, 20);
 	}
 
 }
