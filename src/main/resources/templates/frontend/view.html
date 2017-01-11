@@ -31,6 +31,7 @@
 						</div>
 					</div>
 					<p th:utext="${quote.corpus}" />
+					<p><a th:text="#{frontend.readmore} + ' &raquo;'" th:href="${quote.href}" target="_blank" /></p>
 					<div th:unless="${#lists.isEmpty(list)}" class="today">
 						<span th:text="#{frontend.qotds} + ':'" th:remove="tag" />
 						<div th:each="locale, iterStat : ${list}" th:remove="tag">
