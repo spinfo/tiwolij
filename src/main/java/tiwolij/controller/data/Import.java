@@ -123,7 +123,7 @@ public class Import {
 			@RequestParam(name = "review", defaultValue = "false") Boolean review,
 			@RequestParam(name = "heideltag", defaultValue = "false") Boolean heideltag,
 			@RequestParam(name = "levensthein", defaultValue = "false") Boolean levensthein) throws Exception {
-		session.setAttribute("progress", new Double(0));
+		session.setAttribute("progress", "pre");
 		tsv.process(encoding, Arrays.asList(format.split(";")), forcelang, file.getBytes());
 
 		Map<Integer, Quote> results = tsv.getResults();
@@ -203,7 +203,7 @@ public class Import {
 
 		for (Integer i : lines) {
 			try {
-				session.setAttribute("progress", new Double(i) / lastLine);
+				session.setAttribute("progress", "" + (new Float(i) / lastLine * 100));
 
 				Quote quote = results.get(i);
 				Author author = importAuthor(quote.getAuthor());
@@ -228,42 +228,63 @@ public class Import {
 
 	@ResponseBody
 	@GetMapping("progress")
-	public Double progress(HttpServletResponse response) throws Exception {
-		Double progress = (Double) session.getAttribute("progress");
+	public String progress(HttpServletResponse response) throws Exception {
+		String progress = (String) session.getAttribute("progress");
 		response.setContentType("text/plain");
-		return (progress == null) ? -1 : progress;
+		return (progress == null) ? "null" : progress;
 	}
 
 	private Author importAuthor(Author author) throws Exception {
-		Integer height = Integer.parseInt(env.getProperty("tiwolij.import.imageheight"));
+		Author existing = null;
 		Locale locale = author.getLocales().iterator().next();
+		Integer height = Integer.parseInt(env.getProperty("tiwolij.import.imageheight"));
 
 		if (author.getWikidataId() != null) {
-			if (authors.existsByWikidataId(author.getWikidataId())) {
-				author = authors.getOneByWikidataId(author.getWikidataId());
-			} else {
-				author.setSlug(wikidata.extractSlug(author.getWikidataId()));
-				author.setImage(ImageLoader.getBytes(wikidata.extractImage(author.getWikidataId()), height));
-				author.setImageAttribution(wikidata.extractImageAttribution(author.getWikidataId()));
-			}
+			author.setSlug(wikidata.extractSlug(author.getWikidataId()));
+			locale = wikidata.extractLocale(author.getWikidataId(), locale.getLanguage());
+		}
+
+		if (authors.existsByWikidataId(author.getWikidataId())) {
+			existing = authors.getOneByWikidataId(author.getWikidataId());
 		} else if (authors.existsBySlug(author.getSlug())) {
-			author = authors.getOneBySlug(author.getSlug());
+			existing = authors.getOneBySlug(author.getSlug());
+		}
+
+		if (existing != null) {
+			if (existing.getWikidataId() == null && author.getWikidataId() != null) {
+				existing.setWikidataId(author.getWikidataId());
+			}
+
+			author = existing;
+		} else {
+			author.setImage(ImageLoader.getBytes(wikidata.extractImage(author.getWikidataId()), height));
+			author.setImageAttribution(wikidata.extractImageAttribution(author.getWikidataId()));
 		}
 
 		return author.addLocale(locale);
 	}
 
 	private Work importWork(Work work) throws Exception {
+		Work existing = null;
 		Locale locale = work.getLocales().iterator().next();
 
 		if (work.getWikidataId() != null) {
-			if (works.existsByWikidataId(work.getWikidataId())) {
-				work = works.getOneByWikidataId(work.getWikidataId());
-			} else {
-				work.setSlug(wikidata.extractSlug(work.getWikidataId()));
-			}
+			work.setSlug(wikidata.extractSlug(work.getWikidataId()));
+			locale = wikidata.extractLocale(work.getWikidataId(), locale.getLanguage());
+		}
+
+		if (works.existsByWikidataId(work.getWikidataId())) {
+			existing = works.getOneByWikidataId(work.getWikidataId());
 		} else if (works.existsBySlug(work.getSlug())) {
-			work = works.getOneBySlug(work.getSlug());
+			existing = works.getOneBySlug(work.getSlug());
+		}
+
+		if (existing != null) {
+			if (existing.getWikidataId() == null && work.getWikidataId() != null) {
+				existing.setWikidataId(work.getWikidataId());
+			}
+
+			work = existing;
 		}
 
 		return work.addLocale(locale);
