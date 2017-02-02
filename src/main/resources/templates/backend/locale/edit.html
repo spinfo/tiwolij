@@ -1,0 +1,36 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{locales.edit})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{locales.edit} + ' #' + ${locale.id}" class="panel-heading" />
+					<form th:object="${locale}" class="form-horizontal" method="post">
+						<input th:field="*{id}" type="hidden" />
+						<input th:if="*{author}" th:field="*{author}" type="hidden" />
+						<input th:if="*{work}" th:field="*{work}" type="hidden" />
+						<div class="panel-body">
+							<div th:if="*{author}"><div th:replace="../elements/fields :: fieldView('author', *{author.slug}, @{/tiwolij/authors/view(authorId=*{author.id})}, false)" /></div>
+							<div th:if="*{work}"><div th:replace="../elements/fields :: fieldView('work', *{work.slug}, @{/tiwolij/works/view(workId=*{work.id})}, false)" /></div>
+							<div th:replace="../elements/fields :: fieldInput('language', true, 'text', 2, '^[a-z]{2}$')" />
+							<div th:replace="../elements/fields :: fieldInput('name', true, 'text', 255, '')" />
+							<div th:replace="../elements/fields :: fieldInput('href', false, 'url', 255, '')" />
+						</div>
+						<div class="panel-footer text-right">
+							<button th:text="#{locales.edit}" th:formaction="@{/tiwolij/locales/edit}" type="submit" class="btn btn-sm btn-success" />
+							<a th:text="#{locales.delete}" th:href="@{/tiwolij/locales/delete(localeId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(MESSAGES_BACKEND_CONFIRM)'" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

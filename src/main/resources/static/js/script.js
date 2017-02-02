@@ -5,7 +5,7 @@ $(document).ready(function() {
 		var url = $(this).attr('href');
 		var row = $(this).closest('tr');
 
-		if (confirm(MESSAGES_GENERAL_CONFIRM))
+		if (confirm(MESSAGES_BACKEND_CONFIRM))
 			$.ajax(url).done(row.remove());
 	});
 });

@@ -40,22 +40,25 @@ public class TiwoliJ extends WebMvcConfigurerAdapter {
 		Locale standard = new Locale(env.getProperty("tiwolij.locales.default"));
 
 		Arrays.asList(env.getProperty("tiwolij.locales.allowed", String[].class)).stream()
-				.forEach(l -> list.add(new Locale(l)));
+				.forEach(i -> list.add(new Locale(i)));
 
 		SessionLocaleResolver slr = new SessionLocaleResolver() {
 			@Override
 			public Locale resolveLocale(HttpServletRequest request) {
-				if (request.getHeader("Accept-Language") == null)
+				if (request.getHeader("Accept-Language") == null) {
 					return standard;
+				}
 
 				Locale sessionLocale = (Locale) WebUtils.getSessionAttribute(request, LOCALE_SESSION_ATTRIBUTE_NAME);
 				Locale requestLocale = Locale.lookup(LanguageRange.parse(request.getHeader("Accept-Language")), list);
 
-				if (sessionLocale != null)
+				if (sessionLocale != null) {
 					return sessionLocale;
+				}
 
-				if (requestLocale != null)
+				if (requestLocale != null) {
 					return requestLocale;
+				}
 
 				return standard;
 			}

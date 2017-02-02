@@ -5,59 +5,72 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import tiwolij.domain.Author;
+import tiwolij.domain.WikidataId;
 import tiwolij.domain.Work;
-import tiwolij.domain.WorkLocale;
 
 public interface WorkService {
 
 	public Long count();
 
-	public Long countByAuthorId(Integer authorId);
+	public Long countByAuthor(Integer authorId);
 
-	public Long countLocales();
+	public Work save(Work work);
 
-	public void delLocale(Integer localeId);
+	public void delete(Integer workId);
 
-	public void delWork(Integer workId);
+	public Work getOneById(Integer workId);
 
-	public WorkLocale getLocale(Integer localeId);
+	public Work getOneBySlug(String slug);
 
-	public WorkLocale getLocaleByLang(Integer workId, String language);
+	public Work getOneByWikidataId(Integer wikidataId);
 
-	public List<WorkLocale> getLocales();
+	public List<Work> getAll();
 
-	public Page<WorkLocale> getLocales(Pageable pageable);
+	public Page<Work> getAll(Pageable pageable);
 
-	public List<WorkLocale> getLocalesByWork(Integer workId);
+	public List<Work> getAllByAuthor(Integer authorId);
 
-	public Page<WorkLocale> getLocalesByWork(Pageable pageable, Integer workId);
-
-	public Work getWork(Integer workId);
-
-	public Work getWorkBySlug(String slug);
-
-	public Work getWorkByWikidataId(Integer wikidataId);
-
-	public List<Work> getWorks();
-
-	public Page<Work> getWorks(Pageable pageable);
-
-	public List<Work> getWorksByAuthor(Integer authorId);
-
-	public Page<Work> getWorksByAuthor(Pageable pageable, Integer authorId);
-
-	public Boolean hasLocale(Integer workId, String language);
-
-	public Boolean hasWork(Integer workId);
-
-	public Boolean hasWorkBySlug(String slug);
-
-	public Boolean hasWorkByWikidataId(Integer wikidataId);
+	public Page<Work> getAllByAuthor(Pageable pageable, Integer authorId);
 
 	public List<Work> search(String term);
 
-	public WorkLocale setLocale(WorkLocale locale);
+	public Page<Work> search(Pageable pageable, String term);
 
-	public Work setWork(Work work);
+	default public Long countByAuthor(Author author) {
+		return countByAuthor(author.getId());
+	}
+
+	default public void delete(Work work) {
+		delete(work.getId());
+	}
+
+	default public Boolean existsById(Integer workId) {
+		return (getOneById(workId) != null);
+	}
+
+	default public Boolean existsBySlug(String slug) {
+		return (getOneBySlug(slug) != null);
+	}
+
+	default public Boolean existsByWikidataId(Integer wikidataId) {
+		return (getOneByWikidataId(wikidataId) != null);
+	}
+
+	default public Boolean existsByWikidataId(WikidataId wikidataId) {
+		return (getOneByWikidataId(wikidataId.getId()) != null);
+	}
+
+	default public Work getOneByWikidataId(WikidataId wikidataId) {
+		return getOneByWikidataId(wikidataId.getId());
+	}
+
+	default public List<Work> getAllByAuthor(Author author) {
+		return getAllByAuthor(author.getId());
+	}
+
+	default public Page<Work> getAllByAuthor(Pageable pageable, Author author) {
+		return getAllByAuthor(pageable, author.getId());
+	}
 
 }

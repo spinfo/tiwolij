@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{meta.home})" />
+<head th:replace="../elements/blocks :: header(title=#{meta.home})" />
 
 <body id="frontend">
 	<div id="wrapper">
@@ -25,11 +25,11 @@
 					<p>As a by-product, we coded an app to showcase the more exciting and self-explanatory of our results. We called our app <strong>TIWOLI</strong> (short for “Today in World Literature”).</p>
 				</div>
 			</div>
-			<div th:replace="../elements/meta"></div>
+			<div th:replace="../elements/blocks :: meta"></div>
 		</div>
 	</div>
 
-	<div th:replace="../elements/footer"></div>
+	<div th:replace="../elements/blocks :: footer"></div>
 </body>
 
 </html>

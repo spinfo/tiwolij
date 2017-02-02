@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{meta.about})" />
+<head th:replace="../elements/blocks :: header(title=#{meta.about})" />
 
 <body id="frontend">
 	<div id="wrapper">
@@ -39,11 +39,11 @@
 				<p>Dieses Impressum ist auf dem Stand Oktober 2016. Das Impressum wurde nach Vorbild und in Abstimmung mit dem Projekt <a href="http://www.univie.ac.at/bildzitat/Nutzungshinweise.html">»Datenbank Literarischer Bildzitate«</a> an der Universität Wien
 					erstellt.</p>
 			</div>
-			<div th:replace="../elements/meta"></div>
+			<div th:replace="../elements/blocks :: meta"></div>
 		</div>
 	</div>
 
-	<div th:replace="../elements/footer"></div>
+	<div th:replace="../elements/blocks :: footer"></div>
 </body>
 
 </html>

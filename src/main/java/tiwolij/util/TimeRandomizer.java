@@ -17,7 +17,7 @@ public class TimeRandomizer {
 	 * @param endTime
 	 * @return
 	 */
-	public static String getRandomizedTime(int startTime, int endTime) {
+	public static String getRandomizedTime(Integer startTime, Integer endTime) {
 
 		if (startTime < 0 || startTime > 24) {
 			startTime = 0;
@@ -32,7 +32,7 @@ public class TimeRandomizer {
 		if (endTime < startTime) {
 			endTime += 24;
 		}
-		int span = endTime - startTime;
+		Integer span = endTime - startTime;
 		if (span < 0) {
 			span = span * -1;
 		}
@@ -48,7 +48,7 @@ public class TimeRandomizer {
 		toReturn.append(startTime);
 		toReturn.append(":");
 
-		int minutes = random.nextInt(60);
+		Integer minutes = random.nextInt(60);
 		if (minutes < 10) {
 			toReturn.append("0");
 		}

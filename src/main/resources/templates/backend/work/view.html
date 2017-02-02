@@ -1,0 +1,36 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{works.view})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{works.view} + ' #' + ${work.id}" class="panel-heading" />
+					<form th:object="${work}" class="form-horizontal">
+						<div class="panel-body">
+							<div th:unless="*{#strings.isEmpty(wikidataId)}"><div th:replace="../elements/fields :: fieldView('wikidataId', 'Q' + *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" /></div>
+							<div th:replace="../elements/fields :: fieldView('slug', *{slug}, '', false)" />
+							<div th:replace="../elements/fields :: fieldView('author', *{author.slug}, @{/tiwolij/authors/view(authorId=*{author.id})}, false)" />
+						</div>
+						<div class="panel-footer text-right">
+							<a th:text="#{locales.create}" th:href="@{/tiwolij/locales/create(workId=*{id})}" role="button" class="btn btn-sm btn-success" />
+							<a th:unless="*{#strings.isEmpty(wikidataId)}" th:text="#{locales.import}" th:href="@{/tiwolij/data/import/locales(workId=*{id})}" role="button" class="btn btn-sm btn-success" />
+							<a th:text="#{quotes.create}" th:href="@{/tiwolij/quotes/create(workId=*{id})}" role="button" class="btn btn-sm btn-success" />
+							<a th:text="#{works.edit}" th:href="@{/tiwolij/works/edit(workId=*{id})}" role="button" class="btn btn-sm btn-primary" />
+							<a th:text="#{works.delete}" th:href="@{/tiwolij/works/delete(workId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(MESSAGES_BACKEND_CONFIRM)'" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+		<section th:replace="../elements/lists :: listQuotes(${work.quotes}, ${new String[] {'language', 'schedule', 'corpus'}}, '')" />
+		<section th:replace="../elements/lists :: listLocales(${work.locales}, ${new String[] {'language', 'name', 'source'}}, '')" />
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

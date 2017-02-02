@@ -1,33 +1,13 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{locales.preview})" />
+<head th:replace="../elements/blocks :: header(title=#{data.import.review})" />
 
 <body id="backend">
 	<div class="container">
 		<nav th:replace="../elements/navbar" />
-		<section class="row" th:unless="${#maps.isEmpty(errors)}">
-			<div class="col-md-12">
-				<div class="panel panel-danger">
-					<div th:text="#{fields.errors}" class="panel-heading" />
-					<table class="table table-hover">
-						<thead>
-							<tr>
-								<th th:text="#{fields.error}" />
-								<th th:text="#{fields.line}" />
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="error : ${errors}">
-								<th th:text="${error.value.message}" />
-								<td th:text="${error.key}" class="small" />
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</section>
-		<section th:unless="${#maps.isEmpty(quotes)}" class="row">
+		<section th:replace="../elements/lists :: listErrors(${errors})" />
+		<section th:unless="${#maps.isEmpty(results)}" class="row">
 			<div class="col-md-12">
 				<div class="panel panel-success">
 					<div th:text="#{fields.quotes}" class="panel-heading" />
@@ -47,15 +27,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="element : ${quotes}" th:with="
-									line=${element.key},
-									quote=${element.value},
-									work=${element.value.quote.work},
-									workName=${#strings.isEmpty(element.value.quote.work.wikidataId)} ? ${element.value.quote.work.slug} : ('Q' + ${element.value.quote.work.wikidataId}),
-									author=${element.value.quote.work.author},
-									authorName=${#strings.isEmpty(element.value.quote.work.author.wikidataId)} ? ${element.value.quote.work.author.slug} : ('Q' + ${element.value.quote.work.author.wikidataId}),
-									year=${#strings.isEmpty(element.value.year)} ? '' : '-' + ${element.value.year},
-									time=${#strings.isEmpty(element.value.time)} ? '' : ' ' + ${element.value.time}">
+								<tr th:each="element : ${results}" th:with="line=${element.key}, quote=${element.value}, work=${element.value.work}, workName=${#strings.abbreviate(element.value.work.slug, 25)}, author=${element.value.work.author}, authorName=${#strings.abbreviate(element.value.work.author.slug, 25)}, year=${#strings.isEmpty(element.value.year)} ? '' : '-' + ${element.value.year}, time=${#strings.isEmpty(element.value.time)} ? '' : ' ' + ${element.value.time}">
 									<th><input th:value="${line}" id="lines[]" name="lines[]" type="checkbox" checked="true" /></th>
 									<td th:text="${line}" />
 									<td th:text="${quote.language}" />
@@ -76,7 +48,7 @@
 			</div>
 		</section>
 	</div>
-	<footer th:replace="../elements/footer" />
+	<footer th:replace="../elements/blocks :: footer" />
 </body>
 
 </html>

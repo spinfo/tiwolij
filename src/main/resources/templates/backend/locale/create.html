@@ -1,0 +1,32 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{locales.create})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{locales.create}" class="panel-heading" />
+					<form th:object="${locale}" class="form-horizontal" method="post">
+						<div class="panel-body">
+							<div th:unless="*{work}"><div th:replace="../elements/fields :: fieldSelect('author', false, ${authors}, 'id', 'slug')" /></div>
+							<div th:unless="*{author}"><div th:replace="../elements/fields :: fieldSelect('work', false, ${works}, 'id', 'slug')" /></div>
+							<div th:replace="../elements/fields :: fieldInput('language', true, 'text', 2, '^[a-z]{2}$')" />
+							<div th:replace="../elements/fields :: fieldInput('name', true, 'text', 255, '')" />
+							<div th:replace="../elements/fields :: fieldInput('href', false, 'url', 255, '')" />
+						</div>
+						<div class="panel-footer text-right">
+							<button th:text="#{locales.create}" th:formaction="@{/tiwolij/locales/create}" type="submit" class="btn btn-sm btn-success" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

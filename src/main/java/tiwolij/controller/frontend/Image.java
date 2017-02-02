@@ -14,7 +14,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.Locale;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -27,56 +26,56 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import tiwolij.domain.Author;
-import tiwolij.domain.AuthorLocale;
-import tiwolij.domain.QuoteLocale;
-import tiwolij.domain.WorkLocale;
+import tiwolij.domain.Locale;
+import tiwolij.domain.Quote;
 import tiwolij.service.author.AuthorService;
 import tiwolij.service.quote.QuoteService;
-import tiwolij.service.work.WorkService;
 
 @Controller
 @RequestMapping("/image")
 public class Image {
 
 	@Autowired
-	private AuthorService authors;
+	private MessageSource messages;
 
 	@Autowired
-	private MessageSource messages;
+	private AuthorService authors;
 
 	@Autowired
 	private QuoteService quotes;
 
-	@Autowired
-	private WorkService works;
-
 	@GetMapping("/author")
 	public void author(@RequestParam(name = "id") Integer authorId, HttpServletResponse response) throws Exception {
-		Author author = null;
-		byte[] image = null;
-
-		if ((author = authors.getAuthor(authorId)) != null && (image = author.getImage()) != null && image.length > 0) {
-			response.setContentType("image/jpeg");
-			response.getOutputStream().write(image);
-			response.getOutputStream().close();
-		} else
+		if (!authors.existsById(authorId)) {
 			response.sendRedirect("/img/tiwoli.png");
+		}
+
+		Author author = authors.getOneById(authorId);
+		byte[] image = author.getImage();
+
+		if (author == null || image == null || image.length <= 0) {
+			response.sendRedirect("/img/tiwoli.png");
+		}
+
+		response.setContentType("image/jpeg");
+		response.getOutputStream().write(image);
+		response.getOutputStream().close();
 	}
 
 	@GetMapping("/flashcard")
-	public void flashcard(@RequestParam(name = "id") Integer quoteId, @RequestParam(name = "lang") String language,
-			@RequestParam(name = "onlytext", defaultValue = "0") Boolean onlytext, HttpServletResponse response)
-			throws Exception {
+	public void flashcard(HttpServletResponse response, @RequestParam(name = "id") Integer quoteId,
+			@RequestParam(name = "onlytext", defaultValue = "0") Boolean onlytext) throws Exception {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		BufferedImage image = new BufferedImage(900, 600, BufferedImage.TYPE_INT_RGB);
 		Graphics2D graphic = image.createGraphics();
 		graphic.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
-		QuoteLocale quote = quotes.getLocaleByQuoteAndLang(quoteId, language);
-		WorkLocale work = works.getLocaleByLang(quote.getQuote().getWork().getId(), language);
-		AuthorLocale author = authors.getLocaleByLang(work.getWork().getAuthor().getId(), language);
+		Quote quote = quotes.getOneById(quoteId);
+		String language = quote.getLanguage();
+		Locale work = quote.getWork().getMappedLocales().get(language);
+		Locale author = quote.getWork().getAuthor().getMappedLocales().get(language);
 
-		Locale locale = new Locale(language);
+		java.util.Locale locale = new java.util.Locale(language);
 		String day = messages.getMessage("day." + quote.getDay(), null, locale);
 		String delim = messages.getMessage("months.delim", null, locale);
 		String month = messages.getMessage("months." + quote.getMonth(), null, locale);
@@ -124,16 +123,16 @@ public class Image {
 		String corpus[] = quote.getCorpus().split("<br[^>]*>");
 
 		y = 120f;
-		for (String c : corpus) {
+		for (String i : corpus) {
 			graphic.setColor(text);
-			attstr = new AttributedString(c.replaceAll("<[^>]*>", ""));
+			attstr = new AttributedString(i.replaceAll("<[^>]*>", ""));
 			attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 20));
 			iter = attstr.getIterator();
 			measure = new LineBreakMeasurer(iter, frc);
 			measure.setPosition(iter.getBeginIndex());
 
-			x = onlytext ? 30 : 360f;
-			bound = onlytext ? 840 : 510f;
+			x = (onlytext) ? 30 : 360f;
+			bound = (onlytext) ? 840 : 510f;
 			while (measure.getPosition() < iter.getEndIndex()) {
 				TextLayout layout = measure.nextLayout(bound);
 				y += layout.getAscent();
@@ -150,7 +149,7 @@ public class Image {
 			graphic.fillRect(30, 120, 300, 450);
 
 			// image
-			BufferedImage img = author.getAuthor().getImage().length > 0
+			BufferedImage img = (author.getAuthor().getImage().length > 0)
 					? ImageIO.read(new ByteArrayInputStream(author.getAuthor().getImage()))
 					: ImageIO.read(new File("src/main/resources/static/img/tiwoli.png"));
 			Integer width = img.getWidth();
@@ -193,7 +192,7 @@ public class Image {
 				}
 
 				// imageAttribution
-				String attribution = quote.getQuote().getWork().getAuthor().getImageAttribution();
+				String attribution = quote.getWork().getAuthor().getImageAttribution();
 				attribution = messages.getMessage("fields.imageAttribution", null, locale) + ": " + attribution;
 
 				graphic.setColor(textmuted);
@@ -224,9 +223,8 @@ public class Image {
 	}
 
 	@GetMapping("/textcard")
-	public void textcard(@RequestParam(name = "id") Integer quoteId, @RequestParam(name = "lang") String language,
-			HttpServletResponse response) throws Exception {
-		flashcard(quoteId, language, true, response);
+	public void textcard(HttpServletResponse response, @RequestParam(name = "id") Integer quoteId) throws Exception {
+		flashcard(response, quoteId, true);
 	}
 
 }

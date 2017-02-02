@@ -1,0 +1,38 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{authors.view})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{authors.view} + ' #' + ${author.id}" class="panel-heading" />
+					<form th:object="${author}" class="form-horizontal">
+						<div class="panel-body">
+							<div th:unless="*{#strings.isEmpty(wikidataId)}"><div th:replace="../elements/fields :: fieldView('wikidataId', 'Q' + *{wikidataId}, @{https://www.wikidata.org/wiki/Q} + *{wikidataId}, true)" /></div>
+							<div th:replace="../elements/fields :: fieldView('slug', *{slug}, '', false)" />
+							<div th:unless="*{#lists.isEmpty(image)}"><div th:replace="../elements/fields :: fieldView('image', #{actions.view}, @{/image/author(id=*{id})}, true)" /></div>
+							<div th:unless="*{#lists.isEmpty(image)}"><div th:replace="../elements/fields :: fieldView('imageAttribution', *{imageAttribution}, '', false)" /></div>
+						</div>
+						<div class="panel-footer text-right">
+							<a th:text="#{locales.create}" th:href="@{/tiwolij/locales/create(authorId=*{id})}" role="button" class="btn btn-sm btn-success" />
+							<a th:unless="*{#strings.isEmpty(wikidataId)}" th:text="#{locales.import}" th:href="@{/tiwolij/data/import/locales(authorId=*{id})}" role="button" class="btn btn-sm btn-success" />
+							<a th:text="#{works.create}" th:href="@{/tiwolij/works/create(authorId=*{id})}" role="button" class="btn btn-sm btn-success" />
+							<a th:text="#{authors.edit}" th:href="@{/tiwolij/authors/edit(authorId=*{id})}" role="button" class="btn btn-sm btn-primary" />
+							<a th:text="#{authors.delete}" th:href="@{/tiwolij/authors/delete(authorId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(MESSAGES_BACKEND_CONFIRM)'" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+		<section th:replace="../elements/lists :: listWorks(${author.works}, ${new String[] {'wikidataId', 'slug', 'quotes'}}, '')" />
+		<section th:replace="../elements/lists :: listQuotes(${author.quotes}, ${new String[] {'work', 'language', 'schedule', 'corpus'}}, '')" />
+		<section th:replace="../elements/lists :: listLocales(${author.locales}, ${new String[] {'language', 'name', 'source'}}, '')" />
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{frontend.qotds})" />
+<head th:replace="../elements/blocks :: header(title=#{frontend.qotds})" />
 
 <body id="frontend">
 	<div id="wrapper">
@@ -21,12 +21,12 @@
 					</li>
 				</ul>
 			</div>
-			<div th:if="${#lists.isEmpty(list)}" th:text="#{general.empty}" class="empty" />
-			<div th:replace="../elements/meta"></div>
+			<div th:if="${#lists.isEmpty(list)}" th:text="#{frontend.empty}" class="empty" />
+			<div th:replace="../elements/blocks :: meta"></div>
 		</div>
 	</div>
 
-	<div th:replace="../elements/footer"></div>
+	<div th:replace="../elements/blocks :: footer"></div>
 </body>
 
 </html>

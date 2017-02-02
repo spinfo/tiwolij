@@ -1,0 +1,35 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{quotes.create})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{quotes.create}" class="panel-heading" />
+					<form th:object="${quote}" class="form-horizontal" method="post">
+						<div class="panel-body">
+							<div th:replace="../elements/fields :: fieldSelect('work', true, ${works}, 'id', 'slug')" />
+							<div th:replace="../elements/fields :: fieldInput('language', true, 'text', 2, '^[a-z]{2}$')" />
+							<div th:replace="../elements/fields :: fieldInput('schedule', true, 'text', 5, '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$')" />
+							<div th:replace="../elements/fields :: fieldInput('year', false, 'text', 10, '')" />
+							<div th:replace="../elements/fields :: fieldInput('time', false, 'text', 8, '^([0-1][0-9]|2[0-3])(:[0-5][0-9]){1,2}$')" />
+							<div th:replace="../elements/fields :: fieldTextarea('corpus', true, 5, '')" />
+							<div th:replace="../elements/fields :: fieldInput('href', false, 'url', 255, '')" />
+							<div th:replace="../elements/fields :: fieldInput('meta', false, 'text', 255, '')" />
+						</div>
+						<div class="panel-footer text-right">
+							<button th:text="#{quotes.create}" th:formaction="@{/tiwolij/quotes/create}" type="submit" class="btn btn-sm btn-success" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

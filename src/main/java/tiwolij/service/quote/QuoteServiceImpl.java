@@ -2,7 +2,6 @@ package tiwolij.service.quote;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -13,203 +12,165 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import tiwolij.domain.Quote;
-import tiwolij.domain.QuoteLocale;
-import tiwolij.domain.RecordId;
 
 @Component
 @Transactional
 public class QuoteServiceImpl implements QuoteService {
 
-	private final QuoteLocaleRepository locales;
-
 	private final QuoteRepository quotes;
 
-	public QuoteServiceImpl(QuoteLocaleRepository locales, QuoteRepository quotes) {
-		this.locales = locales;
+	public QuoteServiceImpl(QuoteRepository quotes) {
 		this.quotes = quotes;
 	}
 
 	@Override
-	public void delLocale(Integer localeId) {
-		locales.delete(localeId);
-	}
-
-	@Override
-	public void delQuote(Integer quoteId) {
-		quotes.delete(quoteId);
-	}
-
-	@Override
-	public Long getCount() {
+	public Long count() {
 		return quotes.count();
 	}
 
 	@Override
-	public QuoteLocale getLocale(Integer localeId) {
-		return locales.findTop1ById(localeId);
+	public Long countByAuthor(Integer authorId) {
+		return quotes.countByWorkAuthorId(authorId);
 	}
 
 	@Override
-	public QuoteLocale getLocaleByQuoteAndLang(Integer quoteId, String language) {
-		if (!hasLocale(quoteId, language))
-			return null;
-
-		return locales.findTop1ByQuoteIdAndLanguage(quoteId, language);
+	public Long countByWork(Integer workId) {
+		return quotes.countByWorkId(workId);
 	}
 
 	@Override
-	public Long getLocaleCount() {
-		return locales.count();
+	public Quote save(Quote quote) {
+		return quotes.save(quote);
 	}
 
 	@Override
-	public QuoteLocale getLocaleRandomByLang(String language) {
-		List<RecordId> list = locales.findAllByLanguage(language);
+	public void delete(Integer quoteId) {
+		quotes.delete(quoteId);
+	}
+
+	@Override
+	public Quote getOneById(Integer quoteId) {
+		return quotes.findOneById(quoteId);
+	}
+
+	@Override
+	public Quote getRandomByLang(String language) {
+		List<Quote> list = quotes.findAllByLanguage(language);
 		Collections.shuffle(list);
 
-		return locales.findTop1ById(list.get(0).getId());
+		return (list.size() > 0) ? list.get(0) : null;
 	}
 
 	@Override
-	public QuoteLocale getLocaleRandomByScheduleAndLang(String schedule, String language) {
-		List<RecordId> list = locales.findAllByScheduleAndLanguage(schedule, language);
+	public Quote getRandomByScheduleAndLang(String schedule, String language) {
+		List<Quote> list = quotes.findAllByScheduleAndLanguage(schedule, language);
 		Collections.shuffle(list);
 
-		return locales.findTop1ById(list.get(0).getId());
+		return (list.size() > 0) ? list.get(0) : null;
 	}
 
 	@Override
-	public QuoteLocale getLocaleRandomNextByScheduleAndLang(String schedule, String language, Boolean prev)
-			throws Exception {
-		QuoteLocale result = null;
-		Calendar cal = Calendar.getInstance();
-		DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+	public Quote getRandomNextBySibling(Integer quoteId) {
+		Quote quote = getOneById(quoteId);
+		Quote sibling = null;
 
-		cal.setTime(format.parse(schedule + "-" + cal.get(Calendar.YEAR)));
+		try {
+			Calendar cal = Calendar.getInstance();
+			DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+			cal.setTime(format.parse(quote.getSchedule() + "-" + cal.get(Calendar.YEAR)));
 
-		if (locales.findAllByLanguage(language).size() == 0)
-			return null;
+			while (sibling == null) {
+				cal.add(Calendar.DATE, 1);
+				String schedule = format.format(cal.getTime()).substring(0, 5);
 
-		while (result == null) {
-			cal.add(Calendar.DATE, prev ? -1 : +1);
-			schedule = format.format(cal.getTime()).substring(0, 5);
-			if (hasLocaleByScheduleAndLang(schedule, language))
-				result = getLocaleRandomByScheduleAndLang(schedule, language);
+				sibling = getRandomByScheduleAndLang(schedule, quote.getLanguage());
+			}
+		} catch (Exception e) {
 		}
 
-		return result;
+		return sibling;
 	}
 
 	@Override
-	public List<QuoteLocale> getLocales() {
-		return locales.findAll();
+	public Quote getRandomPrevBySibling(Integer quoteId) {
+		Quote quote = getOneById(quoteId);
+		Quote sibling = null;
+
+		try {
+			Calendar cal = Calendar.getInstance();
+			DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+			cal.setTime(format.parse(quote.getSchedule() + "-" + cal.get(Calendar.YEAR)));
+
+			while (sibling == null) {
+				cal.add(Calendar.DATE, -1);
+				String schedule = format.format(cal.getTime()).substring(0, 5);
+
+				sibling = getRandomByScheduleAndLang(schedule, quote.getLanguage());
+			}
+		} catch (Exception e) {
+		}
+
+		return sibling;
 	}
 
 	@Override
-	public Page<QuoteLocale> getLocales(Pageable pageable) {
-		return locales.findAll(pageable);
-	}
-
-	@Override
-	public List<QuoteLocale> getLocalesByQuote(Integer quoteId) {
-		return locales.findAllByQuoteId(quoteId);
-	}
-
-	@Override
-	public Page<QuoteLocale> getLocalesByQuote(Pageable pageable, Integer quoteId) {
-		return locales.findAllByQuoteId(pageable, quoteId);
-	}
-
-	@Override
-	public Page<QuoteLocale> getLocalesBySchedule(Pageable pageable, String schedule) {
-		return locales.findAllBySchedule(pageable, schedule);
-	}
-
-	@Override
-	public List<QuoteLocale> getLocalesBySchedule(String schedule) {
-		return locales.findAllBySchedule(schedule);
-	}
-
-	@Override
-	public Page<QuoteLocale> getLocalesByScheduleAndLang(Pageable pageable, String schedule, String language) {
-		return locales.findAllByScheduleAndLanguage(pageable, schedule, language);
-	}
-
-	@Override
-	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language) {
-		List<QuoteLocale> all = new ArrayList<QuoteLocale>();
-		List<RecordId> list = locales.findAllByScheduleAndLanguage(schedule, language);
-
-		list.stream().forEach(l -> all.add(locales.findTop1ById(l.getId())));
-
-		return all;
-	}
-
-	@Override
-	public Quote getQuote(Integer quoteId) {
-		return quotes.findTop1ById(quoteId);
-	}
-
-	@Override
-	public List<Quote> getQuotes() {
+	public List<Quote> getAll() {
 		return quotes.findAll();
 	}
 
 	@Override
-	public Page<Quote> getQuotes(Pageable pageable) {
+	public Page<Quote> getAll(Pageable pageable) {
 		return quotes.findAll(pageable);
 	}
 
 	@Override
-	public List<Quote> getQuotesByWork(Integer workId) {
+	public List<Quote> getAllByAuthor(Integer authorId) {
+		return quotes.findAllByWorkAuthorId(authorId);
+	}
+
+	@Override
+	public Page<Quote> getAllByAuthor(Pageable pageable, Integer authorId) {
+		return quotes.findAllByWorkAuthorId(pageable, authorId);
+	}
+
+	@Override
+	public List<Quote> getAllByWork(Integer workId) {
 		return quotes.findAllByWorkId(workId);
 	}
 
 	@Override
-	public Page<Quote> getQuotesByWork(Pageable pageable, Integer workId) {
+	public Page<Quote> getAllByWork(Pageable pageable, Integer workId) {
 		return quotes.findAllByWorkId(pageable, workId);
 	}
 
 	@Override
-	public Boolean hasLocale(Integer quoteId, String language) {
-		return locales.findTop1ByQuoteIdAndLanguage(quoteId, language) != null;
+	public List<Quote> getAllBySchedule(String schedule) {
+		return quotes.findAllBySchedule(schedule);
 	}
 
 	@Override
-	public Boolean hasLocaleByLang(String language) {
-		return locales.findAllByLanguage(language).size() > 0;
+	public Page<Quote> getAllBySchedule(Pageable pageable, String schedule) {
+		return quotes.findAllBySchedule(pageable, schedule);
 	}
 
 	@Override
-	public Boolean hasLocaleByScheduleAndLang(String schedule, String language) {
-		return locales.findTop1ByScheduleAndLanguage(schedule, language) != null;
+	public List<Quote> getAllByScheduleAndLang(String schedule, String language) {
+		return quotes.findAllByScheduleAndLanguage(schedule, language);
 	}
 
 	@Override
-	public Boolean hasQuote(Integer quoteId) {
-		return quotes.exists(quoteId);
+	public Page<Quote> getAllByScheduleAndLang(Pageable pageable, String schedule, String language) {
+		return quotes.findAllByScheduleAndLanguage(pageable, schedule, language);
 	}
 
 	@Override
 	public List<Quote> search(String term) {
-		List<QuoteLocale> found = locales.findAllByCorpusContainingIgnoreCase(term);
-		List<Quote> result = new ArrayList<Quote>();
-
-		for (QuoteLocale l : found)
-			if (!result.contains(l.getQuote()))
-				result.add(l.getQuote());
-
-		return result;
+		return quotes.findAllByCorpusContainingIgnoreCase(term);
 	}
 
 	@Override
-	public QuoteLocale setLocale(QuoteLocale locale) {
-		return locales.save(locale);
-	}
-
-	@Override
-	public Quote setQuote(Quote quote) {
-		return quotes.save(quote);
+	public Page<Quote> search(Pageable pageable, String term) {
+		return quotes.findAllByCorpusContainingIgnoreCase(pageable, term);
 	}
 
 }

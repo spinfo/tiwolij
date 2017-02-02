@@ -1,4 +1,4 @@
-<div th:fragment="view(name, value, href, popup)" class="form-group">
+<div th:fragment="fieldView(name, value, href, popup)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" class="col-sm-4 control-label" />
 	<div class="col-sm-8">
 		<p class="form-control-static">
@@ -7,56 +7,51 @@
 	</div>
 </div>
 
-<div th:fragment="putin(name, required, type, maxlength, pattern, placeholder)" class="form-group">
+<div th:fragment="fieldInput(name, required, type, maxlength, pattern)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-4 control-label" />
 	<div class="col-sm-8">
-		<input th:value="${#object.get(name) instanceof T(java.lang.String)} ? ${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}"
-			th:type="${type}" th:maxlength="${maxlength}" th:pattern="${pattern}" th:placeholder="${placeholder}" class="form-control" />
+		<input th:value="${__'#object.' + ${name}__ instanceof T(java.lang.String)} ? ${__'#object.' + ${name}__}" th:id="${name}" th:name="${name}" th:required="${required}" th:type="${type}" th:maxlength="${maxlength}" th:pattern="${pattern}" class="form-control" />
 	</div>
 </div>
 
-<div th:fragment="areatext(name, required, rows, maxlength, placeholder)" class="form-group">
+<div th:fragment="fieldEnter(name, required, type, maxlength, pattern, addon, action, label)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-4 control-label" />
 	<div class="col-sm-8">
-		<textarea th:text="${#object.get(name) instanceof T(java.lang.String)} ? ${#object.get(name)}" th:id="${name}" th:name="${name}" th:required="${required}"
-			th:rows="${rows}" th:maxlength="${maxlength}" th:placeholder="${placeholder}" class="form-control" />
+		<div class="input-group">
+			<div th:text="${addon}" class="input-group-addon" />
+			<input th:value="${__'#object.' + ${name}__ instanceof T(java.lang.String)} ? ${__'#object.' + ${name}__}" th:id="${name}" th:name="${name}" th:required="${required}" th:type="${type}" th:maxlength="${maxlength}" th:pattern="${pattern}" class="form-control" />
+			<span th:unless="${#strings.isEmpty(action)}" class="input-group-btn">
+				<button th:text="${label}" th:formaction="${action}" type="submit" class="btn btn-primary" formnovalidate="true" />
+			</span>
+		</div>
 	</div>
 </div>
 
-<div th:fragment="pulldown(name, required, options, value, label)" class="form-group">
+<div th:fragment="fieldTextarea(name, required, rows, maxlength)" class="form-group">
+	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-4 control-label" />
+	<div class="col-sm-8">
+		<textarea th:text="${__'#object.' + ${name}__ instanceof T(java.lang.String)} ? ${__'#object.' + ${name}__}" th:id="${name}" th:name="${name}" th:required="${required}" th:rows="${rows}" th:maxlength="${maxlength}" class="form-control" />
+	</div>
+</div>
+
+<div th:fragment="fieldSelect(name, required, options, value, label)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-4 control-label" />
 	<div class="col-sm-8">
 		<select th:id="${name}" th:name="${name}" th:required="${required}" class="form-control">
-			<option th:unless="${required}" th:text="#{fields.emptyOption}" selected="true" value="" />
-			<option th:each="option : ${options}" th:value="${#strings.isEmpty(value)} ? ${option} : ${option.get(value)}"
-				th:selected="${#object instanceof T(tiwolij.domain.BaseEntity) and #object.has(name)} ? (${#object.get(name) == option})"
-				th:text="${#strings.isEmpty(label)} ? ${option} : ${option.get(label)}" />
+			<option th:unless="${required}" th:text="#{fields.emptyOption}" value="" />
+			<option th:each="option : ${options}" th:value="${#strings.isEmpty(value)} ? ${option} : ${__'option.' + ${value}__}" th:selected="${__'#object.' + ${name}__ == option}" th:text="${#strings.isEmpty(label)} ? ${option} : ${__'option.' + ${label}__}" />
 		</select>
 	</div>
 </div>
 
-<div th:fragment="boxcheck(name)" class="form-group">
+<div th:fragment="fieldCheckbox(name)" class="form-group">
 	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-4 control-label" />
 	<div class="col-sm-8">
 		<div class="checkbox">
 			<label>
 				<input th:id="${name}" th:name="${name}" type="checkbox" />
-				<span th:text="#{general.checkbox} + #{'fields.' + ${name}}" th:remove="tag" />
+				<span th:text="#{backend.checkbox} + #{'fields.' + ${name}}" th:remove="tag" />
 			</label>
-		</div>
-	</div>
-</div>
-
-<div th:fragment="portin(name, action, type, maxlength, pattern, label, addon, placeholder)" class="form-group">
-	<label th:text="#{'fields.' + ${name}}" th:for="${name}" class="col-sm-4 control-label" />
-	<div class="col-sm-8">
-		<div class="input-group">
-			<div th:text="${addon}" class="input-group-addon" />
-			<input th:id="${name}" th:name="${name}" th:type="${type}" th:maxlength="${maxlength}" th:pattern="${pattern}"
-				th:placeholder="${placeholder}" class="form-control" />
-			<span class="input-group-btn">
-				<button th:text="${label}" th:formaction="${action}" type="submit" class="btn btn-primary" formnovalidate="true" />
-			</span>
 		</div>
 	</div>
 </div>

@@ -1,0 +1,31 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{authors.create})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{authors.create}" class="panel-heading" />
+					<form th:object="${author}" class="form-horizontal" method="post">
+						<div class="panel-body">
+							<div th:replace="../elements/fields :: fieldEnter('wikidataId', false, 'number', '', '\d+', 'Q', @{/tiwolij/data/import/author}, #{fields.import})" />
+							<div th:replace="../elements/fields :: fieldInput('slug', true, 'text', 255, '')" />
+							<div th:replace="../elements/fields :: fieldInput('image', false, 'url', 255, '')" />
+							<div th:replace="../elements/fields :: fieldInput('imageAttribution', false, 'text', 255, '')" />
+						</div>
+						<div class="panel-footer text-right">
+							<button th:text="#{authors.create}" th:formaction="@{/tiwolij/authors/create}" type="submit" class="btn btn-sm btn-success" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

@@ -10,18 +10,22 @@ import tiwolij.domain.Work;
 
 public interface WorkRepository extends PagingAndSortingRepository<Work, Integer> {
 
-	public List<Work> findAll();
+	public Long countByAuthorId(Integer authorId);
 
-	public Page<Work> findAll(Pageable pageable);
+	public Work findOneById(Integer workId);
+
+	public Work findOneBySlug(String slug);
+
+	public Work findOneByWikidataIdWikidataId(Integer wikidataId);
+
+	public List<Work> findAll();
 
 	public List<Work> findAllByAuthorId(Integer authorId);
 
 	public Page<Work> findAllByAuthorId(Pageable pageable, Integer authorId);
-
-	public Work findTop1ById(Integer workId);
-
-	public Work findTop1BySlug(String slug);
-
-	public Work findTop1ByWikidataId(Integer wikidataId);
+	
+	public List<Work> findAllByLocalesNameContainingIgnoreCase(String term);
+	
+	public Page<Work> findAllByLocalesNameContainingIgnoreCase(Pageable pageable, String term);
 
 }

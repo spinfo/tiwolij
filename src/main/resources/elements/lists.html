@@ -1,0 +1,204 @@
+<section th:fragment="listAuthors(authors, fields, sortable)" class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div th:text="#{authors}" class="panel-heading" />
+			<table th:unless="${#lists.isEmpty(authors)}" class="table table-hover">
+				<thead>
+					<tr>
+						<th>
+							<div th:remove="tag" th:text="#{fields.id}" />
+							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="@{?sort=id}"><span class="caret" /></a>
+						</th>
+						<th th:each="field : ${fields}">
+							<div th:remove="tag" th:text="#{'fields.' + ${field}}" />
+							<a th:if="${#arrays.contains(sortable, field)}" th:href="@{'?sort=' + ${field}}"><span class="caret" /></a>
+						</th>
+						<th th:text="#{actions}" class="text-right" />
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="author : ${authors}">
+						<th th:text="'#' + ${author.id}" />
+						<div th:each="field : ${fields}" th:remove="tag">
+							<td th:if="${field} == 'slug'" th:text="${author.slug}" />
+							<td th:if="${field} == 'image'"><a th:unless="${#lists.isEmpty(author.image)}" target="_blank" th:text="#{actions.view}" th:href="@{/image/author(id=${author.id})}" /></td>
+							<td th:if="${field} == 'works'"><a th:unless="${#lists.isEmpty(author.works)}" th:href="@{/tiwolij/works/list(authorId=${author.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(author.works)} + ')'" /></td>
+							<td th:if="${field} == 'quotes'"><a th:unless="${#lists.isEmpty(author.quotes)}" th:href="@{/tiwolij/quotes/list(authorId=${author.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(author.quotes)} + ')'" /></td>
+							<td th:if="${field} == 'names'" class="child-enum"><div th:each="locale : ${author.locales}" th:text="${locale.name} + ' (' + ${locale.language} + ')'" /></td>
+							<td th:if="${field} == 'wikidataId'"><a th:unless="${#strings.isEmpty(author.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${author.wikidataId}" th:text="'Q' + ${author.wikidataId}" /></td>
+						</div>
+						<td class="text-right">
+							<a th:text="#{actions.view}" th:href="@{/tiwolij/authors/view(authorId=${author.id})}" role="button" class="btn btn-xs btn-default" />
+							<a th:text="#{actions.edit}" th:href="@{/tiwolij/authors/edit(authorId=${author.id})}" role="button" class="btn btn-xs btn-primary" />
+							<a th:text="#{actions.delete}" th:href="@{/tiwolij/authors/delete(authorId=${author.id})}" role="button" class="btn btn-xs btn-danger" data-action="deleteRow" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div th:if="${#lists.isEmpty(authors)}" class="panel-body"><p th:text="#{backend.empty}" class="text-danger" /></div>
+		</div>
+		<div th:if="${page}" th:remove="tag">
+			<div th:replace="../elements/blocks :: pager" />
+		</div>
+	</div>
+</section>
+
+<section th:fragment="listWorks(works, fields, sortable)" class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div th:text="#{works}" class="panel-heading" />
+			<table th:unless="${#lists.isEmpty(works)}" class="table table-hover">
+				<thead>
+					<tr>
+						<th>
+							<div th:remove="tag" th:text="#{fields.id}" />
+							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="@{?sort=id}"><span class="caret" /></a>
+						</th>
+						<th th:each="field : ${fields}">
+							<div th:remove="tag" th:text="#{'fields.' + ${field}}" />
+							<a th:if="${#arrays.contains(sortable, field)}" th:href="@{'?sort=' + ${field}}"><span class="caret" /></a>
+						</th>
+						<th th:text="#{actions}" class="text-right" />
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="work : ${works}">
+						<th th:text="'#' + ${work.id}" />
+						<div th:each="field : ${fields}" th:remove="tag">
+							<td th:if="${field} == 'slug'" th:text="${work.slug}" />
+							<td th:if="${field} == 'author'" th:text="${work.author.slug}" />
+							<td th:if="${field} == 'quotes'"><a th:unless="${#lists.isEmpty(work.quotes)}" th:href="@{/tiwolij/quotes/list(workId=${work.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(work.quotes) + ')'}" /></td>
+							<td th:if="${field} == 'names'" class="child-enum"><div th:each="locale : ${work.locales}" th:text="${locale.name} + ' (' + ${locale.language} + ')'" /></td>
+							<td th:if="${field} == 'wikidataId'"><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${work.wikidataId}" th:text="'Q' + ${work.wikidataId}" /></td>
+						</div>
+						<td class="text-right">
+							<a th:text="#{actions.view}" th:href="@{/tiwolij/works/view(workId=${work.id})}" role="button" class="btn btn-xs btn-default" />
+							<a th:text="#{actions.edit}" th:href="@{/tiwolij/works/edit(workId=${work.id})}" role="button" class="btn btn-xs btn-primary" />
+							<a th:text="#{actions.delete}" th:href="@{/tiwolij/works/delete(workId=${work.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(MESSAGES_BACKEND_CONFIRM)'" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div th:if="${#lists.isEmpty(works)}" class="panel-body"><p th:text="#{backend.empty}" class="text-danger" /></div>
+		</div>
+		<div th:if="${page}" th:remove="tag">
+			<div th:replace="../elements/blocks :: pager" />
+		</div>
+	</div>
+</section>
+
+<section th:fragment="listQuotes(quotes, fields, sortable)" class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div th:text="#{quotes}" class="panel-heading" />
+			<table th:unless="${#lists.isEmpty(quotes)}" class="table table-hover">
+				<thead>
+					<tr>
+						<th>
+							<div th:remove="tag" th:text="#{fields.id}" />
+							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="@{?sort=id}"><span class="caret" /></a>
+						</th>
+						<th th:each="field : ${fields}">
+							<div th:remove="tag" th:text="#{'fields.' + ${field}}" />
+							<a th:if="${#arrays.contains(sortable, field)}" th:href="@{'?sort=' + ${field}}"><span class="caret" /></a>
+						</th>
+						<th th:text="#{actions}" class="text-right" />
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="quote : ${quotes}" th:with="year=${#strings.isEmpty(quote.year)} ? '' : '-' + ${quote.year}, time=${#strings.isEmpty(quote.time)} ? '' : ' ' + ${quote.time}">
+						<th th:text="'#' + ${quote.id}" />
+						<div th:each="field : ${fields}" th:remove="tag">
+							<td th:if="${field} == 'schedule'" th:text="${quote.schedule} + ${year} + ${time}" />
+							<td th:if="${field} == 'language'" th:text="${quote.language}" />
+							<td th:if="${field} == 'corpus'" th:text="${#strings.abbreviate(quote.corpus, 50)}" />
+							<td th:if="${field} == 'source'"><a th:unless="${#strings.isEmpty(quote.href)}" th:text="#{actions.view}" th:href="${quote.href}" target="_blank" /></td>
+							<td th:if="${field} == 'meta'" th:text="${quote.meta}" />
+							<td th:if="${field} == 'curator'" th:text="${quote.curator}" />
+							<td th:if="${field} == 'locked'"><span th:if="${quote.locked}" class="glyphicon glyphicon-star" aria-hidden="true" /></td>
+							<td th:if="${field} == 'author'" th:text="${quote.author.slug}" />
+							<td th:if="${field} == 'work'" th:text="${quote.work.slug}" />
+						</div>
+						<td class="text-right">
+							<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default" />
+							<a th:text="#{actions.edit}" th:href="@{/tiwolij/quotes/edit(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-primary" />
+							<a th:text="#{actions.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(MESSAGES_BACKEND_CONFIRM)'" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div th:if="${#lists.isEmpty(quotes)}" class="panel-body"><p th:text="#{backend.empty}" class="text-danger" /></div>
+		</div>
+		<div th:if="${page}" th:remove="tag">
+			<div th:replace="../elements/blocks :: pager" />
+		</div>
+	</div>
+</section>
+
+<section th:fragment="listLocales(locales, fields, sortable)" class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div th:text="#{locales}" class="panel-heading" />
+			<table th:unless="${#lists.isEmpty(locales)}" class="table table-hover">
+				<thead>
+					<tr>
+						<th>
+							<div th:remove="tag" th:text="#{fields.id}" />
+							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="@{?sort=id}"><span class="caret" /></a>
+						</th>
+						<th th:each="field : ${fields}">
+							<div th:remove="tag" th:text="#{'fields.' + ${field}}" />
+							<a th:if="${#arrays.contains(sortable, field)}" th:href="@{'?sort=' + ${field}}"><span class="caret" /></a>
+						</th>
+						<th th:text="#{actions}" class="text-right" />
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="locale : ${locales}">
+						<th th:text="'#' + ${locale.id}" />
+						<div th:each="field : ${fields}" th:remove="tag">
+							<td th:if="${field} == 'parent'">
+								<a th:if="${locale.author}" th:href="@{/tiwolij/authors/view(authorId=${locale.author.id})}" th:text="${locale.author.slug}" />
+								<a th:if="${locale.work}" th:href="@{/tiwolij/authors/view(authorId=${locale.work.id})}" th:text="${locale.work.slug}" />
+							</td>
+							<td th:if="${field} == 'language'" th:text="${locale.language}" />
+							<td th:if="${field} == 'name'" th:text="${locale.name}" />
+							<td th:if="${field} == 'source'"><a th:unless="${#strings.isEmpty(locale.href)}" th:text="#{actions.view}" th:href="${locale.href}" target="_blank" /></td>
+						</div>
+						<td class="text-right">
+							<a th:text="#{actions.view}" th:href="@{/tiwolij/locales/view(localeId=${locale.id})}" role="button" class="btn btn-xs btn-default" />
+							<a th:text="#{actions.edit}" th:href="@{/tiwolij/locales/edit(localeId=${locale.id})}" role="button" class="btn btn-xs btn-primary" />
+							<a th:text="#{actions.delete}" th:href="@{/tiwolij/locales/delete(localeId=${locale.id})}" role="button" class="btn btn-xs btn-danger" th:onclick="'return confirm(MESSAGES_BACKEND_CONFIRM)'" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div th:if="${#lists.isEmpty(locales)}" class="panel-body"><p th:text="#{backend.empty}" class="text-danger" /></div>
+		</div>
+		<div th:if="${page}" th:remove="tag">
+			<div th:replace="../elements/blocks :: pager" />
+		</div>
+	</div>
+</section>
+
+<section th:fragment="listErrors(errors)" class="row" th:unless="${#maps.isEmpty(errors)}">
+	<div class="col-md-12">
+		<div class="panel panel-danger">
+			<div th:text="#{fields.errors}" class="panel-heading" />
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th th:text="#{fields.line}" />
+						<th th:text="#{fields.error}" />
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="error : ${errors}">
+						<th th:text="${error.key}" />
+						<td th:text="${error.value.message}" class="small" />
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>

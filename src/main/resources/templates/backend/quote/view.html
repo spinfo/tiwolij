@@ -1,0 +1,37 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{quotes.view})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{quotes.view} + ' #' + ${quote.id}" class="panel-heading" />
+					<form th:object="${quote}" class="form-horizontal">
+						<div class="panel-body">
+							<div th:replace="../elements/fields :: fieldView('author', *{author.slug}, @{/tiwolij/authors/view(authorId=*{author.id})}, false)" />
+							<div th:replace="../elements/fields :: fieldView('work', *{work.slug}, @{/tiwolij/works/view(workId=*{work.id})}, false)" />
+							<div th:replace="../elements/fields :: fieldView('language', *{language}, '', false)" />
+							<div th:replace="../elements/fields :: fieldView('schedule', *{schedule} + (*{#strings.isEmpty(year)} ? '' : '-' + *{year}) + (*{#strings.isEmpty(time)} ? '' : ' ' + *{time}), '', false)" />
+							<div th:replace="../elements/fields :: fieldView('corpus', *{corpus}, '', false)" />
+							<div th:unless="*{#strings.isEmpty(href)}"><div th:replace="../elements/fields :: fieldView('href', #{actions.view}, *{href}, true)" /></div>
+							<div th:unless="*{#strings.isEmpty(meta)}"><div th:replace="../elements/fields :: fieldView('meta', *{meta}, '', false)" /></div>
+							<div th:replace="../elements/fields :: fieldView('locked', *{locked} ? 'True' : 'False', '', false)" />
+						</div>
+						<div class="panel-footer text-right">
+							<a th:text="#{actions.preview}" th:href="@{/view(id=${quote.id}, lang=*{language})}" target="_blank" role="button" class="btn btn-sm btn-default" />
+							<a th:text="#{quotes.edit}" th:href="@{/tiwolij/quotes/edit(quoteId=*{id})}" role="button" class="btn btn-sm btn-primary" />
+							<a th:text="#{quotes.delete}" th:href="@{/tiwolij/quotes/delete(quoteId=*{id})}" role="button" class="btn btn-sm btn-danger" th:onclick="'return confirm(MESSAGES_BACKEND_CONFIRM)'" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

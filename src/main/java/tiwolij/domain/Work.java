@@ -1,9 +1,11 @@
 package tiwolij.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,30 +13,34 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import tiwolij.util.StringEncoding;
 
 @Entity
 @Table(name = "works")
-public class Work extends BaseEntity {
-
-	@ManyToOne
-	@JoinColumn(name = "author_id", nullable = false)
-	protected Author author;
+public class Work {
 
 	@Id
 	@GeneratedValue
-	protected Integer id;
-
-	@OneToMany(mappedBy = "work")
-	protected List<WorkLocale> locales;
-
-	@OneToMany(mappedBy = "work")
-	protected List<Quote> quotes;
+	private Integer id;
 
 	@Column(nullable = false)
-	protected String slug;
+	private String slug;
 
-	protected Integer wikidataId;
+	@ManyToOne
+	@JoinColumn(name = "author_id", nullable = false)
+	private Author author;
+
+	@OneToMany(mappedBy = "work", cascade = CascadeType.ALL)
+	private List<Quote> quotes;
+
+	@OneToMany(mappedBy = "work", cascade = CascadeType.ALL)
+	private List<Locale> locales;
+
+	@OneToOne(mappedBy = "work", cascade = CascadeType.ALL)
+	private WikidataId wikidataId;
 
 	public Work() {
 	}
@@ -43,33 +49,32 @@ public class Work extends BaseEntity {
 		this.author = author;
 	}
 
-	public Author getAuthor() {
-		return author;
-	}
-
 	public Integer getId() {
 		return id;
-	}
-
-	public Map<String, WorkLocale> getLocales() {
-		return locales != null ? locales.stream().collect(Collectors.toMap(WorkLocale::getLanguage, l -> l)) : null;
-	}
-
-	public List<Quote> getQuotes() {
-		return quotes;
 	}
 
 	public String getSlug() {
 		return slug;
 	}
 
-	public Integer getWikidataId() {
-		return wikidataId;
+	public Author getAuthor() {
+		return author;
 	}
 
-	public Work setAuthor(Author author) {
-		this.author = author;
-		return this;
+	public List<Quote> getQuotes() {
+		return quotes;
+	}
+
+	public List<Locale> getLocales() {
+		return locales;
+	}
+
+	public Map<String, Locale> getMappedLocales() {
+		return (locales != null) ? locales.stream().collect(Collectors.toMap(Locale::getLanguage, i -> i)) : null;
+	}
+
+	public Integer getWikidataId() {
+		return (wikidataId != null) ? wikidataId.getWikidataId() : null;
 	}
 
 	public Work setId(Integer id) {
@@ -77,23 +82,52 @@ public class Work extends BaseEntity {
 		return this;
 	}
 
-	public Work setLocales(List<WorkLocale> locales) {
+	public Work setSlug(String slug) {
+		this.slug = StringEncoding.toSlug(slug);
+		return this;
+	}
+
+	public Work setAuthor(Author author) {
+		this.author = author;
+		return this;
+	}
+
+	public Work setLocales(List<Locale> locales) {
 		this.locales = locales;
 		return this;
 	}
 
-	public Work setQuotes(List<Quote> quotes) {
-		this.quotes = quotes;
-		return this;
-	}
-
-	public Work setSlug(String slug) {
-		this.slug = esc(slug);
-		return this;
-	}
-
 	public Work setWikidataId(Integer wikidataId) {
-		this.wikidataId = wikidataId;
+		if (wikidataId == null) {
+			return this;
+		}
+
+		if (this.wikidataId == null) {
+			this.wikidataId = new WikidataId(this);
+		}
+
+		this.wikidataId.setWikidataId(wikidataId);
+		return this;
+	}
+
+	public Work addQuote(Quote quote) {
+		if (this.quotes == null) {
+			this.quotes = new ArrayList<Quote>();
+		}
+
+		this.quotes.add(quote.setWork(this));
+		return this;
+	}
+
+	public Work addLocale(Locale locale) throws Exception {
+		if (this.locales == null) {
+			this.locales = new ArrayList<Locale>();
+		}
+
+		if (!getMappedLocales().containsKey(locale.getLanguage())) {
+			this.locales.add(locale.setWork(this));
+		}
+
 		return this;
 	}
 

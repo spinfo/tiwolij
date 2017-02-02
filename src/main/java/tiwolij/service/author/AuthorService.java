@@ -6,51 +6,52 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import tiwolij.domain.Author;
-import tiwolij.domain.AuthorLocale;
+import tiwolij.domain.WikidataId;
 
 public interface AuthorService {
 
 	public Long count();
 
-	public Long countLocales();
+	public Author save(Author author);
 
-	public void delAuthor(Integer authorId);
+	public void delete(Integer authorId);
 
-	public void delLocale(Integer localeId);
+	public Author getOneById(Integer authorId);
 
-	public Author getAuthor(Integer authorId);
+	public Author getOneBySlug(String slug);
 
-	public Author getAuthorBySlug(String slug);
+	public Author getOneByWikidataId(Integer wikidataId);
 
-	public Author getAuthorByWikidataId(Integer wikidataId);
+	public List<Author> getAll();
 
-	public List<Author> getAuthors();
-
-	public Page<Author> getAuthors(Pageable pageable);
-
-	public AuthorLocale getLocale(Integer localeId);
-
-	public AuthorLocale getLocaleByLang(Integer authorId, String language);
-
-	public List<AuthorLocale> getLocales();
-
-	public Page<AuthorLocale> getLocales(Pageable pageable);
-
-	public List<AuthorLocale> getLocalesByAuthor(Integer authorId);
-
-	public Page<AuthorLocale> getLocalesByAuthor(Pageable pageable, Integer authorId);
-
-	public Boolean hasAuthor(Integer authorId);
-
-	public Boolean hasAuthorBySlug(String slug);
-
-	public Boolean hasAuthorByWikidataId(Integer wikidataId);
-
-	public Boolean hasLocale(Integer authorId, String language);
+	public Page<Author> getAll(Pageable pageable);
 
 	public List<Author> search(String term);
 
-	public Author setAuthor(Author author);
+	public Page<Author> search(Pageable pagable, String term);
 
-	public AuthorLocale setLocale(AuthorLocale locale);
+	default public void delete(Author author) {
+		delete(author.getId());
+	}
+
+	default public Boolean existsById(Integer authorId) {
+		return (getOneById(authorId) != null);
+	}
+
+	default public Boolean existsBySlug(String slug) {
+		return (getOneBySlug(slug) != null);
+	}
+
+	default public Boolean existsByWikidataId(Integer wikidataId) {
+		return (getOneByWikidataId(wikidataId) != null);
+	}
+
+	default public Boolean existsByWikidataId(WikidataId wikidataId) {
+		return existsByWikidataId(wikidataId.getId());
+	}
+
+	default public Author getOneByWikidataId(WikidataId wikidataId) {
+		return getOneByWikidataId(wikidataId.getId());
+	}
+
 }

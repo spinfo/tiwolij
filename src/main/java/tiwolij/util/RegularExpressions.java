@@ -6,18 +6,34 @@ import java.util.regex.Pattern;
 public class RegularExpressions {
 
 	private Pattern date = Pattern
-			.compile("(?<day>3[0-1]|[1-2][0-9]|0?[1-9])[.-](?<month>1[1-2]|0?[1-9])([.-](?<year>\\d+))?");
+			.compile("(?<day>3[0-1]|[1-2][0-9]|0?[1-9])[.-](?<month>1[0-2]|0?[1-9])([.-](?<year>\\d+))?");
 
 	private Pattern time = Pattern
 			.compile("(?<hours>2[0-3]|[0-1]?[0-9]):(?<minutes>[0-5][0-9])(:(?<seconds>[0-5][0-9]))?");
 
 	private Pattern wikidataId = Pattern.compile("Q(?<wikidataId>\\d+)");
 
-	private Pattern wikipediaLanguage = Pattern.compile("(?<language>[a-z]{2})\\.wikipedia\\.org");
+	private Pattern wikipediaLang = Pattern.compile("(?<lang>[a-z]{2})\\.wikipedia\\.org");
 
 	private Pattern wikipediaSlug = Pattern.compile("wiki/(?<slug>[^/]*)$");
 
-	public String getDate(String haystack) {
+	public String datetime(String haystack) {
+		String result = null;
+		String date = date(haystack);
+		String time = time(haystack);
+
+		if (date != null) {
+			result = date;
+
+			if (time != null) {
+				result += " " + time;
+			}
+		}
+
+		return result;
+	}
+
+	public String date(String haystack) {
 		Matcher needle = date.matcher(haystack);
 		String result = null;
 
@@ -50,36 +66,7 @@ public class RegularExpressions {
 		return result;
 	}
 
-	public String getDatetime(String haystack) {
-		String result = null;
-		String date = getDate(haystack);
-		String time = getTime(haystack);
-
-		if (date != null) {
-			result = date;
-
-			if (time != null) {
-				result += " " + time;
-			}
-		}
-
-		return result;
-	}
-
-	public String getLanguageFromWikipedia(String haystack) {
-		Matcher needle = wikipediaLanguage.matcher(haystack.toLowerCase());
-		String result = null;
-
-		if (needle.find()) {
-			if (needle.group("language") != null && !needle.group("language").isEmpty()) {
-				result = needle.group("language");
-			}
-		}
-
-		return result;
-	}
-
-	public String getTime(String haystack) {
+	public String time(String haystack) {
 		Matcher needle = time.matcher(haystack);
 		String result = null;
 
@@ -115,20 +102,7 @@ public class RegularExpressions {
 		return result;
 	}
 
-	public String getTitleFromWikipedia(String haystack) {
-		Matcher needle = wikipediaSlug.matcher(haystack);
-		String result = null;
-
-		if (needle.find()) {
-			if (needle.group("slug") != null && !needle.group("slug").isEmpty()) {
-				result = needle.group("slug");
-			}
-		}
-
-		return result;
-	}
-
-	public Integer getWikidataId(String haystack) {
+	public Integer wikidataId(String haystack) {
 		Matcher needle = wikidataId.matcher(haystack);
 		Integer result = null;
 
@@ -138,6 +112,32 @@ public class RegularExpressions {
 					result = Integer.parseInt(needle.group("wikidataId"));
 				} catch (Exception NumberFormatException) {
 				}
+			}
+		}
+
+		return result;
+	}
+
+	public String wikipediaLang(String haystack) {
+		Matcher needle = wikipediaLang.matcher(haystack.toLowerCase());
+		String result = null;
+
+		if (needle.find()) {
+			if (needle.group("lang") != null && !needle.group("lang").isEmpty()) {
+				result = needle.group("lang");
+			}
+		}
+
+		return result;
+	}
+
+	public String wikipediaSlug(String haystack) {
+		Matcher needle = wikipediaSlug.matcher(haystack);
+		String result = null;
+
+		if (needle.find()) {
+			if (needle.group("slug") != null && !needle.group("slug").isEmpty()) {
+				result = needle.group("slug");
 			}
 		}
 

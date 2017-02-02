@@ -5,70 +5,94 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import tiwolij.domain.Author;
 import tiwolij.domain.Quote;
-import tiwolij.domain.QuoteLocale;
+import tiwolij.domain.Work;
 
 public interface QuoteService {
 
-	public void delLocale(Integer localeId);
+	public Long count();
 
-	public void delQuote(Integer quoteId);
+	public Long countByAuthor(Integer authorId);
 
-	public Long getCount();
+	public Long countByWork(Integer workId);
 
-	public QuoteLocale getLocale(Integer localeId);
+	public Quote save(Quote quote);
 
-	public QuoteLocale getLocaleByQuoteAndLang(Integer quoteId, String language);
+	public void delete(Integer quoteId);
 
-	public Long getLocaleCount();
+	public Quote getOneById(Integer quoteId);
 
-	public QuoteLocale getLocaleRandomByLang(String language);
+	public Quote getRandomByLang(String language);
 
-	public QuoteLocale getLocaleRandomByScheduleAndLang(String schedule, String language);
+	public Quote getRandomByScheduleAndLang(String schedule, String language);
 
-	public QuoteLocale getLocaleRandomNextByScheduleAndLang(String schedule, String language, Boolean prev)
-			throws Exception;
+	public Quote getRandomNextBySibling(Integer quoteId);
 
-	public List<QuoteLocale> getLocales();
+	public Quote getRandomPrevBySibling(Integer quoteId);
 
-	public Page<QuoteLocale> getLocales(Pageable pageable);
+	public List<Quote> getAll();
 
-	public List<QuoteLocale> getLocalesByQuote(Integer quoteId);
+	public Page<Quote> getAll(Pageable pageable);
 
-	public Page<QuoteLocale> getLocalesByQuote(Pageable pageable, Integer quoteId);
+	public List<Quote> getAllByAuthor(Integer authorId);
 
-	public Page<QuoteLocale> getLocalesBySchedule(Pageable pageable, String schedule);
+	public Page<Quote> getAllByAuthor(Pageable pageable, Integer authorId);
 
-	// pagination
+	public List<Quote> getAllByWork(Integer workId);
 
-	public List<QuoteLocale> getLocalesBySchedule(String schedule);
+	public Page<Quote> getAllByWork(Pageable pageable, Integer workId);
 
-	public Page<QuoteLocale> getLocalesByScheduleAndLang(Pageable pageable, String schedule, String language);
+	public List<Quote> getAllBySchedule(String schedule);
 
-	public List<QuoteLocale> getLocalesByScheduleAndLang(String schedule, String language);
+	public Page<Quote> getAllBySchedule(Pageable pageable, String schedule);
 
-	public Quote getQuote(Integer quoteId);
+	public List<Quote> getAllByScheduleAndLang(String schedule, String language);
 
-	public List<Quote> getQuotes();
-
-	public Page<Quote> getQuotes(Pageable pageable);
-
-	public List<Quote> getQuotesByWork(Integer workId);
-
-	public Page<Quote> getQuotesByWork(Pageable pageable, Integer workId);
-
-	public Boolean hasLocale(Integer quoteId, String language);
-
-	public Boolean hasLocaleByLang(String language);
-
-	public Boolean hasLocaleByScheduleAndLang(String schedule, String language);
-
-	public Boolean hasQuote(Integer quoteId);
+	public Page<Quote> getAllByScheduleAndLang(Pageable pageable, String schedule, String language);
 
 	public List<Quote> search(String term);
 
-	public QuoteLocale setLocale(QuoteLocale locale);
+	public Page<Quote> search(Pageable pageable, String term);
 
-	public Quote setQuote(Quote quote);
+	default public Long countByAuthor(Author author) {
+		return countByAuthor(author.getId());
+	}
+
+	default public Long countByWork(Work work) {
+		return countByWork(work.getId());
+	}
+
+	default public void delete(Quote quote) {
+		delete(quote.getId());
+	}
+
+	default public Boolean existsById(Integer quoteId) {
+		return (getOneById(quoteId) != null);
+	}
+
+	default public Boolean existsByLang(String language) {
+		return (getRandomByLang(language) != null);
+	}
+
+	default public Boolean existsByScheduleAndLang(String schedule, String language) {
+		return (getRandomByScheduleAndLang(schedule, language) != null);
+	}
+
+	default public List<Quote> getAllByAuthor(Author author) {
+		return getAllByAuthor(author.getId());
+	}
+
+	default public Page<Quote> getAllByAuthor(Pageable pageable, Author author) {
+		return getAllByAuthor(pageable, author.getId());
+	}
+
+	default public List<Quote> getAllByWork(Work work) {
+		return getAllByWork(work.getId());
+	}
+
+	default public Page<Quote> getAllByWork(Pageable pageable, Work work) {
+		return getAllByWork(pageable, work.getId());
+	}
 
 }

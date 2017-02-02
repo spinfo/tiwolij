@@ -1,0 +1,14 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{works.list})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section th:replace="../elements/lists :: listWorks(${page.content}, ${new String[] {'wikidataId', 'author', 'slug', 'names', 'quotes'}}, ${new String[] {'id', 'wikidataId', 'author', 'slug'}})" />
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

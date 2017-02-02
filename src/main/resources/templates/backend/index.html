@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{backend.title})" />
+<head th:replace="../elements/blocks :: header(title=#{backend.title})" />
 
 <body id="backend">
 	<div class="container">
@@ -23,14 +23,14 @@
 							<label th:text="#{fields.locales}" class="col-sm-8 control-label" />
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/authors/locales/list}" th:text="${authorLocales}" />
+									<a th:href="@{/tiwolij/locales/list}" th:text="${authorLocales}" />
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="panel-footer text-right">
 						<a th:text="#{authors.create}" th:href="@{/tiwolij/authors/create}" role="button" class="btn btn-sm btn-success" />
-						<a th:text="#{locales.author.create}" th:href="@{/tiwolij/authors/locales/create}" role="button" class="btn btn-sm btn-success" />
+						<a th:text="#{locales.create}" th:href="@{/tiwolij/locales/create(authorId=)}" role="button" class="btn btn-sm btn-success" />
 					</div>
 				</div>
 			</div>
@@ -50,14 +50,14 @@
 							<label th:text="#{fields.locales}" class="col-sm-8 control-label" />
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/works/locales/list}" th:text="${workLocales}" />
+									<a th:href="@{/tiwolij/locales/list}" th:text="${workLocales}" />
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="panel-footer text-right">
 						<a th:text="#{works.create}" th:href="@{/tiwolij/works/create}" role="button" class="btn btn-sm btn-success" />
-						<a th:text="#{locales.work.create}" th:href="@{/tiwolij/works/locales/create}" role="button" class="btn btn-sm btn-success" />
+						<a th:text="#{locales.create}" th:href="@{/tiwolij/locales/create(workId=)}" role="button" class="btn btn-sm btn-success" />
 					</div>
 				</div>
 			</div>
@@ -73,24 +73,15 @@
 								</p>
 							</div>
 						</div>
-						<div class="form-group">
-							<label th:text="#{fields.locales}" class="col-sm-8 control-label" />
-							<div class="col-sm-4">
-								<p class="form-control-static">
-									<a th:href="@{/tiwolij/quotes/locales/list}" th:text="${quoteLocales}" />
-								</p>
-							</div>
-						</div>
 					</div>
 					<div class="panel-footer text-right">
 						<a th:text="#{quotes.create}" th:href="@{/tiwolij/quotes/create}" role="button" class="btn btn-sm btn-success" />
-						<a th:text="#{locales.quote.create}" th:href="@{/tiwolij/quotes/locales/create}" role="button" class="btn btn-sm btn-success" />
 					</div>
 				</div>
 			</div>
 		</section>
 	</div>
-	<footer th:replace="../elements/footer" />
+	<footer th:replace="../elements/blocks :: footer" />
 </body>
 
 </html>

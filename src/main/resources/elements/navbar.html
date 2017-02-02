@@ -2,12 +2,12 @@
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
-				<span th:text="#{navbar.toggle}" class="sr-only" />
+				<span th:text="#{backend.togglenav}" class="sr-only" />
 				<span class="icon-bar" />
 				<span class="icon-bar" />
 				<span class="icon-bar" />
 			</button>
-			<a th:href="@{/tiwolij/}" th:text="#{navbar.title}" class="navbar-brand" />
+			<a th:href="@{/tiwolij/}" th:text="#{backend.title}" class="navbar-brand" />
 		</div>
 		<div id="navbar-collapse" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
@@ -26,10 +26,8 @@
 						<span class="caret" />
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/authors/list}" th:text="#{navbar.authors.list}" /></li>
-						<li><a th:href="@{/tiwolij/authors/create}" th:text="#{navbar.authors.create}" /></li>
-						<li role="separator" class="divider"></li>
-						<li><a th:href="@{/tiwolij/authors/locales/list}" th:text="#{navbar.authors.locales}" /></li>
+						<li><a th:href="@{/tiwolij/authors/list}" th:text="#{authors.list}" /></li>
+						<li><a th:href="@{/tiwolij/authors/create}" th:text="#{authors.create}" /></li>
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/works')} ? 'active'" class="dropdown">
@@ -38,10 +36,8 @@
 						<span class="caret" />
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/works/list}" th:text="#{navbar.works.list}" /></li>
-						<li><a th:href="@{/tiwolij/works/create}" th:text="#{navbar.works.create}" /></li>
-						<li role="separator" class="divider"></li>
-						<li><a th:href="@{/tiwolij/works/locales/list}" th:text="#{navbar.works.locales}" /></li>
+						<li><a th:href="@{/tiwolij/works/list}" th:text="#{works.list}" /></li>
+						<li><a th:href="@{/tiwolij/works/create}" th:text="#{works.create}" /></li>
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/quotes')} ? 'active'" class="dropdown">
@@ -50,21 +46,19 @@
 						<span class="caret" />
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/quotes/list}" th:text="#{navbar.quotes.list}" /></li>
-						<li><a th:href="@{/tiwolij/quotes/create}" th:text="#{navbar.quotes.create}" /></li>
-						<li role="separator" class="divider"></li>
-						<li><a th:href="@{/tiwolij/quotes/locales/list}" th:text="#{navbar.quotes.locales}" /></li>
+						<li><a th:href="@{/tiwolij/quotes/list}" th:text="#{quotes.list}" /></li>
+						<li><a th:href="@{/tiwolij/quotes/create}" th:text="#{quotes.create}" /></li>
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/data')} ? 'active'">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						<span th:text="#{navbar.data}" th:remove="tag" />
+						<span th:text="#{data}" th:remove="tag" />
 						<span class="caret" />
 					</a>
 					<ul class="dropdown-menu">
+						<li><a th:href="@{/tiwolij/data/import/tsv}" th:text="#{data.import.quotes}" /></li>
+						<li><a th:href="@{/tiwolij/data/heideltag}" th:text="#{data.tagger.heideltag}" /></li>
 						<li><a th:href="@{/tiwolij/data/export/tweets}" th:text="#{data.export.tweets}" /></li>
-						<li><a th:href="@{/tiwolij/data/import}" th:text="#{data.import.locales}" /></li>
-						<li><a th:href="@{/tiwolij/data/heideltag}" th:text="#{data.heideltag}" /></li>
 					</ul>
 				</li>
 			</ul>

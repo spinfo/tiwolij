@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import tiwolij.service.author.AuthorService;
+import tiwolij.service.locale.LocaleService;
 import tiwolij.service.quote.QuoteService;
 import tiwolij.service.work.WorkService;
 
@@ -19,20 +20,22 @@ public class Backend {
 	private AuthorService authors;
 
 	@Autowired
+	private WorkService works;
+
+	@Autowired
 	private QuoteService quotes;
 
 	@Autowired
-	private WorkService works;
+	private LocaleService locales;
 
 	@GetMapping({ "", "/" })
 	public ModelAndView getRoot() {
 		ModelAndView mv = new ModelAndView("backend/index");
 		mv.addObject("authors", authors.count());
-		mv.addObject("authorLocales", authors.countLocales());
+		mv.addObject("authorLocales", locales.countByAuthors());
 		mv.addObject("works", works.count());
-		mv.addObject("workLocales", works.countLocales());
-		mv.addObject("quotes", quotes.getCount());
-		mv.addObject("quoteLocales", quotes.getLocaleCount());
+		mv.addObject("workLocales", locales.countByWorks());
+		mv.addObject("quotes", quotes.count());
 		return mv;
 	}
 

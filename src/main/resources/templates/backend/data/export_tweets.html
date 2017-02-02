@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{data.export.tweets})" />
+<head th:replace="../elements/blocks :: header(title=#{data.export.tweets})" />
 
 <body id="backend">
 	<div class="container">
@@ -12,9 +12,9 @@
 					<div th:text="#{data.export.tweets}" class="panel-heading" />
 					<form class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: boxcheck('onlyfinal')" />
-							<div th:replace="../elements/fields :: pulldown('onlylang', false, ${languages}, '', '')" />
-							<div th:replace="../elements/fields :: pulldown('onlymonth', false, ${months}, 'data', 'label')" />
+							<div th:replace="../elements/fields :: fieldCheckbox('onlyfinal')" />
+							<div th:replace="../elements/fields :: fieldSelect('onlylang', false, ${languages}, '', '')" />
+							<div th:replace="../elements/fields :: fieldSelect('onlymonth', false, ${months}, 'key', 'value')" />
 						</div>
 						<div class="panel-footer text-right">
 							<button id="submit" th:text="#{data.export.tweets}" th:formaction="@{/tiwolij/data/export/tweets}" type="submit" class="btn btn-sm btn-success" />
@@ -24,7 +24,7 @@
 			</div>
 		</section>
 	</div>
-	<footer th:replace="../elements/footer" />
+	<footer th:replace="../elements/blocks :: footer" />
 </body>
 
 </html>

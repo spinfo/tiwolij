@@ -1,0 +1,70 @@
+<head th:fragment="header(title)">
+	<meta charset="utf-8" />
+	<meta http-equiv="x-ua-compatible" content="ie=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+
+	<link rel="stylesheet" href="/css/bootstrap.css" />
+	<link rel="stylesheet" href="/css/style.css" />
+
+	<title th:text="${title} + ' &mdash; Tiwoli'" />
+</head>
+
+<footer th:fragment="footer">
+	<script src="/js/jquery.js" />
+	<script src="/js/bootstrap.js" />
+	<script src="/js/script.js" />
+
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+
+	var MESSAGES_BACKEND_CONFIRM = [[#{backend.confirm}]];
+
+	/*]]>*/
+	</script>
+</footer>
+
+<div th:fragment="meta" id="meta">
+	<div th:if="${#maps.isEmpty(langs)}" id="langselect">
+		<a th:each="lang : ${#strings.arraySplit(@environment.getProperty('tiwolij.locales.allowed'),',')}" th:with="lang=${#strings.trim(lang)}" th:href="${#httpServletRequest.requestURI} + '?lang=' + ${lang}">
+			<img th:src="@{/img/lang/{lang}.gif(lang=${lang})}" th:alt="${lang}" />
+		</a>
+	</div>
+	<div th:unless="${#maps.isEmpty(langs)}" id="langselect">
+		<a th:each="e : ${langs}" th:with="id=${e.value}, lang=${e.key}" th:href="@{/view(id=${id}, lang=${lang})}">
+			<img th:src="@{/img/lang/{lang}.gif(lang=${lang})}" th:alt="${lang}" />
+		</a>
+	</div>
+	<a th:href="@{/home(lang=${lang})}" th:text="#{meta.home}" />
+	<a th:href="@{/about(lang=${lang})}" th:text="#{meta.about}" />
+	<a th:href="@{/random(lang=${lang})}" th:text="#{meta.random}" />
+</div>
+
+<div th:fragment="pager" th:if="${page.totalPages} > 1" th:with="pages=${page.totalPages} - 1" id="pager" class="text-center">
+	<ul class="pagination" th:with="sort=${#httpServletRequest.getParameter('sort')}, start=(${page.number} - 5) lt 0 ? 0 : (${page.number} - 5), end=(${page.number} + 5) gt ${pages} ? ${pages} : (${page.number} + 5)">
+		<li th:class="${page.number == 0} ? disabled">
+			<a th:href="${page.number == 0} ? '#' : '?page=' + 0 + (${sort} != null ? '&amp;sort=' + ${sort} : '')">
+				<span class="glyphicon glyphicon-fast-backward" aria-hidden="true"></span>
+			</a>
+		</li>
+		<li th:class="${page.number == 0} ? disabled">
+			<a th:href="${page.number == 0} ? '#' : '?page=' + (${page.number} - 1) + (${sort} != null ? '&amp;sort=' + ${sort} : '')">
+				<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+			</a>
+		</li>
+		<li th:if="${start} gt 0" class="disabled"><a href="#">&hellip;</a></li>
+		<li th:each="p : ${#numbers.sequence(start, end)}" th:class="${page.number == p} ? 'active'">
+			<a th:href="${page.number == p} ? '#' : '?page=' + ${p} + (${sort} != null ? '&amp;sort=' + ${sort} : '')" th:text="${p + 1}" />
+		</li>
+		<li th:if="${end} lt ${pages}" class="disabled"><a href="#">&hellip;</a></li>
+		<li th:class="${page.number == pages} ? disabled">
+			<a th:href="${page.number == pages} ? '#' : '?page=' + (${page.number} + 1) + (${sort} != null ? '&amp;sort=' + ${sort} : '')">
+				<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+			</a>
+		</li>
+		<li th:class="${page.number == pages} ? disabled">
+			<a th:href="${page.number == pages} ? '#' : '?page=' + ${pages} + (${sort} != null ? '&amp;sort=' + ${sort} : '')">
+				<span class="glyphicon glyphicon-fast-forward" aria-hidden="true"></span>
+			</a>
+		</li>
+	</ul>
+</div>

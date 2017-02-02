@@ -1,18 +1,18 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/header (title=#{frontend.qotd})" />
+<head th:replace="../elements/blocks :: header(title=#{frontend.qotd})" />
 
 <body id="frontend">
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<a th:if="${prevId}" th:href="@{/view(id=${prevId}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
+				<a th:if="${prev}" th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
 				<h1 th:with="date=${#strings.arraySplit(schedule, '-')}">
 					<span th:text="#{frontend.qotd}" th:remove="tag" />
 					(<span th:text="#{'day.' + ${date[0]}} + #{months.delim} + #{'months.' + ${date[1]}}" th:remove="tag" />)
 				 </h1>
-				<a th:if="${nextId}" th:href="@{/view(id=${nextId}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
+				<a th:if="${next}" th:href="@{/view(id=${next}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
 			</div>
 			<div th:if="${quote}" id="view">
 				<div class="image">
@@ -34,19 +34,19 @@
 					<p><a th:text="#{frontend.readmore} + ' &raquo;'" th:href="${quote.href}" target="_blank" /></p>
 					<div th:unless="${#lists.isEmpty(list)}" class="today">
 						<span th:text="#{frontend.qotds} + ':'" th:remove="tag" />
-						<div th:each="locale, iterStat : ${list}" th:remove="tag">
-							<span th:if="${locale} == ${quote}" th:text="'#' + ${iterStat.count}" class="current" />
-							<a th:unless="${locale} == ${quote}" th:text="'#' + ${iterStat.count}" th:href="@{/view(id=${locale.quote.id}, lang=${lang})}" />
+						<div th:each="sibling, i : ${list}" th:remove="tag">
+							<span th:if="${sibling} == ${quote}" th:text="'#' + ${i.count}" class="current" />
+							<a th:unless="${sibling} == ${quote}" th:text="'#' + ${i.count}" th:href="@{/view(id=${sibling.id}, lang=${lang})}" />
 						</div>
 					</div>
 				</div>
 			</div>
-			<div th:unless="${quote}" th:text="#{general.empty}" class="empty" />
-			<div th:replace="../elements/meta"></div>
+			<div th:unless="${quote}" th:text="#{frontend.empty}" class="empty" />
+			<div th:replace="../elements/blocks :: meta"></div>
 		</div>
 	</div>
 
-	<div th:replace="../elements/footer"></div>
+	<div th:replace="../elements/blocks :: footer"></div>
 </body>
 
 </html>
