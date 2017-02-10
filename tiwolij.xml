@@ -105,6 +105,31 @@
 		<Arg>
 			<Ref refid='tiwolij' />
 		</Arg>
+		<Arg>logging.level.org.springframework</Arg>
+		<Arg type="java.lang.String">WARN</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg>
+			<Ref refid='tiwolij' />
+		</Arg>
+		<Arg>logging.level.org.hibernate</Arg>
+		<Arg type="java.lang.String">WARN</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg>
+			<Ref refid='tiwolij' />
+		</Arg>
+		<Arg>logging.level.HeidelTimeStandalone</Arg>
+		<Arg type="java.lang.String">WARN</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg>
+			<Ref refid='tiwolij' />
+		</Arg>
 		<Arg>wikimedia.commons</Arg>
 		<Arg type="java.lang.String">upload.wikimedia.org/wikipedia/commons/</Arg>
 		<Arg type="boolean">true</Arg>
@@ -168,8 +193,7 @@
 		<Arg>tiwolij.import.formats</Arg>
 		<Arg type="java.lang.String">
 			work_id; schedule; language; corpus; source [meta],
-			schedule; corpus; author_name; work_name; author_href; work_href;
-			author_slug; work_slug; source [meta]
+			schedule; corpus; author_name; work_name; author_href; work_href; author_slug; work_slug; source [meta]
 		</Arg>
 		<Arg type="boolean">true</Arg>
 	</New>
