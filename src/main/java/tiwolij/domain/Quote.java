@@ -105,6 +105,42 @@ public class Quote {
 		return work;
 	}
 
+	public Boolean hasId() {
+		return (id != null && id > 0);
+	}
+
+	public Boolean hasSchedule() {
+		return (schedule != null && !schedule.isEmpty());
+	}
+
+	public Boolean hasYear() {
+		return (year != null && !year.isEmpty());
+	}
+
+	public Boolean hasTime() {
+		return (time != null && !time.isEmpty());
+	}
+
+	public Boolean hasLanguage() {
+		return (language != null && !language.isEmpty());
+	}
+
+	public Boolean hasCorpus() {
+		return (corpus != null && !corpus.isEmpty());
+	}
+
+	public Boolean hasHref() {
+		return (href != null && !href.isEmpty());
+	}
+
+	public Boolean hasMeta() {
+		return (meta != null && !meta.isEmpty());
+	}
+
+	public Boolean hasCurator() {
+		return (curator != null && !curator.isEmpty());
+	}
+
 	public Quote setId(Integer id) {
 		this.id = id;
 		return this;

@@ -2,11 +2,20 @@ package tiwolij.service.wikidata;
 
 import java.net.URL;
 
+import tiwolij.domain.Author;
 import tiwolij.domain.Locale;
+import tiwolij.domain.Quote;
+import tiwolij.domain.Work;
 
 public interface WikidataService {
 
-	public Locale extractLocale(Integer wikidataId, String language);
+	public Author getAuthor(Author author);
+
+	public Work getWork(Work work);
+
+	public Quote getQuote(Quote quote);
+
+	public Locale getLocale(Integer wikidataId, String language);
 
 	public Integer extractWikidataId(URL url);
 

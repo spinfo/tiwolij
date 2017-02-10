@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -12,21 +11,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import tiwolij.domain.Author;
 import tiwolij.domain.Locale;
 import tiwolij.domain.Quote;
 import tiwolij.domain.Work;
-import tiwolij.service.wikidata.WikidataRepository;
 import tiwolij.util.RegularExpressions;
 
 @Component
 public class TSVServiceImpl implements TSVService {
-
-	@Autowired
-	private WikidataRepository wikidata;
 
 	private RegularExpressions regex = new RegularExpressions();
 
@@ -100,135 +94,87 @@ public class TSVServiceImpl implements TSVService {
 		}
 	}
 
-	private void parse(String field, String value) throws Exception {
+	private void parse(String field, String value) {
 		switch (field) {
 		case "schedule":
-			if (quote().getSchedule() == null) {
-				quote().setSchedule(regex.datetime(value));
-			}
+			quote().setSchedule((!quote().hasSchedule()) ? regex.datetime(value) : quote().getSchedule());
 			break;
 		case "language":
-			if (quote().getLanguage() == null) {
-				quote().setLanguage(value);
-			}
-			if (authorLocale().getLanguage() == null) {
-				authorLocale().setLanguage(value);
-			}
-			if (workLocale().getLanguage() == null) {
-				workLocale().setLanguage(value);
-			}
+			quote().setLanguage((!quote().hasLanguage()) ? value : quote().getLanguage());
+			authorLocale().setLanguage((!authorLocale().hasLanguage()) ? value : authorLocale().getLanguage());
+			workLocale().setLanguage((!workLocale().hasLanguage()) ? value : workLocale().getLanguage());
 			break;
 		case "corpus":
-			if (quote().getCorpus() == null) {
-				quote().setCorpus(value);
-			}
+			quote().setCorpus((!quote().hasCorpus()) ? value : quote().getCorpus());
 			break;
 		case "source [meta]":
-			if (quote().getHref() == null) {
-				if (value.indexOf(" ") == -1) {
-					quote().setHref(value);
-				} else {
-					quote().setHref(value.split(" ")[0]);
-					quote().setMeta(value.split(" ")[1].replaceAll("-", " "));
-				}
+			if (value.indexOf(" ") == -1) {
+				quote().setHref((!quote().hasHref()) ? value : quote().getHref());
+			} else {
+				quote().setHref((!quote().hasHref()) ? value.split(" ")[0] : quote().getHref());
+				quote().setMeta((!quote().hasMeta()) ? value.split(" ")[1].replaceAll("-", " ") : quote().getMeta());
 			}
 			break;
 		case "author_id":
-			if (author().getWikidataId() == null) {
-				author().setWikidataId(regex.wikidataId(value));
-			}
+			author().setWikidataId((!author().hasWikidataId()) ? regex.wikidataId(value) : author().getWikidataId());
 			break;
 		case "author_slug":
-			author().setSlug(value);
+			author().setSlug((!author().hasSlug()) ? value : author().getSlug());
 			break;
 		case "author_name":
-			if (authorLocale().getName() == null) {
-				authorLocale().setName(value);
-			}
-			if (author().getSlug() == null) {
-				author().setSlug(value);
-			}
+			authorLocale().setName((!authorLocale().hasName()) ? value : authorLocale().getName());
+			author().setSlug((!author().hasSlug()) ? value : author().getSlug());
 			break;
 		case "author_href":
-			if (authorLocale().getHref() == null) {
-				authorLocale().setHref(value);
-			}
-			if (author().getWikidataId() == null) {
-				author().setWikidataId(wikidata.extractWikidataId(new URL(value)));
-			}
-			if (authorLocale().getLanguage() == null) {
-				authorLocale().setLanguage(regex.wikipediaLang(value));
-			}
-			if (workLocale().getLanguage() == null) {
-				workLocale().setLanguage(regex.wikipediaLang(value));
-			}
-			if (quote().getLanguage() == null) {
-				quote().setLanguage(regex.wikipediaLang(value));
-			}
+			authorLocale().setHref((!authorLocale().hasHref()) ? value : authorLocale().getHref());
+			authorLocale().setLanguage(
+					(!authorLocale().hasLanguage()) ? regex.wikipediaLang(value) : authorLocale().getLanguage());
+			workLocale().setLanguage(
+					(!workLocale().hasLanguage()) ? regex.wikipediaLang(value) : workLocale().getLanguage());
+			quote().setLanguage((!quote().hasLanguage()) ? regex.wikipediaLang(value) : quote().getLanguage());
 			break;
 		case "work_id":
-			if (work().getWikidataId() == null) {
-				work().setWikidataId(regex.wikidataId(value));
-			}
-			if (author().getWikidataId() == null) {
-				author().setWikidataId(wikidata.extractAuthor(work().getWikidataId()));
-			}
+			work().setWikidataId((!work().hasWikidataId()) ? regex.wikidataId(value) : work().getWikidataId());
 			break;
 		case "work_slug":
-			work().setSlug(value);
+			work().setSlug((!work().hasSlug()) ? value : work().getSlug());
 			break;
 		case "work_name":
-			if (workLocale().getName() == null) {
-				workLocale().setName(value);
-			}
-			if (work().getSlug() == null) {
-				work().setSlug(value);
-			}
+			workLocale().setName((!workLocale().hasName()) ? value : workLocale().getName());
+			work().setSlug((!work().hasSlug()) ? value : work().getSlug());
 			break;
 		case "work_href":
-			if (workLocale().getHref() == null) {
-				workLocale().setHref(value);
-			}
-			if (work().getWikidataId() == null) {
-				work().setWikidataId(wikidata.extractWikidataId(new URL(value)));
-			}
-			if (author().getWikidataId() == null) {
-				author().setWikidataId(wikidata.extractAuthor(wikidata.extractWikidataId(new URL(value))));
-			}
-			if (authorLocale().getLanguage() == null) {
-				authorLocale().setLanguage(regex.wikipediaLang(value));
-			}
-			if (workLocale().getLanguage() == null) {
-				workLocale().setLanguage(regex.wikipediaLang(value));
-			}
-			if (quote().getLanguage() == null) {
-				quote().setLanguage(regex.wikipediaLang(value));
-			}
+			workLocale().setHref((!workLocale().hasHref()) ? value : workLocale().getHref());
+			authorLocale().setLanguage(
+					(!authorLocale().hasLanguage()) ? regex.wikipediaLang(value) : authorLocale().getLanguage());
+			workLocale().setLanguage(
+					(!workLocale().hasLanguage()) ? regex.wikipediaLang(value) : workLocale().getLanguage());
+			quote().setLanguage((!quote().hasLanguage()) ? regex.wikipediaLang(value) : quote().getLanguage());
 			break;
 		}
 	}
 
 	private void validate(Integer lineno) throws Exception {
-		if (author().getWikidataId() == null) {
-			if (author().getSlug() == null) {
+		if (!author().hasWikidataId()) {
+			if (!author().hasSlug()) {
 				throw new ParseException("Missing author (no slug)", lineno);
 			}
-			if (authorLocale().getLanguage() == null) {
+			if (!authorLocale().hasLanguage()) {
 				throw new ParseException("Missing author locale (no language)", lineno);
 			}
-			if (authorLocale().getName() == null) {
+			if (!authorLocale().hasName()) {
 				throw new ParseException("Missing author locale (no name)", lineno);
 			}
 		}
 
-		if (work().getWikidataId() == null) {
-			if (work().getSlug() == null) {
+		if (!work().hasWikidataId()) {
+			if (!work().hasSlug()) {
 				throw new ParseException("Missing work (no slug)", lineno);
 			}
-			if (workLocale().getLanguage() == null) {
+			if (!workLocale().hasLanguage()) {
 				throw new ParseException("Missing work locale (no language)", lineno);
 			}
-			if (workLocale().getName() == null) {
+			if (!workLocale().hasName()) {
 				throw new ParseException("Missing work locale (no name)", lineno);
 			}
 		}
@@ -247,19 +193,19 @@ public class TSVServiceImpl implements TSVService {
 	}
 
 	private Author author() {
-		return work().getAuthor();
-	}
-
-	private Locale authorLocale() {
-		return author().getMappedLocales().entrySet().iterator().next().getValue();
+		return quote().getAuthor();
 	}
 
 	private Work work() {
 		return quote().getWork();
 	}
 
+	private Locale authorLocale() {
+		return author().getLocales().iterator().next();
+	}
+
 	private Locale workLocale() {
-		return work().getMappedLocales().entrySet().iterator().next().getValue();
+		return work().getLocales().iterator().next();
 	}
 
 	private Quote quote() {

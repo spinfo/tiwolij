@@ -1,9 +1,12 @@
 package tiwolij.controller.data;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class Heideltag {
 
 	@Autowired
 	private Environment env;
+
+	@Autowired
+	private HttpSession session;
 
 	@Autowired
 	private QuoteService quotes;
@@ -57,10 +63,7 @@ public class Heideltag {
 			@RequestParam(name = "onlylang", defaultValue = "") String onlylang,
 			@RequestParam(name = "onlymonth", defaultValue = "") String onlymonth) throws Exception {
 		ModelAndView mv = new ModelAndView("backend/data/report");
-
-		String year, time;
 		List<Quote> list = quotes.getAll();
-		List<Quote> tagged = new ArrayList<Quote>();
 
 		if (onlyfinal) {
 			list = list.stream().filter(i -> i.getLocked()).collect(Collectors.toList());
@@ -74,17 +77,23 @@ public class Heideltag {
 			list = list.stream().filter(i -> i.getMonth().equals(onlymonth)).collect(Collectors.toList());
 		}
 
-		for (Quote i : list) {
+		Iterator<Quote> iter = list.iterator();
+		List<Quote> tagged = new ArrayList<Quote>();
+
+		String year, time;
+		Integer count = 0;
+		Integer total = list.size();
+		session.setAttribute("progress", "heideltag:" + count);
+
+		while (iter.hasNext()) {
+			session.setAttribute("progress", "heideltag:" + (new Float(count++) / total * 100));
+			Quote i = iter.next();
+
 			year = i.getYear();
 			time = i.getTime();
 
-			if (year == null || year.isEmpty()) {
-				i.setYear(timer.getYear(i));
-			}
-
-			if (time == null || time.isEmpty()) {
-				i.setTime(timer.getTime(i));
-			}
+			i.setYear((!i.hasYear()) ? timer.getYear(i) : i.getYear());
+			i.setTime((!i.hasTime()) ? timer.getTime(i) : i.getTime());
 
 			if (year != i.getYear() || time != i.getTime()) {
 				tagged.add(quotes.save(i));

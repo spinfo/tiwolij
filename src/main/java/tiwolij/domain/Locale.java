@@ -8,8 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-
 @Entity
 @Table(name = "locales")
 public class Locale {
@@ -69,6 +67,22 @@ public class Locale {
 		return work;
 	}
 
+	public Boolean hasId() {
+		return (id != null && id > 0);
+	}
+
+	public Boolean hasLanguage() {
+		return (language != null && !language.isEmpty());
+	}
+
+	public Boolean hasName() {
+		return (name != null && !name.isEmpty());
+	}
+
+	public Boolean hasHref() {
+		return (href != null && !href.isEmpty());
+	}
+
 	public Locale setId(Integer id) {
 		this.id = id;
 		return this;
@@ -89,20 +103,14 @@ public class Locale {
 		return this;
 	}
 
-	public Locale setAuthor(Author author) throws Exception {
-		if (work != null) {
-			throw new MySQLIntegrityConstraintViolationException();
-		}
-
+	public Locale setAuthor(Author author) {
+		this.work = null;
 		this.author = author;
 		return this;
 	}
 
-	public Locale setWork(Work work) throws Exception {
-		if (author != null) {
-			throw new MySQLIntegrityConstraintViolationException();
-		}
-
+	public Locale setWork(Work work) {
+		this.author = null;
 		this.work = work;
 		return this;
 	}

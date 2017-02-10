@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import tiwolij.domain.Author;
-import tiwolij.domain.WikidataId;
 
 public interface AuthorService {
 
@@ -30,28 +29,16 @@ public interface AuthorService {
 
 	public Page<Author> search(Pageable pagable, String term);
 
-	default public void delete(Author author) {
-		delete(author.getId());
-	}
-
 	default public Boolean existsById(Integer authorId) {
-		return (getOneById(authorId) != null);
+		return (authorId != null && getOneById(authorId) != null);
 	}
 
 	default public Boolean existsBySlug(String slug) {
-		return (getOneBySlug(slug) != null);
+		return (slug != null && getOneBySlug(slug) != null);
 	}
 
 	default public Boolean existsByWikidataId(Integer wikidataId) {
-		return (getOneByWikidataId(wikidataId) != null);
-	}
-
-	default public Boolean existsByWikidataId(WikidataId wikidataId) {
-		return existsByWikidataId(wikidataId.getId());
-	}
-
-	default public Author getOneByWikidataId(WikidataId wikidataId) {
-		return getOneByWikidataId(wikidataId.getId());
+		return (wikidataId != null && getOneByWikidataId(wikidataId) != null);
 	}
 
 }

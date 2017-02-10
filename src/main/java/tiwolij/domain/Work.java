@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import tiwolij.util.StringEncoding;
 
 @Entity
@@ -43,6 +45,17 @@ public class Work {
 	private WikidataId wikidataId;
 
 	public Work() {
+	}
+
+	public Work merge(Work work) {
+		setId(ObjectUtils.firstNonNull(work.getId(), getId()));
+		setSlug(ObjectUtils.firstNonNull(work.getSlug(), getSlug()));
+		setAuthor(ObjectUtils.firstNonNull(work.getAuthor(), getAuthor()));
+		setQuotes(ObjectUtils.firstNonNull(work.getQuotes(), getQuotes()));
+		setLocales(ObjectUtils.firstNonNull(work.getLocales(), getLocales()));
+		setWikidataId(ObjectUtils.firstNonNull(work.getWikidataId(), getWikidataId()));
+
+		return this;
 	}
 
 	public Work(Author author) {
@@ -77,6 +90,34 @@ public class Work {
 		return (wikidataId != null) ? wikidataId.getWikidataId() : null;
 	}
 
+	public Boolean hasId() {
+		return (id != null && id > 0);
+	}
+
+	public Boolean hasSlug() {
+		return (slug != null && !slug.isEmpty());
+	}
+
+	public Boolean hasAuthor() {
+		return (author != null);
+	}
+
+	public Boolean hasQuotes() {
+		return (quotes != null && !quotes.isEmpty());
+	}
+
+	public Boolean hasLocale(String language) {
+		return (hasLocales() && getMappedLocales().containsKey(language));
+	}
+
+	public Boolean hasLocales() {
+		return (locales != null && !locales.isEmpty());
+	}
+
+	public Boolean hasWikidataId() {
+		return (wikidataId != null && wikidataId.getWikidataId() != null && wikidataId.getWikidataId() > 0);
+	}
+
 	public Work setId(Integer id) {
 		this.id = id;
 		return this;
@@ -92,40 +133,49 @@ public class Work {
 		return this;
 	}
 
+	public Work setQuotes(List<Quote> quotes) {
+		this.quotes = quotes;
+		return this;
+	}
+
 	public Work setLocales(List<Locale> locales) {
 		this.locales = locales;
 		return this;
 	}
 
 	public Work setWikidataId(Integer wikidataId) {
-		if (wikidataId == null) {
-			return this;
+		if (wikidataId != null) {
+			if (this.wikidataId == null) {
+				this.wikidataId = new WikidataId(this);
+			}
+
+			this.wikidataId.setWikidataId(wikidataId);
 		}
 
-		if (this.wikidataId == null) {
-			this.wikidataId = new WikidataId(this);
-		}
-
-		this.wikidataId.setWikidataId(wikidataId);
 		return this;
 	}
 
 	public Work addQuote(Quote quote) {
-		if (this.quotes == null) {
-			this.quotes = new ArrayList<Quote>();
+		if (quote != null) {
+			if (this.quotes == null) {
+				this.quotes = new ArrayList<Quote>();
+			}
+
+			this.quotes.add(quote.setWork(this));
 		}
 
-		this.quotes.add(quote.setWork(this));
 		return this;
 	}
 
-	public Work addLocale(Locale locale) throws Exception {
-		if (this.locales == null) {
-			this.locales = new ArrayList<Locale>();
-		}
+	public Work addLocale(Locale locale) {
+		if (locale != null) {
+			if (this.locales == null) {
+				this.locales = new ArrayList<Locale>();
+			}
 
-		if (!getMappedLocales().containsKey(locale.getLanguage())) {
-			this.locales.add(locale.setWork(this));
+			if (!hasLocale(locale.getLanguage())) {
+				this.locales.add(locale.setWork(this));
+			}
 		}
 
 		return this;

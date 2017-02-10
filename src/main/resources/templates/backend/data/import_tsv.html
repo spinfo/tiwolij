@@ -15,6 +15,7 @@
 							<div th:replace="../elements/fields :: fieldInput('file', true, 'file', '', '')" />
 							<div th:replace="../elements/fields :: fieldSelect('encoding', true, ${encodings}, '', '')" />
 							<div th:replace="../elements/fields :: fieldSelect('format', true, ${formats}, '', '')" />
+							<div th:replace="../elements/fields :: fieldCheckbox('wikidata')" />
 							<div th:replace="../elements/fields :: fieldCheckbox('heideltag')" />
 							<div th:replace="../elements/fields :: fieldCheckbox('levensthein')" />
 							<div th:replace="../elements/fields :: fieldCheckbox('review')" />

@@ -10,33 +10,31 @@ $(document).ready(function() {
 			$.ajax(url).done(row.remove());
 	});
 
-	$('button[formaction^="/tiwolij/data/import/"]').closest('form').submit(function(e) {
+	$('button#submit[formaction^="/tiwolij/data/import/"]').closest('form').submit(function(e) {
 		e.preventDefault();
 
 		var form = new FormData(this);
-		var bar = $('<div class="progress"><div id="progress" class="progress-bar progress-bar-success" style="width: 100%;">');
+		var bar = $('<div class="progress"><div id="bar" class="progress-bar" style="width: 0%;">');
+		var txt = $('<p id="txt" class="lead">Please wait</p>')
 
 		var progress = window.setInterval(function() {
 			$.get('/tiwolij/data/import/progress', function(data) {
-				if ($('#progress').length > 0) {
-					switch(data) {
-						case 'null':
-							$('#progress').removeClass('progress-bar-striped active').css('width', '100%').text('Please wait ...');
-							break;
-						case 'pre':
-							$('#progress').removeClass('progress-bar-striped active').css('width', '100%').text('Preprocessing ...');
-							break;
-						default:
-							$('#progress').addClass('progress-bar-striped active').css('width', data + '%').text('');
-							break;
+				if ($('#bar').length > 0) {
+					if (data.indexOf(':') !== -1) {
+						$('#txt').text('Processing ' + data.split(':')[0]);
+						$('#bar').addClass('progress-bar-striped active').css('width', data.split(':')[1] + '%');
+					} else {
+						$('#txt').text('Please wait');
+						$('#bar').removeClass('progress-bar-striped active').css('width', '0%');
 					}
-				} else
+				} else {
 					clearInterval(progress);
+				}
 			});
-		}, 1000);
+		}, 250);
 
-		$(this).find('.panel-body').empty().append(bar);
-		$(this).find('#submit').attr('disabled', 'disabled');
+		$(this).find('#submit').closest('.panel-footer').remove();
+		$(this).find('.panel-body').empty().append(txt, bar);
 
 		$.ajax({
 	    url: $(this).attr('formaction'),
@@ -45,7 +43,7 @@ $(document).ready(function() {
 	    processData: false,
 	    contentType: false,
 		}).done(function(data) {
-			$('body#backend').replaceWith($(data).find('body#backend'));
+			$('#backend > .container').replaceWith($(data).filter('.container'));
 		});
 	});
 

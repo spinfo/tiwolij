@@ -20,11 +20,11 @@
 					<tr th:each="author : ${authors}">
 						<th th:text="'#' + ${author.id}" />
 						<div th:each="field : ${fields}" th:remove="tag">
-							<td th:if="${field} == 'slug'" th:text="${author.slug}" />
+							<td th:if="${field} == 'slug'" th:text="${#strings.abbreviate(author.slug, 25)}" />
 							<td th:if="${field} == 'image'"><a th:unless="${#lists.isEmpty(author.image)}" target="_blank" th:text="#{actions.view}" th:href="@{/image/author(id=${author.id})}" /></td>
 							<td th:if="${field} == 'works'"><a th:unless="${#lists.isEmpty(author.works)}" th:href="@{/tiwolij/works/list(authorId=${author.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(author.works)} + ')'" /></td>
 							<td th:if="${field} == 'quotes'"><a th:unless="${#lists.isEmpty(author.quotes)}" th:href="@{/tiwolij/quotes/list(authorId=${author.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(author.quotes)} + ')'" /></td>
-							<td th:if="${field} == 'names'" class="child-enum"><div th:each="locale : ${author.locales}" th:text="${locale.name} + ' (' + ${locale.language} + ')'" /></td>
+							<td th:if="${field} == 'names'" class="child-enum"><div th:each="locale : ${author.locales}" th:text="${#strings.abbreviate(locale.name, 25)} + ' (' + ${locale.language} + ')'" /></td>
 							<td th:if="${field} == 'wikidataId'"><a th:unless="${#strings.isEmpty(author.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${author.wikidataId}" th:text="'Q' + ${author.wikidataId}" /></td>
 						</div>
 						<td class="text-right">
@@ -65,10 +65,10 @@
 					<tr th:each="work : ${works}">
 						<th th:text="'#' + ${work.id}" />
 						<div th:each="field : ${fields}" th:remove="tag">
-							<td th:if="${field} == 'slug'" th:text="${work.slug}" />
-							<td th:if="${field} == 'author'" th:text="${work.author.slug}" />
+							<td th:if="${field} == 'slug'" th:text="${#strings.abbreviate(work.slug, 25)}" />
+							<td th:if="${field} == 'author'" th:text="${#strings.abbreviate(work.author.slug, 25)}" />
 							<td th:if="${field} == 'quotes'"><a th:unless="${#lists.isEmpty(work.quotes)}" th:href="@{/tiwolij/quotes/list(workId=${work.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(work.quotes) + ')'}" /></td>
-							<td th:if="${field} == 'names'" class="child-enum"><div th:each="locale : ${work.locales}" th:text="${locale.name} + ' (' + ${locale.language} + ')'" /></td>
+							<td th:if="${field} == 'names'" class="child-enum"><div th:each="locale : ${work.locales}" th:text="${#strings.abbreviate(locale.name, 25)} + ' (' + ${locale.language} + ')'" /></td>
 							<td th:if="${field} == 'wikidataId'"><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${work.wikidataId}" th:text="'Q' + ${work.wikidataId}" /></td>
 						</div>
 						<td class="text-right">
@@ -116,8 +116,8 @@
 							<td th:if="${field} == 'meta'" th:text="${quote.meta}" />
 							<td th:if="${field} == 'curator'" th:text="${quote.curator}" />
 							<td th:if="${field} == 'locked'"><span th:if="${quote.locked}" class="glyphicon glyphicon-star" aria-hidden="true" /></td>
-							<td th:if="${field} == 'author'" th:text="${quote.author.slug}" />
-							<td th:if="${field} == 'work'" th:text="${quote.work.slug}" />
+							<td th:if="${field} == 'author'" th:text="${#strings.abbreviate(quote.author.slug, 25)}" />
+							<td th:if="${field} == 'work'" th:text="${#strings.abbreviate(quote.work.slug, 25)}" />
 						</div>
 						<td class="text-right">
 							<a th:text="#{actions.view}" th:href="@{/tiwolij/quotes/view(quoteId=${quote.id})}" role="button" class="btn btn-xs btn-default" />
@@ -158,8 +158,8 @@
 						<th th:text="'#' + ${locale.id}" />
 						<div th:each="field : ${fields}" th:remove="tag">
 							<td th:if="${field} == 'parent'">
-								<a th:if="${locale.author}" th:href="@{/tiwolij/authors/view(authorId=${locale.author.id})}" th:text="${locale.author.slug}" />
-								<a th:if="${locale.work}" th:href="@{/tiwolij/authors/view(authorId=${locale.work.id})}" th:text="${locale.work.slug}" />
+								<a th:if="${locale.author}" th:href="@{/tiwolij/authors/view(authorId=${locale.author.id})}" th:text="${#strings.abbreviate(locale.author.slug, 25)}" />
+								<a th:if="${locale.work}" th:href="@{/tiwolij/authors/view(authorId=${locale.work.id})}" th:text="${#strings.abbreviate(locale.work.slug, 25)}" />
 							</td>
 							<td th:if="${field} == 'language'" th:text="${locale.language}" />
 							<td th:if="${field} == 'name'" th:text="${locale.name}" />

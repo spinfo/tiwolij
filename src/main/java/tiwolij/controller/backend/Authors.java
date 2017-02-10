@@ -73,30 +73,14 @@ public class Authors {
 	}
 
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute Author edited) throws Exception {
-		Author author = authors.getOneById(edited.getId());
-		String image = new String(edited.getImage());
-		Integer height = Integer.parseInt(env.getProperty("tiwolij.import.imageheight"));
+	public String edit(@ModelAttribute Author author) throws Exception {
+		Integer height = env.getProperty("tiwolij.import.imageheight", Integer.class);
+		String image = new String(author.getImage());
 
-		if (edited.getWikidataId() != author.getWikidataId()) {
-			author.setWikidataId(edited.getWikidataId());
-		}
-
-		if (edited.getSlug() != author.getSlug()) {
-			author.setSlug(edited.getSlug());
-		}
-
-		if (!image.isEmpty()) {
-			edited.setImage(ImageLoader.getBytes(new URL(image), height));
-		} else {
-			edited.setImage(author.getImage());
-		}
-
-		if (edited.getImageAttribution() != author.getImageAttribution()) {
-			author.setImageAttribution(edited.getImageAttribution());
-		}
-
+		author.setImage((!image.isEmpty()) ? ImageLoader.getBytes(new URL(image), height) : null);
+		author = authors.getOneById(author.getId()).merge(author);
 		authors.save(author);
+
 		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
 	}
 

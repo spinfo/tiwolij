@@ -1,6 +1,8 @@
 package tiwolij.service.wikidata;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +19,11 @@ import org.wikidata.wdtk.datamodel.interfaces.MonolingualTextValue;
 import org.wikidata.wdtk.datamodel.interfaces.Value;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 
+import tiwolij.domain.Author;
 import tiwolij.domain.Locale;
+import tiwolij.domain.Quote;
+import tiwolij.domain.Work;
+import tiwolij.util.ImageLoader;
 import tiwolij.util.RegularExpressions;
 
 @Component
@@ -27,6 +33,89 @@ public class WikidataRepository {
 	private Environment env;
 
 	private RegularExpressions regex = new RegularExpressions();
+
+	public Author getAuthor(Author author) {
+		try {
+			if (!author.hasWikidataId() && author.hasWorks()) {
+				for (Work i : author.getWorks()) {
+					if (i.hasWikidataId()) {
+						author.setWikidataId(extractAuthor(i.getWikidataId()));
+					}
+					if (author.hasWikidataId()) {
+						break;
+					}
+				}
+			}
+
+			if (!author.hasWikidataId() && author.hasLocales()) {
+				for (Locale i : author.getLocales()) {
+					if (i.hasHref()) {
+						author.setWikidataId(extractWikidataId(new URL(i.getHref())));
+					}
+					if (author.hasWikidataId()) {
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+		}
+
+		if (author.hasWikidataId()) {
+			Integer height = env.getProperty("tiwolij.import.imageheight", Integer.class);
+
+			author.setSlug(extractSlug(author.getWikidataId()));
+			author.setImage(ImageLoader.getBytes(extractImage(author.getWikidataId()), height));
+			author.setImageAttribution(extractImageAttribution(author.getWikidataId()));
+
+			if (author.hasLocales()) {
+				List<Locale> locales = author.getLocales();
+				author.setLocales(new ArrayList<Locale>());
+
+				for (Locale i : locales) {
+					author.addLocale(extractLocale(author.getWikidataId(), i.getLanguage()));
+				}
+			}
+		}
+
+		return author;
+	}
+
+	public Work getWork(Work work) {
+		try {
+			if (!work.hasWikidataId() && work.hasLocales()) {
+				for (Locale i : work.getLocales()) {
+					if (i.hasHref()) {
+						work.setWikidataId(extractWikidataId(new URL(i.getHref())));
+					}
+					if (work.hasWikidataId()) {
+						break;
+					}
+				}
+			}
+		} catch (Exception e) {
+		}
+
+		if (work.hasWikidataId()) {
+			work.setSlug(extractSlug(work.getWikidataId()));
+
+			if (work.hasLocales()) {
+				List<Locale> locales = work.getLocales();
+				work.setLocales(new ArrayList<Locale>());
+
+				for (Locale i : locales) {
+					work.addLocale(extractLocale(work.getWikidataId(), i.getLanguage()));
+				}
+			}
+		}
+
+		return work;
+	}
+
+	public Quote getQuote(Quote quote) {
+		getWork(quote.getWork());
+		getAuthor(quote.getAuthor());
+		return quote;
+	}
 
 	public Locale extractLocale(Integer wikidataId, String language) {
 		Locale locale = null;

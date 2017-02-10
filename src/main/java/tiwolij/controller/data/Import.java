@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -37,7 +38,6 @@ import tiwolij.service.tsv.TSVServiceImpl;
 import tiwolij.service.wikidata.WikidataService;
 import tiwolij.service.work.WorkService;
 import tiwolij.util.Heideltimer;
-import tiwolij.util.ImageLoader;
 
 @Controller
 @RequestMapping("/tiwolij/data/import")
@@ -48,6 +48,9 @@ public class Import {
 
 	@Autowired
 	private HttpSession session;
+
+	@Autowired
+	EntityManager entityManager;
 
 	@Autowired
 	private AuthorService authors;
@@ -73,22 +76,27 @@ public class Import {
 
 	@PostMapping("/author")
 	public String author(@ModelAttribute Author author) throws Exception {
-		if (author.getWikidataId() <= 0) {
+		if (!author.hasWikidataId()) {
 			throw new NoSuchEntityErrorException("No Wikidata ID given");
+		} else if (authors.existsByWikidataId(author.getWikidataId())) {
+			throw new DuplicateKeyException("Duplicate Author");
 		}
 
-		author = authors.save(importAuthor(author));
-		return "redirect:/tiwolij/authors/view?authorId=" + author.getId();
+		return "redirect:/tiwolij/authors/view?authorId=" + authors.save(wikidata.getAuthor(author)).getId();
 	}
 
 	@PostMapping("/work")
 	public String work(@ModelAttribute Work work) throws Exception {
-		if (work.getWikidataId() <= 0) {
+		if (!work.hasWikidataId()) {
 			throw new NoSuchEntityErrorException("No Wikidata ID given");
+		} else if (works.existsByWikidataId(work.getWikidataId())) {
+			throw new DuplicateKeyException("Duplicate Work");
 		}
 
-		work = works.save(importWork(work));
-		return "redirect:/tiwolij/works/view?workId=" + work.getId();
+		Author author = new Author().setWikidataId(wikidata.extractAuthor(work.getWikidataId()));
+		work.setAuthor((author.hasWikidataId()) ? authors.save(wikidata.getAuthor(author)) : work.getAuthor());
+
+		return "redirect:/tiwolij/works/view?workId=" + works.save(wikidata.getWork(work)).getId();
 	}
 
 	@GetMapping("/locales")
@@ -96,11 +104,28 @@ public class Import {
 			@RequestParam(name = "workId", defaultValue = "0") Integer workId) throws Exception {
 		if (authorId > 0) {
 			Author author = authors.getOneById(authorId);
-			return "redirect:/tiwolij/authors/view?authorId=" + authors.save(importLocale(author)).getId();
 
+			if (!author.hasWikidataId()) {
+				throw new NoSuchEntityErrorException("No Wikidata ID given");
+			}
+
+			for (String i : env.getProperty("tiwolij.locales.allowed", String[].class)) {
+				author.addLocale(wikidata.getLocale(author.getWikidataId(), i));
+			}
+
+			return "redirect:/tiwolij/authors/view?authorId=" + authors.save(author).getId();
 		} else if (workId > 0) {
 			Work work = works.getOneById(workId);
-			return "redirect:/tiwolij/works/view?workId=" + works.save(importLocale(work)).getId();
+
+			if (!work.hasWikidataId()) {
+				throw new NoSuchEntityErrorException("No Wikidata ID given");
+			}
+
+			for (String i : env.getProperty("tiwolij.locales.allowed", String[].class)) {
+				work.addLocale(wikidata.getLocale(work.getWikidataId(), i));
+			}
+
+			return "redirect:/tiwolij/works/view?workId=" + works.save(work).getId();
 		} else {
 			return "redirect:/tiwolij/";
 		}
@@ -110,6 +135,10 @@ public class Import {
 	public ModelAndView tsv() {
 		ModelAndView mv = new ModelAndView("backend/data/import_tsv");
 
+		if (session.getAttribute("progress") != null) {
+			throw new IllegalStateException("Import already running");
+		}
+
 		mv.addObject("encodings", new String[] { "UTF-8", "UTF-16", "US-ASCII", "cp1252" });
 		mv.addObject("formats", env.getProperty("tiwolij.import.formats", String[].class));
 		mv.addObject("languages", env.getProperty("tiwolij.locales.allowed", String[].class));
@@ -117,49 +146,75 @@ public class Import {
 	}
 
 	@PostMapping("/tsv")
-	public String tsv(@RequestParam("file") MultipartFile file,
-			@RequestParam(name = "forcelang", defaultValue = "") String forcelang,
-			@RequestParam("format") String format, @RequestParam("encoding") String encoding,
-			@RequestParam(name = "review", defaultValue = "false") Boolean review,
+	public String tsv(@RequestParam("file") MultipartFile file, @RequestParam("format") String format,
+			@RequestParam("encoding") String encoding,
+			@RequestParam(name = "wikidata", defaultValue = "false") Boolean wikifill,
 			@RequestParam(name = "heideltag", defaultValue = "false") Boolean heideltag,
-			@RequestParam(name = "levensthein", defaultValue = "false") Boolean levensthein) throws Exception {
-		session.setAttribute("progress", "pre");
+			@RequestParam(name = "levensthein", defaultValue = "false") Boolean levensthein,
+			@RequestParam(name = "review", defaultValue = "false") Boolean review,
+			@RequestParam(name = "forcelang", defaultValue = "") String forcelang) throws Exception {
+
+		session.setAttribute("progress", "tsv");
 		tsv.process(encoding, Arrays.asList(format.split(";")), forcelang, file.getBytes());
 
 		Map<Integer, Quote> results = tsv.getResults();
 		Map<Integer, Exception> errors = tsv.getErrors();
 
+		if (wikifill) {
+			Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
+
+			Integer count = 0;
+			Integer total = results.values().size();
+			session.setAttribute("progress", "wikidata:" + count);
+
+			while (iter.hasNext()) {
+				session.setAttribute("progress", "wikidata:" + (new Float(count++) / total * 100));
+				Quote i = iter.next().getValue();
+
+				wikidata.getQuote(i);
+			}
+		}
+
 		if (heideltag) {
 			Heideltimer timer = new Heideltimer();
+			Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
 
-			results.values().forEach(i -> {
-				if (i.getYear() == null || i.getYear().isEmpty()) {
-					i.setYear(timer.getYear(i));
-				}
+			Integer count = 0;
+			Integer total = results.values().size();
+			session.setAttribute("progress", "heideltag:" + count);
 
-				if (i.getTime() == null || i.getTime().isEmpty()) {
-					i.setTime(timer.getTime(i));
-				}
-			});
+			while (iter.hasNext()) {
+				session.setAttribute("progress", "heideltag:" + (new Float(count++) / total * 100));
+				Quote i = iter.next().getValue();
+
+				i.setYear((!i.hasYear()) ? timer.getYear(i) : i.getYear());
+				i.setTime((!i.hasTime()) ? timer.getTime(i) : i.getTime());
+			}
 		}
 
 		if (levensthein) {
 			List<Quote> existing = quotes.getAll();
-			Iterator<Entry<Integer, Quote>> quotes = results.entrySet().iterator();
-			Integer distance = Integer.parseInt(env.getProperty("tiwolij.import.levenshtein"));
+			Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
+			Integer distance = env.getProperty("tiwolij.import.levenshtein", Integer.class);
 
-			while (quotes.hasNext()) {
-				Entry<Integer, Quote> i = quotes.next();
+			Integer count = 0;
+			Integer total = results.values().size();
+			session.setAttribute("progress", "levensthein:" + count);
+
+			while (iter.hasNext()) {
+				session.setAttribute("progress", "levensthein:" + (new Float(count++) / total * 100));
+				Entry<Integer, Quote> i = iter.next();
 
 				existing.stream().filter(j -> i.getValue().getSchedule().equals(j.getSchedule())).forEach(k -> {
 					if (StringUtils.getLevenshteinDistance(i.getValue().getCorpus(), k.getCorpus()) < distance) {
 						errors.put(i.getKey(), new DuplicateKeyException("Duplicate quote"));
-						quotes.remove();
+						iter.remove();
 					}
 				});
 			}
 		}
 
+		session.removeAttribute("progress");
 		session.setAttribute("results", results);
 		session.setAttribute("errors", errors);
 
@@ -203,15 +258,42 @@ public class Import {
 
 		for (Integer i : lines) {
 			try {
-				session.setAttribute("progress", "" + (new Float(i) / lastLine * 100));
+				session.setAttribute("progress", "import:" + (new Float(i) / lastLine * 100));
 
 				Quote quote = results.get(i);
-				Author author = importAuthor(quote.getAuthor());
-				Work work = importWork(quote.getWork());
+				Author author = quote.getAuthor();
+				Work work = quote.getWork();
 
-				authors.save(author);
-				works.save(work.setAuthor(author));
-				quotes.save(quote.setWork(work));
+				Locale authorLocale = author.getLocales().iterator().next();
+				Locale workLocale = work.getLocales().iterator().next();
+
+				author.setLocales(null);
+				work.setLocales(null);
+
+				if (authors.existsByWikidataId(author.getWikidataId())) {
+					author = authors.getOneByWikidataId(author.getWikidataId()).merge(author);
+					author.addLocale(wikidata.getLocale(author.getWikidataId(), authorLocale.getLanguage()));
+				} else if (authors.existsBySlug(author.getSlug())) {
+					author = authors.getOneBySlug(author.getSlug()).merge(author);
+					author.addLocale(authorLocale);
+				} else {
+					author.addLocale(authorLocale);
+				}
+
+				if (works.existsByWikidataId(work.getWikidataId())) {
+					work = works.getOneByWikidataId(work.getWikidataId()).merge(work);
+					work.addLocale(wikidata.getLocale(work.getWikidataId(), workLocale.getLanguage()));
+				} else if (works.existsBySlug(work.getSlug())) {
+					work = works.getOneBySlug(work.getSlug()).merge(work);
+					work.addLocale(workLocale);
+				} else {
+					work.addLocale(workLocale);
+				}
+
+				entityManager.clear();
+				author = authors.save(author);
+				work = works.save(work.setAuthor(author));
+				quote = quotes.save(quote.setWork(work));
 
 				imports.add(quote);
 			} catch (Exception e) {
@@ -232,86 +314,6 @@ public class Import {
 		String progress = (String) session.getAttribute("progress");
 		response.setContentType("text/plain");
 		return (progress == null) ? "null" : progress;
-	}
-
-	private Author importAuthor(Author author) throws Exception {
-		Author existing = null;
-		Locale locale = author.getLocales().iterator().next();
-		Integer height = Integer.parseInt(env.getProperty("tiwolij.import.imageheight"));
-
-		if (author.getWikidataId() != null) {
-			author.setSlug(wikidata.extractSlug(author.getWikidataId()));
-			locale = wikidata.extractLocale(author.getWikidataId(), locale.getLanguage());
-		}
-
-		if (authors.existsByWikidataId(author.getWikidataId())) {
-			existing = authors.getOneByWikidataId(author.getWikidataId());
-		} else if (authors.existsBySlug(author.getSlug())) {
-			existing = authors.getOneBySlug(author.getSlug());
-		}
-
-		if (existing != null) {
-			if (existing.getWikidataId() == null && author.getWikidataId() != null) {
-				existing.setWikidataId(author.getWikidataId());
-			}
-
-			author = existing;
-		} else {
-			author.setImage(ImageLoader.getBytes(wikidata.extractImage(author.getWikidataId()), height));
-			author.setImageAttribution(wikidata.extractImageAttribution(author.getWikidataId()));
-		}
-
-		return author.addLocale(locale);
-	}
-
-	private Work importWork(Work work) throws Exception {
-		Work existing = null;
-		Locale locale = work.getLocales().iterator().next();
-
-		if (work.getWikidataId() != null) {
-			work.setSlug(wikidata.extractSlug(work.getWikidataId()));
-			locale = wikidata.extractLocale(work.getWikidataId(), locale.getLanguage());
-		}
-
-		if (works.existsByWikidataId(work.getWikidataId())) {
-			existing = works.getOneByWikidataId(work.getWikidataId());
-		} else if (works.existsBySlug(work.getSlug())) {
-			existing = works.getOneBySlug(work.getSlug());
-		}
-
-		if (existing != null) {
-			if (existing.getWikidataId() == null && work.getWikidataId() != null) {
-				existing.setWikidataId(work.getWikidataId());
-			}
-
-			work = existing;
-		}
-
-		return work.addLocale(locale);
-	}
-
-	private Author importLocale(Author author) throws Exception {
-		if (author.getWikidataId() != null) {
-			for (String i : env.getProperty("tiwolij.locales.allowed", String[].class)) {
-				if (!author.getMappedLocales().containsKey(i)) {
-					author.addLocale(wikidata.extractLocale(author.getWikidataId(), i));
-				}
-			}
-		}
-
-		return author;
-	}
-
-	private Work importLocale(Work work) throws Exception {
-		if (work.getWikidataId() == null) {
-			for (String i : env.getProperty("tiwolij.locales.allowed", String[].class)) {
-				if (!work.getMappedLocales().containsKey(i)) {
-					work.addLocale(wikidata.extractLocale(work.getWikidataId(), i));
-				}
-			}
-		}
-
-		return work;
 	}
 
 }

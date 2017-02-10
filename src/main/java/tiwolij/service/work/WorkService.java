@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import tiwolij.domain.Author;
-import tiwolij.domain.WikidataId;
 import tiwolij.domain.Work;
 
 public interface WorkService {
@@ -37,40 +35,16 @@ public interface WorkService {
 
 	public Page<Work> search(Pageable pageable, String term);
 
-	default public Long countByAuthor(Author author) {
-		return countByAuthor(author.getId());
-	}
-
-	default public void delete(Work work) {
-		delete(work.getId());
-	}
-
 	default public Boolean existsById(Integer workId) {
-		return (getOneById(workId) != null);
+		return (workId != null && getOneById(workId) != null);
 	}
 
 	default public Boolean existsBySlug(String slug) {
-		return (getOneBySlug(slug) != null);
+		return (slug != null && getOneBySlug(slug) != null);
 	}
 
 	default public Boolean existsByWikidataId(Integer wikidataId) {
-		return (getOneByWikidataId(wikidataId) != null);
-	}
-
-	default public Boolean existsByWikidataId(WikidataId wikidataId) {
-		return (getOneByWikidataId(wikidataId.getId()) != null);
-	}
-
-	default public Work getOneByWikidataId(WikidataId wikidataId) {
-		return getOneByWikidataId(wikidataId.getId());
-	}
-
-	default public List<Work> getAllByAuthor(Author author) {
-		return getAllByAuthor(author.getId());
-	}
-
-	default public Page<Work> getAllByAuthor(Pageable pageable, Author author) {
-		return getAllByAuthor(pageable, author.getId());
+		return (wikidataId != null && getOneByWikidataId(wikidataId) != null);
 	}
 
 }

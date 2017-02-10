@@ -85,18 +85,11 @@ public class Works {
 	}
 
 	@PostMapping("/edit")
-	public String edit(@ModelAttribute Work edited) throws Exception {
-		Work work = works.getOneById(edited.getId());
+	public String edit(@ModelAttribute Work work) throws Exception {
 
-		if (edited.getWikidataId() != work.getWikidataId()) {
-			work.setWikidataId(edited.getWikidataId());
-		}
-
-		if (edited.getSlug() != work.getSlug()) {
-			work.setSlug(edited.getSlug());
-		}
-
+		work = works.getOneById(work.getId()).merge(work);
 		work = works.save(work);
+
 		return "redirect:/tiwolij/works/view?workId=" + work.getId();
 	}
 

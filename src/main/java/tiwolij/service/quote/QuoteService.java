@@ -5,9 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import tiwolij.domain.Author;
 import tiwolij.domain.Quote;
-import tiwolij.domain.Work;
 
 public interface QuoteService {
 
@@ -55,44 +53,16 @@ public interface QuoteService {
 
 	public Page<Quote> search(Pageable pageable, String term);
 
-	default public Long countByAuthor(Author author) {
-		return countByAuthor(author.getId());
-	}
-
-	default public Long countByWork(Work work) {
-		return countByWork(work.getId());
-	}
-
-	default public void delete(Quote quote) {
-		delete(quote.getId());
-	}
-
 	default public Boolean existsById(Integer quoteId) {
-		return (getOneById(quoteId) != null);
+		return (quoteId != null && getOneById(quoteId) != null);
 	}
 
 	default public Boolean existsByLang(String language) {
-		return (getRandomByLang(language) != null);
+		return (language != null && getRandomByLang(language) != null);
 	}
 
 	default public Boolean existsByScheduleAndLang(String schedule, String language) {
-		return (getRandomByScheduleAndLang(schedule, language) != null);
-	}
-
-	default public List<Quote> getAllByAuthor(Author author) {
-		return getAllByAuthor(author.getId());
-	}
-
-	default public Page<Quote> getAllByAuthor(Pageable pageable, Author author) {
-		return getAllByAuthor(pageable, author.getId());
-	}
-
-	default public List<Quote> getAllByWork(Work work) {
-		return getAllByWork(work.getId());
-	}
-
-	default public Page<Quote> getAllByWork(Pageable pageable, Work work) {
-		return getAllByWork(pageable, work.getId());
+		return (schedule != null && language != null && getRandomByScheduleAndLang(schedule, language) != null);
 	}
 
 }

@@ -15,6 +15,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import tiwolij.util.StringEncoding;
 
 @Entity
@@ -34,15 +36,27 @@ public class Author {
 	private String imageAttribution;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-	private List<Work> works = new ArrayList<Work>();
+	private List<Work> works;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-	private List<Locale> locales = new ArrayList<Locale>();
+	private List<Locale> locales;
 
 	@OneToOne(mappedBy = "author", cascade = CascadeType.ALL)
 	private WikidataId wikidataId;
 
 	public Author() {
+	}
+
+	public Author merge(Author author) {
+		setId(ObjectUtils.firstNonNull(author.getId(), getId()));
+		setSlug(ObjectUtils.firstNonNull(author.getSlug(), getSlug()));
+		setImage(ObjectUtils.firstNonNull(author.getImage(), getImage()));
+		setImageAttribution(ObjectUtils.firstNonNull(author.getImageAttribution(), getImageAttribution()));
+		setWorks(ObjectUtils.firstNonNull(author.getWorks(), getWorks()));
+		setLocales(ObjectUtils.firstNonNull(author.getLocales(), getLocales()));
+		setWikidataId(ObjectUtils.firstNonNull(author.getWikidataId(), getWikidataId()));
+
+		return this;
 	}
 
 	public Integer getId() {
@@ -69,6 +83,10 @@ public class Author {
 		return works.stream().map(i -> i.getQuotes()).flatMap(List::stream).collect(Collectors.toList());
 	}
 
+	public Boolean hasLocale(String language) {
+		return (hasLocales() && getMappedLocales().containsKey(language));
+	}
+
 	public List<Locale> getLocales() {
 		return locales;
 	}
@@ -79,6 +97,38 @@ public class Author {
 
 	public Integer getWikidataId() {
 		return (wikidataId != null) ? wikidataId.getWikidataId() : null;
+	}
+
+	public Boolean hasId() {
+		return (id != null && id > 0);
+	}
+
+	public Boolean hasSlug() {
+		return (slug != null && !slug.isEmpty());
+	}
+
+	public Boolean hasImage() {
+		return (image != null && image != new byte[0]);
+	}
+
+	public Boolean hasImageAttribution() {
+		return (imageAttribution != null && !imageAttribution.isEmpty());
+	}
+
+	public Boolean hasWorks() {
+		return (works != null && !works.isEmpty());
+	}
+
+	public Boolean hasQuotes() {
+		return (getQuotes() != null && !getQuotes().isEmpty());
+	}
+
+	public Boolean hasLocales() {
+		return (locales != null && !locales.isEmpty());
+	}
+
+	public Boolean hasWikidataId() {
+		return (wikidataId != null && wikidataId.getWikidataId() != null && wikidataId.getWikidataId() > 0);
 	}
 
 	public Author setId(Integer id) {
@@ -101,40 +151,49 @@ public class Author {
 		return this;
 	}
 
+	public Author setWorks(List<Work> works) {
+		this.works = works;
+		return this;
+	}
+
 	public Author setLocales(List<Locale> locales) {
 		this.locales = locales;
 		return this;
 	}
 
 	public Author setWikidataId(Integer wikidataId) {
-		if (wikidataId == null) {
-			return this;
+		if (wikidataId != null) {
+			if (this.wikidataId == null) {
+				this.wikidataId = new WikidataId(this);
+			}
+
+			this.wikidataId.setWikidataId(wikidataId);
 		}
 
-		if (this.wikidataId == null) {
-			this.wikidataId = new WikidataId(this);
-		}
-
-		this.wikidataId.setWikidataId(wikidataId);
 		return this;
 	}
 
 	public Author addWork(Work work) {
-		if (this.works == null) {
-			this.works = new ArrayList<Work>();
+		if (work != null) {
+			if (this.works == null) {
+				this.works = new ArrayList<Work>();
+			}
+
+			this.works.add(work.setAuthor(this));
 		}
 
-		this.works.add(work.setAuthor(this));
 		return this;
 	}
 
-	public Author addLocale(Locale locale) throws Exception {
-		if (this.locales == null) {
-			this.locales = new ArrayList<Locale>();
-		}
+	public Author addLocale(Locale locale) {
+		if (locale != null) {
+			if (this.locales == null) {
+				this.locales = new ArrayList<Locale>();
+			}
 
-		if (!getMappedLocales().containsKey(locale.getLanguage())) {
-			this.locales.add(locale.setAuthor(this));
+			if (!hasLocale(locale.getLanguage())) {
+				this.locales.add(locale.setAuthor(this));
+			}
 		}
 
 		return this;

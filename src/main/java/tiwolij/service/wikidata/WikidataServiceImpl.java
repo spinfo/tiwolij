@@ -4,7 +4,10 @@ import java.net.URL;
 
 import org.springframework.stereotype.Component;
 
+import tiwolij.domain.Author;
 import tiwolij.domain.Locale;
+import tiwolij.domain.Quote;
+import tiwolij.domain.Work;
 
 @Component
 public class WikidataServiceImpl implements WikidataService {
@@ -16,7 +19,22 @@ public class WikidataServiceImpl implements WikidataService {
 	}
 
 	@Override
-	public Locale extractLocale(Integer wikidataId, String language) {
+	public Author getAuthor(Author author) {
+		return wikidata.getAuthor(author);
+	}
+
+	@Override
+	public Work getWork(Work work) {
+		return wikidata.getWork(work);
+	}
+
+	@Override
+	public Quote getQuote(Quote quote) {
+		return wikidata.getQuote(quote);
+	}
+
+	@Override
+	public Locale getLocale(Integer wikidataId, String language) {
 		return wikidata.extractLocale(wikidataId, language);
 	}
 
