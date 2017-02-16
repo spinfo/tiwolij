@@ -63,9 +63,13 @@ public class WikidataRepository {
 		if (author.hasWikidataId()) {
 			Integer height = env.getProperty("tiwolij.import.imageheight", Integer.class);
 
-			author.setSlug(extractSlug(author.getWikidataId()));
-			author.setImage(ImageLoader.getBytes(extractImage(author.getWikidataId()), height));
-			author.setImageAttribution(extractImageAttribution(author.getWikidataId()));
+			String slug = extractSlug(author.getWikidataId());
+			byte[] image = ImageLoader.getBytes(extractImage(author.getWikidataId()), height);
+			String imageAttribution = extractImageAttribution(author.getWikidataId());
+
+			author.setSlug((slug != null) ? slug : author.getSlug());
+			author.setImage((image != null) ? image : author.getImage());
+			author.setImageAttribution((imageAttribution != null) ? imageAttribution : author.getImageAttribution());
 
 			if (author.hasLocales()) {
 				List<Locale> locales = author.getLocales();
@@ -96,7 +100,9 @@ public class WikidataRepository {
 		}
 
 		if (work.hasWikidataId()) {
-			work.setSlug(extractSlug(work.getWikidataId()));
+			String slug = extractSlug(work.getWikidataId());
+
+			work.setSlug((slug != null) ? slug : work.getSlug());
 
 			if (work.hasLocales()) {
 				List<Locale> locales = work.getLocales();
