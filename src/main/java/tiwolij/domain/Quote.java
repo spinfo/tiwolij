@@ -1,5 +1,7 @@
 package tiwolij.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,9 +10,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "quotes")
-public class Quote {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Quote.class)
+public class Quote implements Serializable {
+
+	private static final long serialVersionUID = 8653376637288064042L;
 
 	@Id
 	@GeneratedValue
@@ -61,10 +70,12 @@ public class Quote {
 		return year;
 	}
 
+	@JsonIgnore
 	public String getMonth() {
 		return schedule.split("-")[1];
 	}
 
+	@JsonIgnore
 	public String getDay() {
 		return schedule.split("-")[0];
 	}
@@ -97,6 +108,7 @@ public class Quote {
 		return locked;
 	}
 
+	@JsonIgnore
 	public Author getAuthor() {
 		return work.getAuthor();
 	}

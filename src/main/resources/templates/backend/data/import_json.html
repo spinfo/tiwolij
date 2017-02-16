@@ -1,0 +1,29 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{data.import.json})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{data.import.json}" class="panel-heading" />
+					<form enctype="multipart/form-data" class="form-horizontal" method="post">
+						<div class="panel-body">
+							<div th:replace="../elements/fields :: fieldInput('file', true, 'file', '', '')" />
+							<div th:replace="../elements/fields :: fieldCheckbox('review')" />
+						</div>
+						<div class="panel-footer text-right">
+							<button th:text="#{data.import.json}" th:formaction="@{/tiwolij/data/import/json}" type="submit" class="btn btn-sm btn-success" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

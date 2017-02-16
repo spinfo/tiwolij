@@ -1,5 +1,6 @@
 package tiwolij.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,11 +19,19 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.ObjectUtils;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import tiwolij.util.StringEncoding;
 
 @Entity
 @Table(name = "works")
-public class Work {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Work.class)
+public class Work implements Serializable {
+
+	private static final long serialVersionUID = -2333662636408115444L;
 
 	@Id
 	@GeneratedValue
@@ -36,6 +45,7 @@ public class Work {
 	private Author author;
 
 	@OneToMany(mappedBy = "work", cascade = CascadeType.ALL)
+	@JsonBackReference(value = "quotes")
 	private List<Quote> quotes;
 
 	@OneToMany(mappedBy = "work", cascade = CascadeType.ALL)
@@ -47,6 +57,10 @@ public class Work {
 	public Work() {
 	}
 
+	public Work(Author author) {
+		this.author = author;
+	}
+
 	public Work merge(Work work) {
 		setId(ObjectUtils.firstNonNull(work.getId(), getId()));
 		setSlug(ObjectUtils.firstNonNull(work.getSlug(), getSlug()));
@@ -56,38 +70,6 @@ public class Work {
 		setWikidataId(ObjectUtils.firstNonNull(work.getWikidataId(), getWikidataId()));
 
 		return this;
-	}
-
-	public Work(Author author) {
-		this.author = author;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public String getSlug() {
-		return slug;
-	}
-
-	public Author getAuthor() {
-		return author;
-	}
-
-	public List<Quote> getQuotes() {
-		return quotes;
-	}
-
-	public List<Locale> getLocales() {
-		return locales;
-	}
-
-	public Map<String, Locale> getMappedLocales() {
-		return (locales != null) ? locales.stream().collect(Collectors.toMap(Locale::getLanguage, i -> i)) : null;
-	}
-
-	public Integer getWikidataId() {
-		return (wikidataId != null) ? wikidataId.getWikidataId() : null;
 	}
 
 	public Boolean hasId() {
@@ -116,6 +98,35 @@ public class Work {
 
 	public Boolean hasWikidataId() {
 		return (wikidataId != null && wikidataId.getWikidataId() != null && wikidataId.getWikidataId() > 0);
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public String getSlug() {
+		return slug;
+	}
+
+	public Author getAuthor() {
+		return author;
+	}
+
+	public List<Quote> getQuotes() {
+		return quotes;
+	}
+
+	public List<Locale> getLocales() {
+		return locales;
+	}
+
+	@JsonIgnore
+	public Map<String, Locale> getMappedLocales() {
+		return (hasLocales()) ? locales.stream().collect(Collectors.toMap(Locale::getLanguage, i -> i)) : null;
+	}
+
+	public Integer getWikidataId() {
+		return (wikidataId != null) ? wikidataId.getWikidataId() : null;
 	}
 
 	public Work setId(Integer id) {

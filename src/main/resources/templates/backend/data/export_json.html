@@ -1,0 +1,30 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{data.export.backup})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{data.export.backup}" class="panel-heading" />
+					<form class="form-horizontal" method="post">
+						<div class="panel-body">
+							<div th:replace="../elements/fields :: fieldCheckbox('onlyfinal')" />
+							<div th:replace="../elements/fields :: fieldSelect('onlylang', false, ${languages}, '', '')" />
+							<div th:replace="../elements/fields :: fieldSelect('onlymonth', false, ${months}, 'key', 'value')" />
+						</div>
+						<div class="panel-footer text-right">
+							<button th:text="#{data.export.backup}" th:formaction="@{/tiwolij/data/export/json}" type="submit" class="btn btn-sm btn-success" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

@@ -1,5 +1,6 @@
 package tiwolij.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,11 +18,19 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.ObjectUtils;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import tiwolij.util.StringEncoding;
 
 @Entity
 @Table(name = "authors")
-public class Author {
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Author.class)
+public class Author implements Serializable {
+
+	private static final long serialVersionUID = -5590869234980268995L;
 
 	@Id
 	@GeneratedValue
@@ -36,6 +45,7 @@ public class Author {
 	private String imageAttribution;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+	@JsonBackReference(value = "works")
 	private List<Work> works;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
@@ -57,46 +67,6 @@ public class Author {
 		setWikidataId(ObjectUtils.firstNonNull(author.getWikidataId(), getWikidataId()));
 
 		return this;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public String getSlug() {
-		return slug;
-	}
-
-	public byte[] getImage() {
-		return image;
-	}
-
-	public String getImageAttribution() {
-		return imageAttribution;
-	}
-
-	public List<Work> getWorks() {
-		return works;
-	}
-
-	public List<Quote> getQuotes() {
-		return works.stream().map(i -> i.getQuotes()).flatMap(List::stream).collect(Collectors.toList());
-	}
-
-	public Boolean hasLocale(String language) {
-		return (hasLocales() && getMappedLocales().containsKey(language));
-	}
-
-	public List<Locale> getLocales() {
-		return locales;
-	}
-
-	public Map<String, Locale> getMappedLocales() {
-		return (locales != null) ? locales.stream().collect(Collectors.toMap(Locale::getLanguage, i -> i)) : null;
-	}
-
-	public Integer getWikidataId() {
-		return (wikidataId != null) ? wikidataId.getWikidataId() : null;
 	}
 
 	public Boolean hasId() {
@@ -123,12 +93,54 @@ public class Author {
 		return (getQuotes() != null && !getQuotes().isEmpty());
 	}
 
+	public Boolean hasLocale(String language) {
+		return (hasLocales() && getMappedLocales().containsKey(language));
+	}
+
 	public Boolean hasLocales() {
 		return (locales != null && !locales.isEmpty());
 	}
 
 	public Boolean hasWikidataId() {
 		return (wikidataId != null && wikidataId.getWikidataId() != null && wikidataId.getWikidataId() > 0);
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public String getSlug() {
+		return slug;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public String getImageAttribution() {
+		return imageAttribution;
+	}
+
+	public List<Work> getWorks() {
+		return works;
+	}
+
+	@JsonIgnore
+	public List<Quote> getQuotes() {
+		return works.stream().map(i -> i.getQuotes()).flatMap(List::stream).collect(Collectors.toList());
+	}
+
+	public List<Locale> getLocales() {
+		return locales;
+	}
+
+	@JsonIgnore
+	public Map<String, Locale> getMappedLocales() {
+		return (hasLocales()) ? locales.stream().collect(Collectors.toMap(Locale::getLanguage, i -> i)) : null;
+	}
+
+	public Integer getWikidataId() {
+		return (wikidataId != null) ? wikidataId.getWikidataId() : null;
 	}
 
 	public Author setId(Integer id) {

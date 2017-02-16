@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tiwolij.domain.Author;
 import tiwolij.domain.Locale;
@@ -129,6 +134,34 @@ public class Import {
 		} else {
 			return "redirect:/tiwolij/";
 		}
+	}
+
+	@GetMapping("/json")
+	public ModelAndView json() {
+		ModelAndView mv = new ModelAndView("backend/data/import_json");
+
+		if (session.getAttribute("progress") != null) {
+			throw new IllegalStateException("Import already running");
+		}
+
+		mv.addObject("encodings", new String[] { "UTF-8", "UTF-16", "US-ASCII", "cp1252" });
+		return mv;
+	}
+
+	@PostMapping("/json")
+	public String json(@RequestParam("file") MultipartFile file,
+			@RequestParam(name = "review", defaultValue = "false") Boolean review) throws Exception {
+		ObjectMapper mapper = new ObjectMapper();
+		List<Quote> list = mapper.readValue(file.getBytes(), new TypeReference<List<Quote>>() {
+		});
+
+		list.stream().forEach(i -> i.setId(null).getWork().setId(null).getAuthor().setId(null));
+
+		AtomicInteger key = new AtomicInteger();
+		Map<Integer, Quote> results = list.stream().collect(Collectors.toMap(i -> key.incrementAndGet(), i -> i));
+		session.setAttribute("results", results);
+
+		return (review) ? "redirect:/tiwolij/data/import/review" : "redirect:/tiwolij/data/import/report";
 	}
 
 	@GetMapping("/tsv")
@@ -298,6 +331,7 @@ public class Import {
 				imports.add(quote);
 			} catch (Exception e) {
 				errors.put(i, e);
+				e.printStackTrace();
 			}
 		}
 
