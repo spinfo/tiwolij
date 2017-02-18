@@ -78,7 +78,7 @@ public class Author implements Serializable {
 	}
 
 	public Boolean hasImage() {
-		return (image != null && image != new byte[0]);
+		return (image != null && image != new byte[0] && image.length > 0);
 	}
 
 	public Boolean hasImageAttribution() {

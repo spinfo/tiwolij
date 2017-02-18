@@ -11,7 +11,6 @@ import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
@@ -51,14 +50,13 @@ public class Image {
 		}
 
 		Author author = authors.getOneById(authorId);
-		byte[] image = author.getImage();
 
-		if (author == null || image == null || image.length <= 0) {
+		if (author == null || !author.hasImage()) {
 			response.sendRedirect("/img/tiwoli.png");
 		}
 
 		response.setContentType("image/jpeg");
-		response.getOutputStream().write(image);
+		response.getOutputStream().write(author.getImage());
 		response.getOutputStream().close();
 	}
 
@@ -73,7 +71,8 @@ public class Image {
 		Quote quote = quotes.getOneById(quoteId);
 		String language = quote.getLanguage();
 		Locale work = quote.getWork().getMappedLocales().get(language);
-		Locale author = quote.getWork().getAuthor().getMappedLocales().get(language);
+		Locale author = quote.getAuthor().getMappedLocales().get(language);
+		onlytext = (!onlytext) ? !author.getAuthor().hasImage() : false;
 
 		java.util.Locale locale = new java.util.Locale(language);
 		String day = messages.getMessage("day." + quote.getDay(), null, locale);
@@ -149,9 +148,7 @@ public class Image {
 			graphic.fillRect(30, 120, 300, 450);
 
 			// image
-			BufferedImage img = (author.getAuthor().getImage().length > 0)
-					? ImageIO.read(new ByteArrayInputStream(author.getAuthor().getImage()))
-					: ImageIO.read(new File("src/main/resources/static/img/tiwoli.png"));
+			BufferedImage img = ImageIO.read(new ByteArrayInputStream(author.getAuthor().getImage()));
 			Integer width = img.getWidth();
 			Integer height = img.getHeight();
 
@@ -168,50 +165,46 @@ public class Image {
 			graphic.drawImage(img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH), center, 125, null);
 
 			// image details
-			if (author.getAuthor().getImage().length > 0) {
+			String name = author.getName();
 
-				// author name
-				String name = author.getName();
+			graphic.setColor(text);
+			attstr = new AttributedString(name);
+			attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+			iter = attstr.getIterator();
+			measure = new LineBreakMeasurer(iter, frc);
+			measure.setPosition(iter.getBeginIndex());
 
-				graphic.setColor(text);
-				attstr = new AttributedString(name);
-				attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 16));
-				iter = attstr.getIterator();
-				measure = new LineBreakMeasurer(iter, frc);
-				measure.setPosition(iter.getBeginIndex());
+			x = 35f;
+			y = 130f + height;
+			bound = 290f;
+			while (measure.getPosition() < iter.getEndIndex()) {
+				TextLayout layout = measure.nextLayout(bound);
+				dx = x + (bound - layout.getAdvance()) / 2;
+				y += layout.getAscent();
+				layout.draw(graphic, dx, y);
+				y += layout.getDescent() + layout.getLeading();
+			}
 
-				x = 35f;
-				y = 130f + height;
-				bound = 290f;
-				while (measure.getPosition() < iter.getEndIndex()) {
-					TextLayout layout = measure.nextLayout(bound);
-					dx = x + (bound - layout.getAdvance()) / 2;
-					y += layout.getAscent();
-					layout.draw(graphic, dx, y);
-					y += layout.getDescent() + layout.getLeading();
-				}
+			// imageAttribution
+			String attribution = quote.getWork().getAuthor().getImageAttribution();
+			attribution = messages.getMessage("fields.imageAttribution", null, locale) + ": " + attribution;
 
-				// imageAttribution
-				String attribution = quote.getWork().getAuthor().getImageAttribution();
-				attribution = messages.getMessage("fields.imageAttribution", null, locale) + ": " + attribution;
+			graphic.setColor(textmuted);
+			attstr = new AttributedString(attribution);
+			attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+			iter = attstr.getIterator();
+			measure = new LineBreakMeasurer(iter, frc);
+			measure.setPosition(iter.getBeginIndex());
 
-				graphic.setColor(textmuted);
-				attstr = new AttributedString(attribution);
-				attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 14));
-				iter = attstr.getIterator();
-				measure = new LineBreakMeasurer(iter, frc);
-				measure.setPosition(iter.getBeginIndex());
-
-				x = 35f;
-				y = 570f;
-				bound = 290f;
-				while (measure.getPosition() < iter.getEndIndex()) {
-					TextLayout layout = measure.nextLayout(bound);
-					dx = x + (bound - layout.getAdvance()) / 2;
-					y += layout.getAscent();
-					layout.draw(graphic, dx, y);
-					y += layout.getDescent() + layout.getLeading();
-				}
+			x = 35f;
+			y = 570f;
+			bound = 290f;
+			while (measure.getPosition() < iter.getEndIndex()) {
+				TextLayout layout = measure.nextLayout(bound);
+				dx = x + (bound - layout.getAdvance()) / 2;
+				y += layout.getAscent();
+				layout.draw(graphic, dx, y);
+				y += layout.getDescent() + layout.getLeading();
 			}
 		}
 
