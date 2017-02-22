@@ -1,0 +1,41 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{data.import})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div th:text="#{data.import.json}" class="panel-heading" />
+					<div class="panel-body">
+						<p>
+							...
+						</p>
+					</div>
+					<div class="panel-footer text-right">
+						<a th:text="#{data.import.json}" th:href="@{/tiwolij/data/import/json}" class="btn btn-sm btn-success" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div th:text="#{data.import.tsv}" class="panel-heading" />
+					<div class="panel-body">
+						<p>
+							...
+						</p>
+					</div>
+					<div class="panel-footer text-right">
+						<a th:text="#{data.import.tsv}" th:href="@{/tiwolij/data/import/tsv}" class="btn btn-sm btn-success" />
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

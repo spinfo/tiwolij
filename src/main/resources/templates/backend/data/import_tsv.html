@@ -1,7 +1,7 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{data.import.quotes})" />
+<head th:replace="../elements/blocks :: header(title=#{data.import.tsv})" />
 
 <body id="backend">
 	<div class="container">
@@ -9,7 +9,7 @@
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="#{data.import.quotes}" class="panel-heading" />
+					<div th:text="#{data.import.tsv}" class="panel-heading" />
 					<form enctype="multipart/form-data" class="form-horizontal" method="post">
 						<div class="panel-body">
 							<div th:replace="../elements/fields :: fieldInput('file', true, 'file', '', '')" />
@@ -22,7 +22,7 @@
 							<div th:replace="../elements/fields :: fieldSelect('forcelang', false, ${languages}, '', '')" />
 						</div>
 						<div class="panel-footer text-right">
-							<button id="submit" th:text="#{data.import.quotes}" th:formaction="@{/tiwolij/data/import/tsv}" type="submit" class="btn btn-sm btn-success" />
+							<button id="submit" th:text="#{data.import.tsv}" th:formaction="@{/tiwolij/data/import/tsv}" type="submit" class="btn btn-sm btn-success" />
 						</div>
 					</form>
 				</div>

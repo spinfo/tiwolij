@@ -1,0 +1,41 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{data.export})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div th:text="#{data.export.json}" class="panel-heading" />
+					<div class="panel-body">
+						<p>
+							...
+						</p>
+					</div>
+					<div class="panel-footer text-right">
+						<a th:text="#{data.export.json}" th:href="@{/tiwolij/data/export/json}" class="btn btn-sm btn-success" />
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-default">
+					<div th:text="#{data.export.tweets}" class="panel-heading" />
+					<div class="panel-body">
+						<p>
+							...
+						</p>
+					</div>
+					<div class="panel-footer text-right">
+						<a th:text="#{data.export.tweets}" th:href="@{/tiwolij/data/export/tweets}" class="btn btn-sm btn-success" />
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>
