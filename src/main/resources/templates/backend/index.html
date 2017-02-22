@@ -15,7 +15,7 @@
 							<label th:text="#{fields.authors}" class="col-sm-8 control-label" />
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/authors/list}" th:text="${authors}" />
+									<a th:href="@{/tiwolij/authors/list(page=0, sort=id)}" th:text="${authors}" />
 								</p>
 							</div>
 						</div>
@@ -23,7 +23,7 @@
 							<label th:text="#{fields.locales}" class="col-sm-8 control-label" />
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/locales/list}" th:text="${authorLocales}" />
+									<a th:href="@{/tiwolij/locales/list(page=0, sort=id)}" th:text="${authorLocales}" />
 								</p>
 							</div>
 						</div>
@@ -42,7 +42,7 @@
 							<label th:text="#{fields.works}" class="col-sm-8 control-label" />
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/works/list}" th:text="${works}" />
+									<a th:href="@{/tiwolij/works/list(page=0, sort=id)}" th:text="${works}" />
 								</p>
 							</div>
 						</div>
@@ -50,7 +50,7 @@
 							<label th:text="#{fields.locales}" class="col-sm-8 control-label" />
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/locales/list}" th:text="${workLocales}" />
+									<a th:href="@{/tiwolij/locales/list(page=0, sort=id)}" th:text="${workLocales}" />
 								</p>
 							</div>
 						</div>
@@ -69,7 +69,7 @@
 							<label th:text="#{fields.quotes}" class="col-sm-8 control-label" />
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/quotes/list}" th:text="${quotes}" />
+									<a th:href="@{/tiwolij/quotes/list(page=0, sort=id)}" th:text="${quotes}" />
 								</p>
 							</div>
 						</div>

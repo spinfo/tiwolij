@@ -2,16 +2,16 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div th:text="#{authors}" class="panel-heading" />
-			<table th:unless="${#lists.isEmpty(authors)}" class="table table-hover">
+			<table th:unless="${#lists.isEmpty(authors)}" th:with="params=${#httpServletRequest.getQueryString()}" class="table table-hover">
 				<thead>
 					<tr>
 						<th>
 							<div th:remove="tag" th:text="#{fields.id}" />
-							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="@{?sort=id}"><span class="caret" /></a>
+							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="'?' + ${params.replaceFirst('sort=[^&amp;]+', 'sort=id')}"><span class="caret" /></a>
 						</th>
 						<th th:each="field : ${fields}">
 							<div th:remove="tag" th:text="#{'fields.' + ${field}}" />
-							<a th:if="${#arrays.contains(sortable, field)}" th:href="@{'?sort=' + ${field}}"><span class="caret" /></a>
+							<a th:if="${#arrays.contains(sortable, field)}" th:href="'?' + ${params.replaceFirst('sort=[^&amp;]+', 'sort=' + __field__)}"><span class="caret" /></a>
 						</th>
 						<th th:text="#{actions}" class="text-right" />
 					</tr>
@@ -22,8 +22,8 @@
 						<div th:each="field : ${fields}" th:remove="tag">
 							<td th:if="${field} == 'slug'" th:text="${#strings.abbreviate(author.slug, 25)}" />
 							<td th:if="${field} == 'image'"><a th:unless="${#lists.isEmpty(author.image)}" target="_blank" th:text="#{actions.view}" th:href="@{/image/author(id=${author.id})}" /></td>
-							<td th:if="${field} == 'works'"><a th:unless="${#lists.isEmpty(author.works)}" th:href="@{/tiwolij/works/list(authorId=${author.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(author.works)} + ')'" /></td>
-							<td th:if="${field} == 'quotes'"><a th:unless="${#lists.isEmpty(author.quotes)}" th:href="@{/tiwolij/quotes/list(authorId=${author.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(author.quotes)} + ')'" /></td>
+							<td th:if="${field} == 'works'"><a th:unless="${#lists.isEmpty(author.works)}" th:href="@{/tiwolij/works/list(authorId=${author.id}, page=0, sort=id)}" th:text="#{actions.list} + ' (' + ${#lists.size(author.works)} + ')'" /></td>
+							<td th:if="${field} == 'quotes'"><a th:unless="${#lists.isEmpty(author.quotes)}" th:href="@{/tiwolij/quotes/list(authorId=${author.id}, page=0, sort=id)}" th:text="#{actions.list} + ' (' + ${#lists.size(author.quotes)} + ')'" /></td>
 							<td th:if="${field} == 'names'" class="child-enum"><div th:each="locale : ${author.locales}" th:text="${#strings.abbreviate(locale.name, 25)} + ' (' + ${locale.language} + ')'" /></td>
 							<td th:if="${field} == 'wikidataId'"><a th:unless="${#strings.isEmpty(author.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${author.wikidataId}" th:text="'Q' + ${author.wikidataId}" /></td>
 						</div>
@@ -47,16 +47,16 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div th:text="#{works}" class="panel-heading" />
-			<table th:unless="${#lists.isEmpty(works)}" class="table table-hover">
+			<table th:unless="${#lists.isEmpty(works)}" th:with="params=${#httpServletRequest.getQueryString()}" class="table table-hover">
 				<thead>
 					<tr>
 						<th>
 							<div th:remove="tag" th:text="#{fields.id}" />
-							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="@{?sort=id}"><span class="caret" /></a>
+							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="'?' + ${params.replaceFirst('sort=[^&amp;]+', 'sort=id')}"><span class="caret" /></a>
 						</th>
 						<th th:each="field : ${fields}">
 							<div th:remove="tag" th:text="#{'fields.' + ${field}}" />
-							<a th:if="${#arrays.contains(sortable, field)}" th:href="@{'?sort=' + ${field}}"><span class="caret" /></a>
+							<a th:if="${#arrays.contains(sortable, field)}" th:href="'?' + ${params.replaceFirst('sort=[^&amp;]+', 'sort=' + __field__)}"><span class="caret" /></a>
 						</th>
 						<th th:text="#{actions}" class="text-right" />
 					</tr>
@@ -67,7 +67,7 @@
 						<div th:each="field : ${fields}" th:remove="tag">
 							<td th:if="${field} == 'slug'" th:text="${#strings.abbreviate(work.slug, 25)}" />
 							<td th:if="${field} == 'author'" th:text="${#strings.abbreviate(work.author.slug, 25)}" />
-							<td th:if="${field} == 'quotes'"><a th:unless="${#lists.isEmpty(work.quotes)}" th:href="@{/tiwolij/quotes/list(workId=${work.id})}" th:text="#{actions.list} + ' (' + ${#lists.size(work.quotes) + ')'}" /></td>
+							<td th:if="${field} == 'quotes'"><a th:unless="${#lists.isEmpty(work.quotes)}" th:href="@{/tiwolij/quotes/list(workId=${work.id}, page=0, sort=id)}" th:text="#{actions.list} + ' (' + ${#lists.size(work.quotes) + ')'}" /></td>
 							<td th:if="${field} == 'names'" class="child-enum"><div th:each="locale : ${work.locales}" th:text="${#strings.abbreviate(locale.name, 25)} + ' (' + ${locale.language} + ')'" /></td>
 							<td th:if="${field} == 'wikidataId'"><a th:unless="${#strings.isEmpty(work.wikidataId)}" target="_blank" th:href="'https://www.wikidata.org/wiki/Q' + ${work.wikidataId}" th:text="'Q' + ${work.wikidataId}" /></td>
 						</div>
@@ -91,16 +91,16 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div th:text="#{quotes}" class="panel-heading" />
-			<table th:unless="${#lists.isEmpty(quotes)}" class="table table-hover">
+			<table th:unless="${#lists.isEmpty(quotes)}" th:with="params=${#httpServletRequest.getQueryString()}" class="table table-hover">
 				<thead>
 					<tr>
 						<th>
 							<div th:remove="tag" th:text="#{fields.id}" />
-							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="@{?sort=id}"><span class="caret" /></a>
+							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="'?' + ${params.replaceFirst('sort=[^&amp;]+', 'sort=id')}"><span class="caret" /></a>
 						</th>
 						<th th:each="field : ${fields}">
 							<div th:remove="tag" th:text="#{'fields.' + ${field}}" />
-							<a th:if="${#arrays.contains(sortable, field)}" th:href="@{'?sort=' + ${field}}"><span class="caret" /></a>
+							<a th:if="${#arrays.contains(sortable, field)}" th:href="'?' + ${params.replaceFirst('sort=[^&amp;]+', 'sort=' + __field__)}"><span class="caret" /></a>
 						</th>
 						<th th:text="#{actions}" class="text-right" />
 					</tr>
@@ -139,16 +139,16 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div th:text="#{locales}" class="panel-heading" />
-			<table th:unless="${#lists.isEmpty(locales)}" class="table table-hover">
+			<table th:unless="${#lists.isEmpty(locales)}" th:with="params=${#httpServletRequest.getQueryString()}" class="table table-hover">
 				<thead>
 					<tr>
 						<th>
 							<div th:remove="tag" th:text="#{fields.id}" />
-							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="@{?sort=id}"><span class="caret" /></a>
+							<a th:if="${#arrays.contains(sortable, 'id')}" th:href="'?' + ${params.replaceFirst('sort=[^&amp;]+', 'sort=id')}"><span class="caret" /></a>
 						</th>
 						<th th:each="field : ${fields}">
 							<div th:remove="tag" th:text="#{'fields.' + ${field}}" />
-							<a th:if="${#arrays.contains(sortable, field)}" th:href="@{'?sort=' + ${field}}"><span class="caret" /></a>
+							<a th:if="${#arrays.contains(sortable, field)}" th:href="'?' + ${params.replaceFirst('sort=[^&amp;]+', 'sort=' + __field__)}"><span class="caret" /></a>
 						</th>
 						<th th:text="#{actions}" class="text-right" />
 					</tr>

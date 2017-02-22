@@ -26,7 +26,7 @@
 						<span class="caret" />
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/authors/list}" th:text="#{authors.list}" /></li>
+						<li><a th:href="@{/tiwolij/authors/list(page=0, sort=id)}" th:text="#{authors.list}" /></li>
 						<li><a th:href="@{/tiwolij/authors/create}" th:text="#{authors.create}" /></li>
 					</ul>
 				</li>
@@ -36,7 +36,7 @@
 						<span class="caret" />
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/works/list}" th:text="#{works.list}" /></li>
+						<li><a th:href="@{/tiwolij/works/list(page=0, sort=id)}" th:text="#{works.list}" /></li>
 						<li><a th:href="@{/tiwolij/works/create}" th:text="#{works.create}" /></li>
 					</ul>
 				</li>
@@ -46,7 +46,7 @@
 						<span class="caret" />
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/quotes/list}" th:text="#{quotes.list}" /></li>
+						<li><a th:href="@{/tiwolij/quotes/list(page=0, sort=id)}" th:text="#{quotes.list}" /></li>
 						<li><a th:href="@{/tiwolij/quotes/create}" th:text="#{quotes.create}" /></li>
 					</ul>
 				</li>
