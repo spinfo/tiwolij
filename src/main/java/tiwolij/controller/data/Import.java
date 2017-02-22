@@ -74,7 +74,7 @@ public class Import {
 
 	@GetMapping({ "", "/" })
 	public ModelAndView root() {
-		ModelAndView mv = new ModelAndView();
+		ModelAndView mv = new ModelAndView("backend/data/import");
 
 		return mv;
 	}
@@ -259,7 +259,7 @@ public class Import {
 		ModelAndView mv = new ModelAndView("backend/data/review");
 
 		if (session.getAttribute("results") == null && session.getAttribute("errors") == null) {
-			return new ModelAndView("redirect:/tiwolij/data/import/tsv");
+			return new ModelAndView("redirect:/tiwolij/data/import");
 		}
 
 		mv.addObject("results", session.getAttribute("results"));
@@ -272,7 +272,7 @@ public class Import {
 		ModelAndView mv = new ModelAndView("backend/data/report");
 
 		if (session.getAttribute("results") == null && session.getAttribute("errors") == null) {
-			return new ModelAndView("redirect:/tiwolij/data/import/tsv");
+			return new ModelAndView("redirect:/tiwolij/data/import");
 		}
 
 		List<Quote> imports = new ArrayList<Quote>();

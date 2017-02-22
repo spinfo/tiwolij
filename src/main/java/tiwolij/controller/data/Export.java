@@ -43,6 +43,13 @@ public class Export {
 	@Autowired
 	private TiwoliChirp chirper;
 
+	@GetMapping({ "", "/" })
+	public ModelAndView root() {
+		ModelAndView mv = new ModelAndView("backend/data/export");
+
+		return mv;
+	}
+
 	@GetMapping("/json")
 	public ModelAndView json() {
 		ModelAndView mv = new ModelAndView("backend/data/export_json");
