@@ -8,6 +8,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -271,7 +272,8 @@ public class WikidataRepository {
 					license = StringUtils.abbreviate(license.replaceAll("\\<[^>]*>", ""), 100);
 				}
 
-				imageAttribution = artist + " (" + license + ")";
+				imageAttribution = StringEscapeUtils.unescapeHtml4(artist) + " ("
+						+ StringEscapeUtils.unescapeHtml4(license) + ")";
 			}
 		} catch (Exception e) {
 		}
