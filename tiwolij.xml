@@ -105,6 +105,23 @@
 		<Arg>
 			<Ref refid='tiwolij' />
 		</Arg>
+		<Arg>spring.http.multipart.max-file-size</Arg>
+		<Arg type="java.lang.String">200MB</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg>
+			<Ref refid='tiwolij' />
+		</Arg>
+		<Arg>spring.http.multipart.max-request-size</Arg>
+		<Arg type="java.lang.String">200MB</Arg>
+		<Arg type="boolean">true</Arg>
+	</New>
+
+	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
+		<Arg>
+			<Ref refid='tiwolij' />
+		</Arg>
 		<Arg>logging.level.org.springframework</Arg>
 		<Arg type="java.lang.String">WARN</Arg>
 		<Arg type="boolean">true</Arg>
