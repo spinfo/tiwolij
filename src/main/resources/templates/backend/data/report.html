@@ -6,8 +6,52 @@
 <body id="backend">
 	<div class="container">
 		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span th:remove="tag" th:text="#{data.import.report}" />
+						<a th:text="#{data.clear}" th:href="@{/tiwolij/data/import/clear}" class="pull-right btn btn-xs btn-danger" />
+					</div>
+				</div>
+			</div>
+		</section>
 		<section th:replace="../elements/lists :: listErrors(${errors})" />
-		<section th:replace="../elements/lists :: listQuotes(${quotes}, ${new String[] {'language', 'schedule', 'corpus', 'source', 'meta'}}, '')" />
+		<section th:unless="${#maps.isEmpty(results)}" class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{fields.quotes}" class="panel-heading" />
+					<form class="form-horizontal" method="post">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th th:text="#{fields.line}" />
+									<th th:text="#{fields.language}" />
+									<th th:text="#{fields.schedule}" />
+									<th th:text="#{fields.author}" />
+									<th th:text="#{fields.work}" />
+									<th th:text="#{fields.corpus}" />
+									<th th:text="#{fields.source}" class="text-center" />
+									<th th:text="#{fields.meta}" />
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="element : ${results}" th:with="line=${element.key}, quote=${element.value}, work=${element.value.work}, workName=${#strings.abbreviate(element.value.work.slug, 25)}, author=${element.value.work.author}, authorName=${#strings.abbreviate(element.value.work.author.slug, 25)}, year=${#strings.isEmpty(element.value.year)} ? '' : '-' + ${element.value.year}, time=${#strings.isEmpty(element.value.time)} ? '' : ' ' + ${element.value.time}">
+									<td th:text="${line}" />
+									<td th:text="${quote.language}" />
+									<td th:text="${quote.schedule} + ${year} + ${time}" />
+									<td><a th:remove="${#strings.isEmpty(author.wikidataId)} ? tag" th:href="@{https://www.wikidata.org/wiki/Q} + ${author.wikidataId}" th:text="${authorName}" target="_blank" /></td>
+									<td><a th:remove="${#strings.isEmpty(work.wikidataId)} ? tag" th:href="@{https://www.wikidata.org/wiki/Q} + ${work.wikidataId}" th:text="${workName}" target="_blank" /></td>
+									<td th:text="${#strings.abbreviate(quote.corpus, 25)}" />
+									<td class="text-center"><a th:unless="${#strings.isEmpty(quote.href)}" th:text="#{actions.view}" th:href="${quote.href}" target="_blank" /></td>
+									<td th:text="${quote.meta}" />
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</section>
 	</div>
 	<footer th:replace="../elements/blocks :: footer" />
 </body>

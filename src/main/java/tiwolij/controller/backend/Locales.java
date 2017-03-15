@@ -49,7 +49,7 @@ public class Locales {
 			page = locales.getAll(pageable);
 		}
 
-		mv.addObject("locales", page);
+		mv.addObject("page", page);
 		return mv;
 	}
 

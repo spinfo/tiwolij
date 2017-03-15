@@ -7,44 +7,44 @@ $(document).ready(function() {
 		var row = $(this).closest('tr');
 
 		if (confirm(MESSAGES_BACKEND_CONFIRM))
-			$.ajax(url).done(row.remove());
+		$.ajax(url).done(row.remove());
 	});
 
-	$('button#submit[formaction^="/tiwolij/data/import/"]').closest('form').submit(function(e) {
+	$('button#submit[formaction]').closest('form').submit(function(e) {
+		$(this).find('button#submit').attr('disabled', true);
 		e.preventDefault();
 
-		var form = new FormData(this);
-		var bar = $('<div class="progress"><div id="bar" class="progress-bar" style="width: 0%;">');
-		var txt = $('<p id="txt" class="lead">Please wait</p>')
+		$.ajax({
+			url: $(this).find('button#submit').attr('formaction'),
+			method: $(this).attr('method'),
+			data: new FormData(this),
+			processData: false,
+			contentType: false
+		});
 
 		var progress = window.setInterval(function() {
 			$.get('/tiwolij/data/import/progress', function(data) {
-				if ($('#bar').length > 0) {
-					if (data.indexOf(':') !== -1) {
-						$('#txt').text('Processing ' + data.split(':')[0]);
-						$('#bar').addClass('progress-bar-striped active').css('width', data.split(':')[1] + '%');
-					} else {
-						$('#txt').text('Please wait');
-						$('#bar').removeClass('progress-bar-striped active').css('width', '0%');
-					}
-				} else {
+				if ($(data).find('#bar').length > 0) {
 					clearInterval(progress);
+					$.get('/tiwolij/data/import/process');
+					window.location.replace('/tiwolij/data/import/progress');
 				}
 			});
 		}, 250);
-
-		$(this).find('#submit').closest('.panel-footer').remove();
-		$(this).find('.panel-body').empty().append(txt, bar);
-
-		$.ajax({
-	    url: $(this).attr('formaction'),
-	    method: 'POST',
-	    data: form,
-	    processData: false,
-	    contentType: false,
-		}).done(function(data) {
-			$('#backend > .container').replaceWith($(data).filter('.container'));
-		});
 	});
+
+	if ($('#bar').length > 0) {
+		var progress = window.setInterval(function() {
+			$.get('/tiwolij/data/import/progress', function(data) {
+				if ($(data).find('#bar').length > 0) {
+					$('#txt').text($(data).find('#txt').text());
+					$('#bar').addClass('progress-bar-striped active').css('width', $(data).find('#bar').css('width'));
+				} else {
+					clearInterval(progress);
+					window.location.replace('/tiwolij/data/import/progress');
+				}
+			});
+		}, 250);
+	}
 
 });

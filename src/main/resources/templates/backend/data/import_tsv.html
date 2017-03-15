@@ -22,7 +22,7 @@
 							<div th:replace="../elements/fields :: fieldSelect('forcelang', false, ${languages}, '', '')" />
 						</div>
 						<div class="panel-footer text-right">
-							<button id="submit" th:text="#{data.import.tsv}" th:formaction="@{/tiwolij/data/import/tsv}" type="submit" class="btn btn-sm btn-success" />
+							<button th:text="#{data.import.tsv}" th:formaction="@{/tiwolij/data/import/tsv}" id="submit" type="submit" class="btn btn-sm btn-success" />
 						</div>
 					</form>
 				</div>

@@ -19,21 +19,20 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.ObjectUtils;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import tiwolij.util.StringEncoding;
 
 @Entity
 @Table(name = "authors")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Author.class)
 public class Author implements Serializable {
 
 	private static final long serialVersionUID = -5590869234980268995L;
 
 	@Id
 	@GeneratedValue
+	@JsonIgnore
 	private Integer id;
 
 	@Column(nullable = false)
@@ -45,10 +44,11 @@ public class Author implements Serializable {
 	private String imageAttribution;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-	@JsonBackReference(value = "works")
+	@JsonBackReference("work")
 	private List<Work> works;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+	@JsonManagedReference("author_locale")
 	private List<Locale> locales;
 
 	@OneToOne(mappedBy = "author", cascade = CascadeType.ALL)

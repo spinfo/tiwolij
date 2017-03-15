@@ -13,12 +13,12 @@ public interface LocaleRepository extends PagingAndSortingRepository<Locale, Int
 
 	@Query("SELECT COUNT(x) FROM Locale x WHERE x.author IS NOT NULL")
 	public Long countByAuthors();
-	
+
 	public Long countByAuthorId(Integer authorId);
 
 	@Query("SELECT COUNT(x) FROM Locale x WHERE x.work IS NOT NULL")
 	public Long countByWorks();
-	
+
 	public Long countByWorkId(Integer workId);
 
 	public Locale findOneById(Integer localeId);

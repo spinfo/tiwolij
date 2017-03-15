@@ -10,19 +10,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 @Entity
 @Table(name = "wikidataids")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = WikidataId.class)
 public class WikidataId implements Serializable {
 
 	private static final long serialVersionUID = 8407720903534196950L;
 
 	@Id
 	@GeneratedValue
+	@JsonIgnore
 	private Integer id;
 
 	@Column(nullable = false)

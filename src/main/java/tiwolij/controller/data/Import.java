@@ -2,8 +2,8 @@ package tiwolij.controller.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
@@ -75,6 +73,10 @@ public class Import {
 	@GetMapping({ "", "/" })
 	public ModelAndView root() {
 		ModelAndView mv = new ModelAndView("backend/data/import");
+
+		if (session.getAttribute("progress") != null) {
+			return new ModelAndView("redirect:/tiwolij/data/import/progress");
+		}
 
 		return mv;
 	}
@@ -132,7 +134,7 @@ public class Import {
 
 			return "redirect:/tiwolij/works/view?workId=" + works.save(work).getId();
 		} else {
-			return "redirect:/tiwolij/";
+			throw new NoSuchEntityErrorException("No Wikidata ID given");
 		}
 	}
 
@@ -141,7 +143,7 @@ public class Import {
 		ModelAndView mv = new ModelAndView("backend/data/import_json");
 
 		if (session.getAttribute("progress") != null) {
-			throw new IllegalStateException("Import already running");
+			return new ModelAndView("redirect:/tiwolij/data/import/progress");
 		}
 
 		mv.addObject("encodings", new String[] { "UTF-8", "UTF-16", "US-ASCII", "cp1252" });
@@ -149,19 +151,49 @@ public class Import {
 	}
 
 	@PostMapping("/json")
-	public String json(@RequestParam("file") MultipartFile file,
-			@RequestParam(name = "review", defaultValue = "false") Boolean review) throws Exception {
+	public String json(@RequestParam(name = "review", defaultValue = "false") Boolean review,
+			@RequestParam(name = "wikidata", defaultValue = "false") Boolean wikifill,
+			@RequestParam(name = "heideltag", defaultValue = "false") Boolean heideltag,
+			@RequestParam(name = "levensthein", defaultValue = "false") Boolean levensthein,
+			@RequestParam("file") MultipartFile file) throws Exception {
+
+		if (session.getAttribute("progress") != null) {
+			return "redirect:/tiwolij/data/import/progress";
+		}
+
+		AtomicInteger key = new AtomicInteger();
 		ObjectMapper mapper = new ObjectMapper();
+
+		session.setAttribute("progress", "json");
 		List<Quote> list = mapper.readValue(file.getBytes(), new TypeReference<List<Quote>>() {
 		});
 
-		list.stream().forEach(i -> i.setId(null).getWork().setId(null).getAuthor().setId(null));
+		Map<Integer, Quote> results = list.stream()
+				.collect(Collectors.toMap(i -> key.incrementAndGet(), i -> i.setId(null)));
+		Map<Integer, Exception> errors = new HashMap<Integer, Exception>();
 
-		AtomicInteger key = new AtomicInteger();
-		Map<Integer, Quote> results = list.stream().collect(Collectors.toMap(i -> key.incrementAndGet(), i -> i));
+		if (wikifill) {
+			wikifill(results, errors);
+		}
+
+		if (heideltag) {
+			heideltag(results, errors);
+		}
+
+		if (levensthein) {
+			levensthein(results, errors);
+		}
+
 		session.setAttribute("results", results);
+		session.setAttribute("errors", errors);
 
-		return (review) ? "redirect:/tiwolij/data/import/review" : "redirect:/tiwolij/data/import/report";
+		if (review) {
+			session.setAttribute("progress", "review");
+			return "redirect:/tiwolij/data/import/review";
+		} else {
+			session.setAttribute("progress", "process");
+			return "redirect:/tiwolij/data/import/process";
+		}
 	}
 
 	@GetMapping("/tsv")
@@ -169,7 +201,7 @@ public class Import {
 		ModelAndView mv = new ModelAndView("backend/data/import_tsv");
 
 		if (session.getAttribute("progress") != null) {
-			throw new IllegalStateException("Import already running");
+			return new ModelAndView("redirect:/tiwolij/data/import/progress");
 		}
 
 		mv.addObject("encodings", new String[] { "UTF-8", "UTF-16", "US-ASCII", "cp1252" });
@@ -179,13 +211,17 @@ public class Import {
 	}
 
 	@PostMapping("/tsv")
-	public String tsv(@RequestParam("file") MultipartFile file, @RequestParam("format") String format,
-			@RequestParam("encoding") String encoding,
+	public String tsv(@RequestParam(name = "review", defaultValue = "false") Boolean review,
+			@RequestParam(name = "forcelang", defaultValue = "") String forcelang,
 			@RequestParam(name = "wikidata", defaultValue = "false") Boolean wikifill,
 			@RequestParam(name = "heideltag", defaultValue = "false") Boolean heideltag,
 			@RequestParam(name = "levensthein", defaultValue = "false") Boolean levensthein,
-			@RequestParam(name = "review", defaultValue = "false") Boolean review,
-			@RequestParam(name = "forcelang", defaultValue = "") String forcelang) throws Exception {
+			@RequestParam("format") String format, @RequestParam("encoding") String encoding,
+			@RequestParam("file") MultipartFile file) throws Exception {
+
+		if (session.getAttribute("progress") != null) {
+			return "redirect:/tiwolij/data/import/progress";
+		}
 
 		session.setAttribute("progress", "tsv");
 		tsv.process(encoding, Arrays.asList(format.split(";")), forcelang, file.getBytes());
@@ -194,72 +230,39 @@ public class Import {
 		Map<Integer, Exception> errors = tsv.getErrors();
 
 		if (wikifill) {
-			Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
-
-			Integer count = 0;
-			Integer total = results.values().size();
-			session.setAttribute("progress", "wikidata:" + count);
-
-			while (iter.hasNext()) {
-				session.setAttribute("progress", "wikidata:" + (new Float(count++) / total * 100));
-				Quote i = iter.next().getValue();
-
-				wikidata.getQuote(i);
-			}
+			wikifill(results, errors);
 		}
 
 		if (heideltag) {
-			Heideltimer timer = new Heideltimer();
-			Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
-
-			Integer count = 0;
-			Integer total = results.values().size();
-			session.setAttribute("progress", "heideltag:" + count);
-
-			while (iter.hasNext()) {
-				session.setAttribute("progress", "heideltag:" + (new Float(count++) / total * 100));
-				Quote i = iter.next().getValue();
-
-				i.setYear((!i.hasYear()) ? timer.getYear(i) : i.getYear());
-				i.setTime((!i.hasTime()) ? timer.getTime(i) : i.getTime());
-			}
+			heideltag(results, errors);
 		}
 
 		if (levensthein) {
-			List<Quote> existing = quotes.getAll();
-			Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
-			Integer distance = env.getProperty("tiwolij.import.levenshtein", Integer.class);
-
-			Integer count = 0;
-			Integer total = results.values().size();
-			session.setAttribute("progress", "levensthein:" + count);
-
-			while (iter.hasNext()) {
-				session.setAttribute("progress", "levensthein:" + (new Float(count++) / total * 100));
-				Entry<Integer, Quote> i = iter.next();
-
-				existing.stream().filter(j -> i.getValue().getSchedule().equals(j.getSchedule())).forEach(k -> {
-					if (StringUtils.getLevenshteinDistance(i.getValue().getCorpus(), k.getCorpus()) < distance) {
-						errors.put(i.getKey(), new DuplicateKeyException("Duplicate quote"));
-						iter.remove();
-					}
-				});
-			}
+			levensthein(results, errors);
 		}
 
-		session.removeAttribute("progress");
 		session.setAttribute("results", results);
 		session.setAttribute("errors", errors);
 
-		return (review) ? "redirect:/tiwolij/data/import/review" : "redirect:/tiwolij/data/import/report";
+		if (review) {
+			session.setAttribute("progress", "review");
+			return "redirect:/tiwolij/data/import/review";
+		} else {
+			session.setAttribute("progress", "process");
+			return "redirect:/tiwolij/data/import/process";
+		}
 	}
 
 	@GetMapping("review")
 	public ModelAndView review() {
 		ModelAndView mv = new ModelAndView("backend/data/review");
 
-		if (session.getAttribute("results") == null && session.getAttribute("errors") == null) {
-			return new ModelAndView("redirect:/tiwolij/data/import");
+		if ((String) session.getAttribute("progress") != "review") {
+			if (session.getAttribute("results") == null && session.getAttribute("errors") == null) {
+				return new ModelAndView("redirect:/tiwolij/data/import");
+			} else {
+				return new ModelAndView("redirect:/tiwolij/data/import/report");
+			}
 		}
 
 		mv.addObject("results", session.getAttribute("results"));
@@ -267,87 +270,197 @@ public class Import {
 		return mv;
 	}
 
-	@RequestMapping("report")
-	public ModelAndView report(@RequestParam(value = "lines[]", defaultValue = "") Set<Integer> lines) {
-		ModelAndView mv = new ModelAndView("backend/data/report");
-
+	@RequestMapping("process")
+	public String process(@RequestParam(value = "lines[]", defaultValue = "") Set<Integer> lines) {
 		if (session.getAttribute("results") == null && session.getAttribute("errors") == null) {
-			return new ModelAndView("redirect:/tiwolij/data/import");
+			return "redirect:/tiwolij/data/import";
 		}
 
-		List<Quote> imports = new ArrayList<Quote>();
-		Map<Integer, Quote> results = (LinkedHashMap<Integer, Quote>) session.getAttribute("results");
-		Map<Integer, Exception> errors = (LinkedHashMap<Integer, Exception>) session.getAttribute("errors");
+		Map<Integer, Quote> results = (HashMap<Integer, Quote>) session.getAttribute("results");
+		Map<Integer, Exception> errors = (HashMap<Integer, Exception>) session.getAttribute("errors");
 
-		session.removeAttribute("results");
-		session.removeAttribute("errors");
-
-		List<Integer> lineList = new ArrayList<Integer>(results.keySet());
-		Integer lastLine = lineList.get(lineList.size() - 1);
-
-		if (lines.isEmpty()) {
-			lines = results.keySet();
-		}
+		lines = (lines.isEmpty()) ? results.keySet() : lines;
+		results = (results == null) ? new HashMap<Integer, Quote>() : results;
+		errors = (errors == null) ? new HashMap<Integer, Exception>() : errors;
+		Integer last = lines.toArray(new Integer[lines.size()])[lines.size() - 1];
 
 		for (Integer i : lines) {
 			try {
-				session.setAttribute("progress", "import:" + (new Float(i) / lastLine * 100));
+				session.setAttribute("progress", "import:" + (new Float(i) / last * 100));
 
 				Quote quote = results.get(i);
 				Author author = quote.getAuthor();
 				Work work = quote.getWork();
 
-				Locale authorLocale = author.getLocales().iterator().next();
-				Locale workLocale = work.getLocales().iterator().next();
+				List<Locale> authorLocales = (author.hasLocales()) ? author.getLocales() : new ArrayList<Locale>();
+				List<Locale> workLocales = (work.hasLocales()) ? work.getLocales() : new ArrayList<Locale>();
 
 				author.setLocales(null);
 				work.setLocales(null);
 
 				if (authors.existsByWikidataId(author.getWikidataId())) {
 					author = authors.getOneByWikidataId(author.getWikidataId()).merge(author);
-					author.addLocale(wikidata.getLocale(author.getWikidataId(), authorLocale.getLanguage()));
+					for (Locale j : authorLocales) {
+						if (!author.hasLocale(j.getLanguage())) {
+							author.addLocale(wikidata.getLocale(author.getWikidataId(), j.getLanguage()));
+						}
+					}
 				} else if (authors.existsBySlug(author.getSlug())) {
 					author = authors.getOneBySlug(author.getSlug()).merge(author);
-					author.addLocale(authorLocale);
+					for (Locale j : authorLocales) {
+						if (!author.hasLocale(j.getLanguage())) {
+							author.addLocale(j);
+						}
+					}
 				} else {
-					author.addLocale(authorLocale);
+					for (Locale j : authorLocales) {
+						if (!author.hasLocale(j.getLanguage())) {
+							author.addLocale(j);
+						}
+					}
 				}
 
 				if (works.existsByWikidataId(work.getWikidataId())) {
 					work = works.getOneByWikidataId(work.getWikidataId()).merge(work);
-					work.addLocale(wikidata.getLocale(work.getWikidataId(), workLocale.getLanguage()));
+					for (Locale j : workLocales) {
+						if (!work.hasLocale(j.getLanguage())) {
+							work.addLocale(wikidata.getLocale(work.getWikidataId(), j.getLanguage()));
+						}
+					}
 				} else if (works.existsBySlug(work.getSlug())) {
 					work = works.getOneBySlug(work.getSlug()).merge(work);
-					work.addLocale(workLocale);
+					for (Locale j : workLocales) {
+						if (!work.hasLocale(j.getLanguage())) {
+							work.addLocale(j);
+						}
+					}
 				} else {
-					work.addLocale(workLocale);
+					for (Locale j : workLocales) {
+						if (!work.hasLocale(j.getLanguage())) {
+							work.addLocale(j);
+						}
+					}
 				}
 
 				entityManager.clear();
-				author = authors.save(author);
-				work = works.save(work.setAuthor(author));
-				quote = quotes.save(quote.setWork(work));
-
-				imports.add(quote);
+				authors.save(author);
+				works.save(work.setAuthor(author));
+				quotes.save(quote.setWork(work));
+				results.replace(i, quote);
 			} catch (Exception e) {
+				results.remove(i);
 				errors.put(i, e);
-				e.printStackTrace();
 			}
 		}
 
+		session.setAttribute("results", results);
+		session.setAttribute("errors", errors);
 		session.removeAttribute("progress");
 
-		mv.addObject("quotes", imports);
+		return "redirect:/tiwolij/data/import/report";
+	}
+
+	@GetMapping("progress")
+	public ModelAndView progress() throws Exception {
+		ModelAndView mv = new ModelAndView("backend/data/progress");
+
+		if (session.getAttribute("progress") == null) {
+			if (session.getAttribute("results") == null && session.getAttribute("errors") == null) {
+				return new ModelAndView("redirect:/tiwolij/data/import");
+			} else {
+				return new ModelAndView("redirect:/tiwolij/data/import/report");
+			}
+		} else if ((String) session.getAttribute("progress") == "review") {
+			return new ModelAndView("redirect:/tiwolij/data/import/review");
+		} else if ((String) session.getAttribute("progress") == "process") {
+			return new ModelAndView("redirect:/tiwolij/data/import/process");
+		}
+
+		mv.addObject("progress", session.getAttribute("progress"));
+		return mv;
+	}
+
+	@RequestMapping("report")
+	public ModelAndView report() {
+		ModelAndView mv = new ModelAndView("backend/data/report");
+
+		if (session.getAttribute("progress") != null) {
+			return new ModelAndView("redirect:/tiwolij/data/import/progress");
+		}
+
+		if (session.getAttribute("results") == null && session.getAttribute("errors") == null) {
+			return new ModelAndView("redirect:/tiwolij/data/import");
+		}
+
+		Map<Integer, Quote> results = (HashMap<Integer, Quote>) session.getAttribute("results");
+		Map<Integer, Exception> errors = (HashMap<Integer, Exception>) session.getAttribute("errors");
+
+		mv.addObject("results", results);
 		mv.addObject("errors", errors);
 		return mv;
 	}
 
-	@ResponseBody
-	@GetMapping("progress")
-	public String progress(HttpServletResponse response) throws Exception {
-		String progress = (String) session.getAttribute("progress");
-		response.setContentType("text/plain");
-		return (progress == null) ? "null" : progress;
+	@GetMapping("clear")
+	public String clear() {
+		session.removeAttribute("results");
+		session.removeAttribute("errors");
+		session.removeAttribute("progress");
+
+		return "redirect:/tiwolij/data/import";
+	}
+
+	private void wikifill(Map<Integer, Quote> results, Map<Integer, Exception> errors) {
+		Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
+
+		Integer count = 0;
+		Integer total = results.values().size();
+		session.setAttribute("progress", "wikidata:" + count);
+
+		while (iter.hasNext()) {
+			session.setAttribute("progress", "wikidata:" + (new Float(count++) / total * 100));
+			Quote i = iter.next().getValue();
+
+			wikidata.getQuote(i);
+		}
+	}
+
+	private void heideltag(Map<Integer, Quote> results, Map<Integer, Exception> errors) {
+		Heideltimer timer = new Heideltimer();
+		Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
+
+		Integer count = 0;
+		Integer total = results.values().size();
+		session.setAttribute("progress", "heideltag:" + count);
+
+		while (iter.hasNext()) {
+			session.setAttribute("progress", "heideltag:" + (new Float(count++) / total * 100));
+			Quote i = iter.next().getValue();
+
+			i.setYear((!i.hasYear()) ? timer.getYear(i) : i.getYear());
+			i.setTime((!i.hasTime()) ? timer.getTime(i) : i.getTime());
+		}
+	}
+
+	private void levensthein(Map<Integer, Quote> results, Map<Integer, Exception> errors) {
+		List<Quote> existing = quotes.getAll();
+		Iterator<Entry<Integer, Quote>> iter = results.entrySet().iterator();
+		Integer distance = env.getProperty("tiwolij.import.levenshtein", Integer.class);
+
+		Integer count = 0;
+		Integer total = results.values().size();
+		session.setAttribute("progress", "levensthein:" + count);
+
+		while (iter.hasNext()) {
+			session.setAttribute("progress", "levensthein:" + (new Float(count++) / total * 100));
+			Entry<Integer, Quote> i = iter.next();
+
+			existing.stream().filter(j -> i.getValue().getSchedule().equals(j.getSchedule())).forEach(k -> {
+				if (StringUtils.getLevenshteinDistance(i.getValue().getCorpus(), k.getCorpus()) < distance) {
+					errors.put(i.getKey(), new DuplicateKeyException("Duplicate quote"));
+					iter.remove();
+				}
+			});
+		}
 	}
 
 }

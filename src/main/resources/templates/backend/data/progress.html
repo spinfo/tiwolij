@@ -1,0 +1,29 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head th:replace="../elements/blocks :: header(title=#{data.import})" />
+
+<body id="backend">
+	<div class="container">
+		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div th:text="#{data.import}" class="panel-heading" />
+					<div class="panel-body">
+						<noscript>
+							<meta itemprop="refresh" http-equiv="refresh" content="5" />
+						</noscript>
+						<p id="txt" class="lead" th:text="'Processing ' + ${#strings.substringBefore(progress, ':')}" />
+						<div class="progress">
+							<div id="bar" class="progress-bar" th:style="'width:' + ${#strings.substringAfter(progress, ':')} + '%;'" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<footer th:replace="../elements/blocks :: footer" />
+</body>
+
+</html>

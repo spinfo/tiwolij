@@ -6,10 +6,20 @@
 <body id="backend">
 	<div class="container">
 		<nav th:replace="../elements/navbar" />
+		<section class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<span th:remove="tag" th:text="#{data.import.report}" />
+						<a th:text="#{data.clear}" th:href="@{/tiwolij/data/import/clear}" class="pull-right btn btn-xs btn-danger" />
+					</div>
+				</div>
+			</div>
+		</section>
 		<section th:replace="../elements/lists :: listErrors(${errors})" />
 		<section th:unless="${#maps.isEmpty(results)}" class="row">
 			<div class="col-md-12">
-				<div class="panel panel-success">
+				<div class="panel panel-default">
 					<div th:text="#{fields.quotes}" class="panel-heading" />
 					<form class="form-horizontal" method="post">
 						<table class="table table-hover">
@@ -41,7 +51,7 @@
 							</tbody>
 						</table>
 						<div class="panel-footer text-right">
-							<button th:text="#{data.import}" th:formaction="@{/tiwolij/data/import/report}" type="submit" class="btn btn-sm btn-success" />
+							<button th:text="#{data.import}" th:formaction="@{/tiwolij/data/import/process}" id="submit" type="submit" class="btn btn-sm btn-success" />
 						</div>
 					</form>
 				</div>

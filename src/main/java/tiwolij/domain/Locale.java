@@ -10,18 +10,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "locales")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Locale.class)
 public class Locale implements Serializable {
 
 	private static final long serialVersionUID = 6517072584087211218L;
 
 	@Id
 	@GeneratedValue
+	@JsonIgnore
 	private Integer id;
 
 	@Column(nullable = false)
@@ -34,10 +34,12 @@ public class Locale implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "author_id")
+	@JsonBackReference("author_locale")
 	private Author author;
 
 	@ManyToOne
 	@JoinColumn(name = "work_id")
+	@JsonBackReference("work_locale")
 	private Work work;
 
 	public Locale() {

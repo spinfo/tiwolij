@@ -23,9 +23,9 @@ public interface WorkRepository extends PagingAndSortingRepository<Work, Integer
 	public List<Work> findAllByAuthorId(Integer authorId);
 
 	public Page<Work> findAllByAuthorId(Pageable pageable, Integer authorId);
-	
+
 	public List<Work> findAllByLocalesNameContainingIgnoreCase(String term);
-	
+
 	public Page<Work> findAllByLocalesNameContainingIgnoreCase(Pageable pageable, String term);
 
 }

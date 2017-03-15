@@ -45,8 +45,12 @@ public class Heideltag {
 	@GetMapping({ "", "/" })
 	public ModelAndView root() {
 		ModelAndView mv = new ModelAndView("backend/data/heideltag");
-		Locale locale = LocaleContextHolder.getLocale();
 
+		if (session.getAttribute("progress") != null) {
+			return new ModelAndView("redirect:/tiwolij/data/import/progress");
+		}
+
+		Locale locale = LocaleContextHolder.getLocale();
 		List<Pair<String, String>> months = new ArrayList<Pair<String, String>>();
 		for (Integer i = 1; i <= 12; i++) {
 			months.add(Pair.of(String.format("%02d", i),
@@ -63,6 +67,11 @@ public class Heideltag {
 			@RequestParam(name = "onlylang", defaultValue = "") String onlylang,
 			@RequestParam(name = "onlymonth", defaultValue = "") String onlymonth) throws Exception {
 		ModelAndView mv = new ModelAndView("backend/data/report");
+
+		if (session.getAttribute("progress") != null) {
+			return new ModelAndView("redirect:/tiwolij/data/import/progress");
+		}
+
 		List<Quote> list = quotes.getAll();
 
 		if (onlyfinal) {

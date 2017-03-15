@@ -20,21 +20,20 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.ObjectUtils;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import tiwolij.util.StringEncoding;
 
 @Entity
 @Table(name = "works")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id", scope = Work.class)
 public class Work implements Serializable {
 
 	private static final long serialVersionUID = -2333662636408115444L;
 
 	@Id
 	@GeneratedValue
+	@JsonIgnore
 	private Integer id;
 
 	@Column(nullable = false)
@@ -45,10 +44,11 @@ public class Work implements Serializable {
 	private Author author;
 
 	@OneToMany(mappedBy = "work", cascade = CascadeType.ALL)
-	@JsonBackReference(value = "quotes")
+	@JsonBackReference("quote")
 	private List<Quote> quotes;
 
 	@OneToMany(mappedBy = "work", cascade = CascadeType.ALL)
+	@JsonManagedReference("work_locale")
 	private List<Locale> locales;
 
 	@OneToOne(mappedBy = "work", cascade = CascadeType.ALL)

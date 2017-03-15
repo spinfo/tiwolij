@@ -13,10 +13,13 @@
 					<form enctype="multipart/form-data" class="form-horizontal" method="post">
 						<div class="panel-body">
 							<div th:replace="../elements/fields :: fieldInput('file', true, 'file', '', '')" />
+							<div th:replace="../elements/fields :: fieldCheckbox('wikidata')" />
+							<div th:replace="../elements/fields :: fieldCheckbox('heideltag')" />
+							<div th:replace="../elements/fields :: fieldCheckbox('levensthein')" />
 							<div th:replace="../elements/fields :: fieldCheckbox('review')" />
 						</div>
 						<div class="panel-footer text-right">
-							<button th:text="#{data.import.json}" th:formaction="@{/tiwolij/data/import/json}" type="submit" class="btn btn-sm btn-success" />
+							<button th:text="#{data.import.json}" th:formaction="@{/tiwolij/data/import/json}" id="submit" type="submit" class="btn btn-sm btn-success" />
 						</div>
 					</form>
 				</div>

@@ -6,7 +6,7 @@
 <body id="backend">
 	<div class="container">
 		<nav th:replace="../elements/navbar" />
-		<section th:replace="../elements/lists :: listLocales(${locales}, ${new String[] {'parent', 'language', 'name', 'source'}}, ${new String[] {'id', 'parent', 'language'}})" />
+		<section th:replace="../elements/lists :: listLocales(${page.content}, ${new String[] {'parent', 'language', 'name', 'source'}}, ${new String[] {'id', 'parent', 'language'}})" />
 	</div>
 	<footer th:replace="../elements/blocks :: footer" />
 </body>

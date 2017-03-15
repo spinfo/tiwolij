@@ -47,12 +47,14 @@ public class Image {
 	public void author(@RequestParam(name = "id") Integer authorId, HttpServletResponse response) throws Exception {
 		if (!authors.existsById(authorId)) {
 			response.sendRedirect("/img/tiwoli.png");
+			return;
 		}
 
 		Author author = authors.getOneById(authorId);
 
 		if (author == null || !author.hasImage()) {
 			response.sendRedirect("/img/tiwoli.png");
+			return;
 		}
 
 		response.setContentType("image/jpeg");
