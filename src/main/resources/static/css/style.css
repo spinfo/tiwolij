@@ -4,7 +4,8 @@
 
 body {
     padding: 15px 0;
-    background-color: lightgrey;
+		background-image: url('/img/papertile.jpg');
+		/*overflow-x: hidden;*/
 }
 
 /*
@@ -46,10 +47,9 @@ body {
 }
 #frontend #inner {
     margin: auto;
-    width: 900px;
     max-width: 100vw;
     padding: 20px;
-    background-color: lightgrey;
+    /*background-color: lightgrey;*/
 }
 #frontend #head {
     display: flex;
@@ -58,12 +58,13 @@ body {
     flex-wrap: wrap;
     justify-content: space-around;
     text-align: center;
-    background-color: darkgrey;
+    /*background-color: darkgrey;*/
 }
 #frontend #head h1 {
     margin: 0;
     order: -1;
     flex-basis: 100%;
+		font-weight: bold;
 }
 #frontend #head a {
     margin: 10px;
@@ -73,7 +74,7 @@ body {
     flex-flow: column;
     justify-content: space-around;
     text-align: center;
-    background-color: darkgrey;
+    /*background-color: darkgrey;*/
 }
 #frontend #meta> * {
     padding: 10px 0;
@@ -116,9 +117,10 @@ body {
     margin: 20px 0;
 }
 #frontend #index .image, #frontend #view .image {
-    flex-basis: 0;
+		position: relative;
+		flex-basis: 0;
     flex-grow: 1;
-		background-color: darkgrey;
+		/*background-color: darkgrey;*/
 		/*border: 5px solid darkgrey;*/
 }
 #frontend #index .intro, #frontend #view .corpus {
@@ -136,14 +138,18 @@ body {
     padding: 5px;
 		/*border: 5px solid darkgrey;*/
 }
-#frontend #index .image p, #frontend #view .image p {
-		font-size: smaller;
-		text-align: center;
+#frontend #index .image .attribution, #frontend #view .image .attribution {
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+	font-size: smaller;
+	text-align: center;
+	background-color: rgba(255, 255, 255, .75);
 }
 #frontend #index .intro .heatron, #frontend #view .corpus .source, #frontend #view .corpus .today {
     margin: 20px 0;
     text-align: center;
-    background-color: darkgrey;
+    /*background-color: darkgrey;*/
 }
 #frontend #view .corpus .today {
     bottom: 0;
@@ -178,10 +184,14 @@ body {
 @media screen and (min-width: 900px) {
     /* GENERAL */
     body {
+				background-image: none;
         background-color: white;
     }
     /* FRONTEND */
     #frontend #inner {
+				width: 900px;
+				background-image: url('/img/card.png');
+				background-size: 100%;
         margin-top: 50px;
         margin-bottom: 50px;
     }
@@ -197,7 +207,8 @@ body {
     }
     #frontend #index, #frontend #view {
         flex-flow: row;
-        text-align: inherit;
+				height: 440px;
+        /*text-align: inherit;*/
     }
     #frontend #index .intro .heatron, #frontend #view .corpus .source {
         margin-top: 0;

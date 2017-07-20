@@ -66,7 +66,7 @@ public class Image {
 	public void flashcard(HttpServletResponse response, @RequestParam(name = "id") Integer quoteId,
 			@RequestParam(name = "onlytext", defaultValue = "0") Boolean onlytext) throws Exception {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
-		BufferedImage image = new BufferedImage(900, 600, BufferedImage.TYPE_INT_RGB);
+		BufferedImage image = new BufferedImage(900, 600, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphic = image.createGraphics();
 		graphic.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
 
@@ -74,7 +74,7 @@ public class Image {
 		String language = quote.getLanguage();
 		Locale work = quote.getWork().getMappedLocales().get(language);
 		Locale author = quote.getAuthor().getMappedLocales().get(language);
-		onlytext = (!onlytext) ? !author.getAuthor().hasImage() : false;
+		onlytext = (!author.getAuthor().hasImage()) ? true : onlytext;
 
 		java.util.Locale locale = new java.util.Locale(language);
 		String day = messages.getMessage("day." + quote.getDay(), null, locale);
@@ -85,19 +85,13 @@ public class Image {
 		// colors
 		Color text = new Color(51, 51, 51);
 		Color textmuted = new Color(119, 119, 119);
-		Color lightgrey = new Color(211, 211, 211);
-		Color darkgrey = new Color(169, 169, 169);
 
-		// background
-		graphic.setColor(lightgrey);
-		graphic.fillRect(0, 0, image.getWidth(), image.getHeight());
-
-		// header box
-		graphic.setColor(darkgrey);
-		graphic.fillRect(30, 30, 840, 60);
+		// background image
+		BufferedImage bgimg = ImageIO.read(getClass().getClassLoader().getResource("static/img/card.png"));
+		graphic.drawImage(bgimg, 0, 0, null);
 
 		// formated texts
-		Float dx, x, y, bound;
+		Float x, y, bound;
 		AttributedString attstr;
 		LineBreakMeasurer measure;
 		AttributedCharacterIterator iter;
@@ -114,10 +108,10 @@ public class Image {
 		measure.setPosition(iter.getBeginIndex());
 
 		x = 35f;
-		y = 68f;
-		bound = 830f;
+		y = 50f;
+		bound = 865f;
 
-		measure.getPosition();
+		// measure.getPosition();
 		measure.nextLayout(bound).draw(graphic, x, y);
 
 		// corpus
@@ -132,8 +126,8 @@ public class Image {
 			measure = new LineBreakMeasurer(iter, frc);
 			measure.setPosition(iter.getBeginIndex());
 
-			x = (onlytext) ? 30 : 360f;
-			bound = (onlytext) ? 840 : 510f;
+			x = 330f;
+			bound = 550f;
 			while (measure.getPosition() < iter.getEndIndex()) {
 				TextLayout layout = measure.nextLayout(bound);
 				y += layout.getAscent();
@@ -143,49 +137,58 @@ public class Image {
 		}
 
 		// image
+		BufferedImage img = onlytext ? ImageIO.read(getClass().getClassLoader().getResource("static/img/tiwoli.png"))
+				: ImageIO.read(new ByteArrayInputStream(author.getAuthor().getImage()));
+		Integer imgWidth = img.getWidth();
+		Integer imgHeight = img.getHeight();
+
+		if (imgWidth > 280) {
+			imgWidth = 280;
+			imgHeight = (imgWidth * img.getHeight()) / img.getWidth();
+		}
+		if (imgHeight > 400) {
+			imgHeight = 400;
+			imgWidth = (imgHeight * img.getWidth()) / img.getHeight();
+		}
+
+		Integer center = 25 + (280 - imgWidth) / 2;
+		graphic.drawImage(img.getScaledInstance(imgWidth, imgHeight, java.awt.Image.SCALE_SMOOTH), center, 85, null);
+
 		if (!onlytext) {
 
-			// image box
-			graphic.setColor(darkgrey);
-			graphic.fillRect(30, 120, 300, 450);
-
-			// image
-			BufferedImage img = ImageIO.read(new ByteArrayInputStream(author.getAuthor().getImage()));
-			Integer width = img.getWidth();
-			Integer height = img.getHeight();
-
-			if (width > 290) {
-				width = 290;
-				height = (width * img.getHeight()) / img.getWidth();
-			}
-			if (height > 420) {
-				height = 420;
-				width = (height * img.getWidth()) / img.getHeight();
-			}
-
-			Integer center = 35 + (290 - width) / 2;
-			graphic.drawImage(img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH), center, 125, null);
-
 			// image details
-			String name = author.getName();
+			String name = messages.getMessage("fields.image", null, locale) + ": " + author.getName();
 
 			graphic.setColor(text);
 			attstr = new AttributedString(name);
-			attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+			attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.BOLD, 15));
 			iter = attstr.getIterator();
 			measure = new LineBreakMeasurer(iter, frc);
 			measure.setPosition(iter.getBeginIndex());
 
 			x = 35f;
-			y = 130f + height;
-			bound = 290f;
-			while (measure.getPosition() < iter.getEndIndex()) {
-				TextLayout layout = measure.nextLayout(bound);
-				dx = x + (bound - layout.getAdvance()) / 2;
-				y += layout.getAscent();
-				layout.draw(graphic, dx, y);
-				y += layout.getDescent() + layout.getLeading();
-			}
+			y = 565f;
+			bound = 865f;
+			measure.nextLayout(bound).draw(graphic, x, y);
+
+			// graphic.setColor(text);
+			// attstr = new AttributedString(name);
+			// attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF,
+			// Font.PLAIN, 15));
+			// iter = attstr.getIterator();
+			// measure = new LineBreakMeasurer(iter, frc);
+			// measure.setPosition(iter.getBeginIndex());
+			//
+			// x = 35f;
+			// y = 90f + imgHeight;
+			// bound = 290f;
+			// while (measure.getPosition() < iter.getEndIndex()) {
+			// TextLayout layout = measure.nextLayout(bound);
+			// dx = x + (bound - layout.getAdvance()) / 2;
+			// y += layout.getAscent();
+			// layout.draw(graphic, dx, y);
+			// y += layout.getDescent() + layout.getLeading();
+			// }
 
 			// imageAttribution
 			String attribution = quote.getWork().getAuthor().getImageAttribution();
@@ -193,21 +196,29 @@ public class Image {
 
 			graphic.setColor(textmuted);
 			attstr = new AttributedString(attribution);
-			attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 14));
+			attstr.addAttribute(TextAttribute.FONT, new Font(Font.SANS_SERIF, Font.PLAIN, 11));
+
 			iter = attstr.getIterator();
 			measure = new LineBreakMeasurer(iter, frc);
 			measure.setPosition(iter.getBeginIndex());
 
-			x = 35f;
-			y = 570f;
-			bound = 290f;
-			while (measure.getPosition() < iter.getEndIndex()) {
-				TextLayout layout = measure.nextLayout(bound);
-				dx = x + (bound - layout.getAdvance()) / 2;
-				y += layout.getAscent();
-				layout.draw(graphic, dx, y);
-				y += layout.getDescent() + layout.getLeading();
-			}
+			// x = 35f;
+			// y = 565f;
+			// bound = 830f;
+			x = 865f - measure.nextLayout(bound).getAdvance();
+			measure.setPosition(iter.getBeginIndex());
+			measure.nextLayout(bound).draw(graphic, x, y);
+
+			// x = 25f;
+			// y = 510f;
+			// bound = 290f;
+			// while (measure.getPosition() < iter.getEndIndex()) {
+			// TextLayout layout = measure.nextLayout(bound);
+			// dx = x + (bound - layout.getAdvance()) / 2;
+			// y += layout.getAscent();
+			// layout.draw(graphic, dx, y);
+			// y += layout.getDescent() + layout.getLeading();
+			// }
 		}
 
 		// done

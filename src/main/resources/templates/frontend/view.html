@@ -17,9 +17,9 @@
 			<div th:if="${quote}" id="view">
 				<div class="image">
 					<img th:src="@{/image/author(id=${author.author.id})}" th:alt="${author.name}" />
-					<div th:unless="${#lists.isEmpty(author.author.image)}" th:remove="tag">
-						<p><a th:href="${author.href}" th:text="${author.name}" target="_blank" /></p>
-						<p th:text="#{fields.imageAttribution} + ': ' + ${author.author.imageAttribution}" class="text-muted" />
+					<div th:unless="${#lists.isEmpty(author.author.image)}" class="attribution">
+						<a th:href="${author.href}" th:text="${author.name}" target="_blank" /><br />
+						<span th:text="#{fields.imageAttribution} + ': ' + ${author.author.imageAttribution}" th:remove="tag" />
 					</div>
 				</div>
 				<div class="corpus">
