@@ -4,8 +4,8 @@
 
 body {
     padding: 15px 0;
-		background-image: url('/img/papertile.jpg');
-		/*overflow-x: hidden;*/
+    background-image: url('/img/papertile.jpg');
+    /*overflow-x: hidden;*/
 }
 
 /*
@@ -64,7 +64,7 @@ body {
     margin: 0;
     order: -1;
     flex-basis: 100%;
-		font-weight: bold;
+    font-weight: bold;
 }
 #frontend #head a {
     margin: 10px;
@@ -117,15 +117,15 @@ body {
     margin: 20px 0;
 }
 #frontend #index .image, #frontend #view .image {
-		position: relative;
-		flex-basis: 0;
+    position: relative;
+    flex-basis: 0;
     flex-grow: 1;
-		/*background-color: darkgrey;*/
-		/*border: 5px solid darkgrey;*/
+    /*background-color: darkgrey;*/
+    /*border: 5px solid darkgrey;*/
 }
 #frontend #index .intro, #frontend #view .corpus {
     position: relative;
-		padding-bottom: 20px;
+    padding-bottom: 20px;
     flex-basis: 0;
     flex-grow: 2;
 }
@@ -136,7 +136,7 @@ body {
     max-height: 500px;
     max-width: 100%;
     padding: 5px;
-		/*border: 5px solid darkgrey;*/
+    /*border: 5px solid darkgrey;*/
 }
 #frontend #index .image .attribution, #frontend #view .image .attribution {
 	position: absolute;
@@ -183,17 +183,19 @@ body {
 
 @media screen and (min-width: 900px) {
     /* GENERAL */
-    body {
-				background-image: none;
+    body:not(.bgfill) {
+        background-image: none;
         background-color: white;
     }
     /* FRONTEND */
     #frontend #inner {
-				width: 900px;
-				background-image: url('/img/card.png');
-				background-size: 100%;
+        width: 900px;
         margin-top: 50px;
         margin-bottom: 50px;
+    }
+    #frontend #inner.card {
+        background-image: url('/img/card.png');
+        background-size: 100%;
     }
     #frontend #head {
         flex-wrap: nowrap;
@@ -207,7 +209,7 @@ body {
     }
     #frontend #index, #frontend #view {
         flex-flow: row;
-				height: 440px;
+        height: 440px;
         /*text-align: inherit;*/
     }
     #frontend #index .intro .heatron, #frontend #view .corpus .source {

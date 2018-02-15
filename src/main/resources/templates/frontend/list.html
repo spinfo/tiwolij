@@ -3,7 +3,7 @@
 
 <head th:replace="../elements/blocks :: header(title=#{frontend.qotds})" />
 
-<body id="frontend">
+<body id="frontend" class="bgfill">
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
@@ -14,7 +14,7 @@
 					<li th:each="entry : ${list}">
 						<a target="_blank" th:href="${entry.middle.href}" th:text="${entry.middle.name}" />
 						(<a target="_blank" th:href="${entry.right.href}" th:text="${entry.right.name}" />):
-						<a th:href="@{/view(id=${entry.left.quote.id}, lang=${lang})}" th:utext="${entry.left.corpus}" />
+						<a th:href="@{/view(id=${entry.left.id}, lang=${lang})}" th:utext="${entry.left.corpus}" />
 						<div th:unless="${#strings.isEmpty(entry.left.href)}" th:remove="tag">
 							(<a th:text="#{fields.source}" th:href="${entry.left.href}" target="_blank" /><span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="', ' + ${entry.left.meta}" />)
 						</div>

@@ -5,7 +5,7 @@
 
 <body id="frontend">
 	<div id="wrapper">
-		<div id="inner">
+		<div id="inner" class="card">
 			<div id="head">
 				<a th:if="${prev}" th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
 				<h1 th:with="date=${#strings.arraySplit(schedule, '-')}">

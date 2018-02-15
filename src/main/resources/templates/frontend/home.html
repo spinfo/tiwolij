@@ -5,14 +5,14 @@
 
 <body id="frontend">
 	<div id="wrapper">
-		<div id="inner">
+		<div id="inner" class="card">
 			<div id="head">
 				<h1>tiwoli: <span th:text="#{frontend.title}" th:remove="tag" /></h1>
 			</div>
 			<div id="index">
 				<div class="image"><img th:src="@{/img/tiwoli.png}" alt="tiwoli" /></div>
 				<div class="intro">
-					<div class="heatron">Some arbitrary text on top of the body.</div>
+					<div class="heatron">&nbsp;</div>
 					<p>What TIWOLI does is give You the opportunity to zigzag through an entire world-literary year, a calendar filled with fictional happenings.</p>
 					<form method="get">
 						<input type="text" name="schedule" placeholder="21-07" maxlength="5" size="5" pattern="^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$" />
