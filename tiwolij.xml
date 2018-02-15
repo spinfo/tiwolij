@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_0.dtd">
 
-<Configure id="tiwolij" class="org.eclipse.jetty.webapp.WebAppContext">
+<Configure id="tiwolij"
+	class="org.eclipse.jetty.webapp.WebAppContext">
+	<Set name="parentLoaderPriority">true</Set>
 	<Set name="war">
 		<SystemProperty name="jetty.base" />
 		/webapps/tiwolij.war
 	</Set>
-	<Set name="parentLoaderPriority">true</Set>
 	<Set name="contextPath">/</Set>
 	<Set name="virtualHosts">
 		<Array type="java.lang.String">
@@ -57,7 +58,7 @@
 			<Ref refid='tiwolij' />
 		</Arg>
 		<Arg>spring.datasource.url</Arg>
-		<Arg type="java.lang.String">jdbc:mysql://localhost/tiwolij?useSSL=false</Arg>
+		<Arg type="java.lang.String">jdbc:mysql://localhost:3306/tiwolij?useSSL=false</Arg>
 		<Arg type="boolean">true</Arg>
 	</New>
 	<New class="org.eclipse.jetty.plus.jndi.EnvEntry">
@@ -209,8 +210,10 @@
 		</Arg>
 		<Arg>tiwolij.import.formats</Arg>
 		<Arg type="java.lang.String">
-			work_id; schedule; language; corpus; source [meta],
-			schedule; corpus; author_name; work_name; author_href; work_href; author_slug; work_slug; source [meta]
+			schedule; corpus; author_name; work_name; author_href;
+			work_href; author_slug; work_slug; source [meta],
+			work_id; schedule;
+			language; corpus; source [meta]
 		</Arg>
 		<Arg type="boolean">true</Arg>
 	</New>
