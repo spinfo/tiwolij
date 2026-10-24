@@ -1,68 +1,69 @@
-<nav th:fragment="navbar" th:with="uri=${#httpServletRequest.requestURI},path=${#httpServletRequest.getContextPath()}" class="navbar navbar-inverse">
+<nav th:fragment="navbar" th:with="uri=${requestURI},path=${contextPath}" class="navbar navbar-inverse">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
-				<span th:text="#{backend.togglenav}" class="sr-only" />
-				<span class="icon-bar" />
-				<span class="icon-bar" />
-				<span class="icon-bar" />
+				<span th:text="#{backend.togglenav}" class="sr-only"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
 			</button>
-			<a th:href="@{/tiwolij/}" th:text="#{backend.title}" class="navbar-brand" />
+			<a th:href="@{/tiwolij/}" th:text="#{backend.title}" class="navbar-brand"></a>
 		</div>
 		<div id="navbar-collapse" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li><a th:href="@{/home}" th:text="#{meta.home}" /></li>
+				<li><a th:href="@{/home}" th:text="#{meta.home}"></a></li>
 			</ul>
 			<form th:action="@{/tiwolij/search}" class="navbar-form navbar-left" role="search">
 			  <div class="form-group">
 			    <input id="term" name="term" type="text" class="form-control" />
 			  </div>
-			  <button th:text="#{actions.search}" type="submit" class="btn btn-default" />
+			  <button th:text="#{actions.search}" type="submit" class="btn btn-default"></button>
 			</form>
 			<ul class="nav navbar-nav navbar-right">
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/authors')} ? 'active'" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						<span th:text="#{fields.authors}" th:remove="tag" />
-						<span class="caret" />
+						<span th:text="#{fields.authors}" th:remove="tag"></span>
+						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/authors/list(page=0, sort=id)}" th:text="#{authors.list}" /></li>
-						<li><a th:href="@{/tiwolij/authors/create}" th:text="#{authors.create}" /></li>
+						<li><a th:href="@{/tiwolij/authors/list(page=0, sort=id)}" th:text="#{authors.list}"></a></li>
+						<li><a th:href="@{/tiwolij/authors/create}" th:text="#{authors.create}"></a></li>
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/works')} ? 'active'" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						<span th:text="#{fields.works}" th:remove="tag" />
-						<span class="caret" />
+						<span th:text="#{fields.works}" th:remove="tag"></span>
+						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/works/list(page=0, sort=id)}" th:text="#{works.list}" /></li>
-						<li><a th:href="@{/tiwolij/works/create}" th:text="#{works.create}" /></li>
+						<li><a th:href="@{/tiwolij/works/list(page=0, sort=id)}" th:text="#{works.list}"></a></li>
+						<li><a th:href="@{/tiwolij/works/create}" th:text="#{works.create}"></a></li>
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/quotes')} ? 'active'" class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						<span th:text="#{fields.quotes}" th:remove="tag" />
-						<span class="caret" />
+						<span th:text="#{fields.quotes}" th:remove="tag"></span>
+						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/quotes/list(page=0, sort=id)}" th:text="#{quotes.list}" /></li>
-						<li><a th:href="@{/tiwolij/quotes/create}" th:text="#{quotes.create}" /></li>
+						<li><a th:href="@{/tiwolij/quotes/list(page=0, sort=id)}" th:text="#{quotes.list}"></a></li>
+						<li><a th:href="@{/tiwolij/quotes/create}" th:text="#{quotes.create}"></a></li>
 					</ul>
 				</li>
 				<li th:classappend="${uri.startsWith(path + '/tiwolij/data')} ? 'active'">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-						<span th:text="#{data}" th:remove="tag" />
-						<span class="caret" />
+						<span th:text="#{data}" th:remove="tag"></span>
+						<span class="caret"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a th:href="@{/tiwolij/data/heideltag}" th:text="#{data.tagger.heideltag}" /></li>
+						<li><a th:href="@{/tiwolij/data/heideltag}" th:text="#{data.tagger.heideltag}"></a></li>
 						<li class="divider"></li>
-						<li><a th:href="@{/tiwolij/data/export/json}" th:text="#{data.export.json}" /></li>
-						<li><a th:href="@{/tiwolij/data/export/tweets}" th:text="#{data.export.tweets}" /></li>
+						<li><a th:href="@{/tiwolij/data/export/json}" th:text="#{data.export.json}"></a></li>
+						<li><a th:href="@{/tiwolij/data/export/posts}" th:text="#{data.export.posts}"></a></li>
+						<li><a th:href="@{/tiwolij/data/export/tweets}" th:text="#{data.export.tweets}"></a></li>
 						<li class="divider"></li>
-						<li><a th:href="@{/tiwolij/data/import/json}" th:text="#{data.import.json}" /></li>
-						<li><a th:href="@{/tiwolij/data/import/tsv}" th:text="#{data.import.tsv}" /></li>
+						<li><a th:href="@{/tiwolij/data/import/json}" th:text="#{data.import.json}"></a></li>
+						<li><a th:href="@{/tiwolij/data/import/tsv}" th:text="#{data.import.tsv}"></a></li>
 					</ul>
 				</li>
 			</ul>

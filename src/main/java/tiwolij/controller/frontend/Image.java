@@ -15,7 +15,7 @@ import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

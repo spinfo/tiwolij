@@ -15,8 +15,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.wikidata.wdtk.datamodel.interfaces.EntityIdValue;
 import org.wikidata.wdtk.datamodel.interfaces.ItemDocument;
 import org.wikidata.wdtk.datamodel.interfaces.MonolingualTextValue;
+import org.wikidata.wdtk.datamodel.interfaces.StringValue;
 import org.wikidata.wdtk.datamodel.interfaces.Value;
 import org.wikidata.wdtk.wikibaseapi.WikibaseDataFetcher;
 
@@ -180,7 +182,7 @@ public class WikidataRepository {
 
 			if (item.hasStatement("P50")) {
 				Value value = item.findStatementGroup("P50").getStatements().get(0).getValue();
-				authorId = regex.wikidataId(value.toString());
+				authorId = regex.wikidataId(((EntityIdValue) value).getId());
 			}
 		} catch (Exception e) {
 		}
@@ -228,7 +230,7 @@ public class WikidataRepository {
 
 			if (item.hasStatement("P18")) {
 				Value value = item.findStatementGroup("P18").getStatements().get(0).getValue();
-				String file = value.toString().replaceAll("^\"|\"$", "").replace(" ", "_");
+				String file = ((StringValue) value).getString().replace(" ", "_");
 				String md5 = DigestUtils.md5Hex(file);
 				String dir = md5.substring(0, 1) + "/" + md5.substring(0, 2) + "/";
 
@@ -253,7 +255,7 @@ public class WikidataRepository {
 
 			if (item.hasStatement("P18")) {
 				Value value = item.findStatementGroup("P18").getStatements().get(0).getValue();
-				String file = value.toString().replaceAll("^\"|\"$", "").replace(" ", "_");
+				String file = ((StringValue) value).getString().replace(" ", "_");
 
 				URL url = new URL("https://" + wikimediaImageinfo + file);
 				DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();

@@ -53,7 +53,7 @@ public class LocaleServiceImpl implements LocaleService {
 
 	@Override
 	public void delete(Integer localeId) {
-		locales.delete(localeId);
+		locales.deleteById(localeId);
 	}
 
 	@Override

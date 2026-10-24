@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import tiwolij.domain.Locale;
 
-public interface LocaleRepository extends PagingAndSortingRepository<Locale, Integer> {
+public interface LocaleRepository extends JpaRepository<Locale, Integer> {
 
 	@Query("SELECT COUNT(x) FROM Locale x WHERE x.author IS NOT NULL")
 	public Long countByAuthors();

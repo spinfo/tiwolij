@@ -1,0 +1,13 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tiwolij",
+      "runtimeExecutable": "docker",
+      "runtimeArgs": ["run", "--rm", "--name", "tiwolij-app", "--network", "tiwolij-test", "-p", "18080:8080",
+        "-e", "SPRING_DATASOURCE_URL=jdbc:mysql://tiwolij-mysql:3306/tiwolij",
+        "-e", "SPRING_DATASOURCE_PASSWORD=test", "tiwolij:preview"],
+      "port": 18080
+    }
+  ]
+}

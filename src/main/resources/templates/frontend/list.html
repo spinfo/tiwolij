@@ -1,32 +1,32 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{frontend.qotds})" />
+<head th:replace="~{../elements/blocks :: header(title=#{frontend.qotds})}"></head>
 
 <body id="frontend" class="bgfill">
 	<div id="wrapper">
 		<div id="inner">
 			<div id="head">
-				<h1 th:text="#{frontend.qotds} + ' (' + ${schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'" />
+				<h1 th:text="#{frontend.qotds} + ' (' + ${schedule} + '-' + ${#dates.format(#dates.createNow(), 'yyyy')} + ')'"></h1>
 			</div>
 			<div th:unless="${#lists.isEmpty(list)}" id="list">
 				<ul>
 					<li th:each="entry : ${list}">
-						<a target="_blank" th:href="${entry.middle.href}" th:text="${entry.middle.name}" />
-						(<a target="_blank" th:href="${entry.right.href}" th:text="${entry.right.name}" />):
-						<a th:href="@{/view(id=${entry.left.id}, lang=${lang})}" th:utext="${entry.left.corpus}" />
+						<a target="_blank" th:href="${entry.middle.href}" th:text="${entry.middle.name}"></a>
+						(<a target="_blank" th:href="${entry.right.href}" th:text="${entry.right.name}"></a>):
+						<a th:href="@{/view(id=${entry.left.id}, lang=${lang})}" th:utext="${entry.left.corpus}"></a>
 						<div th:unless="${#strings.isEmpty(entry.left.href)}" th:remove="tag">
-							(<a th:text="#{fields.source}" th:href="${entry.left.href}" target="_blank" /><span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="', ' + ${entry.left.meta}" />)
+							(<a th:text="#{fields.source}" th:href="${entry.left.href}" target="_blank"></a><span th:unless="${#strings.isEmpty(entry.left.meta)}" th:text="', ' + ${entry.left.meta}"></span>)
 						</div>
 					</li>
 				</ul>
 			</div>
-			<div th:if="${#lists.isEmpty(list)}" th:text="#{frontend.empty}" class="empty" />
-			<div th:replace="../elements/blocks :: meta"></div>
+			<div th:if="${#lists.isEmpty(list)}" th:text="#{frontend.empty}" class="empty"></div>
+			<div th:replace="~{../elements/blocks :: meta}"></div>
 		</div>
 	</div>
 
-	<div th:replace="../elements/blocks :: footer"></div>
+	<div th:replace="~{../elements/blocks :: footer}"></div>
 </body>
 
 </html>

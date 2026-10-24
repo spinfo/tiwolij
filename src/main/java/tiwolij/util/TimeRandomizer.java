@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  * Get randomized time within a default or specified timeframe
- * 
+ *
  * @author jhermes
  *
  */
@@ -12,7 +12,7 @@ public class TimeRandomizer {
 
 	/**
 	 * Returns a randomized time between the specified times.
-	 * 
+	 *
 	 * @param startTime
 	 * @param endTime
 	 * @return
@@ -58,7 +58,7 @@ public class TimeRandomizer {
 
 	/**
 	 * Returns a randomized time String between 4 and 8 pm.
-	 * 
+	 *
 	 * @return
 	 */
 	public static String getRandomizedTime() {

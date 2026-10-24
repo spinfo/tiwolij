@@ -1,13 +1,13 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{meta.home})" />
+<head th:replace="~{../elements/blocks :: header(title=#{meta.home})}"></head>
 
 <body id="frontend">
 	<div id="wrapper">
 		<div id="inner" class="card">
 			<div id="head">
-				<h1>tiwoli: <span th:text="#{frontend.title}" th:remove="tag" /></h1>
+				<h1>tiwoli: <span th:text="#{frontend.title}" th:remove="tag"></span></h1>
 			</div>
 			<div id="index">
 				<div class="image"><img th:src="@{/img/tiwoli.png}" alt="tiwoli" /></div>
@@ -16,8 +16,8 @@
 					<p>What TIWOLI does is give You the opportunity to zigzag through an entire world-literary year, a calendar filled with fictional happenings.</p>
 					<form method="get">
 						<input type="text" name="schedule" placeholder="21-07" maxlength="5" size="5" pattern="^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])$" />
-						<button th:text="#{frontend.qotd}" th:formaction="@{/view(lang=${lang})}" type="submit" />
-						<button th:text="#{frontend.qotds}" th:formaction="@{/list(lang=${lang})}" type="submit" />
+						<button th:text="#{frontend.qotd}" th:formaction="@{/view(lang=${lang})}" type="submit"></button>
+						<button th:text="#{frontend.qotds}" th:formaction="@{/list(lang=${lang})}" type="submit"></button>
 					</form>
 					<p>How did this come about? At the annual ADHO Digital Humanities conference 2015 (<a href="http://dh2015.org/">DH2015</a>) in Sydney, we delivered a talk called “When does (German) literature take place?” (<a href="http://dbs.ifi.uni-heidelberg.de/fileadmin/Team/jannik/publications/dh2015-sydney-fischer-stroetgen-german-literature-slides.pdf">slides</a>)
 						In order to answer that unusual question, we extracted exact dates and months from a corpus of 2,700+ works of German-language fiction from 1510 to the 1940s. Our results suggested that <a href="https://de.wikisource.org/wiki/Im_wundersch%C3%B6nen_Monat_Mai">“the marvellous month of May”</a>
@@ -25,11 +25,11 @@
 					<p>As a by-product, we coded an app to showcase the more exciting and self-explanatory of our results. We called our app <strong>TIWOLI</strong> (short for “Today in World Literature”).</p>
 				</div>
 			</div>
-			<div th:replace="../elements/blocks :: meta"></div>
+			<div th:replace="~{../elements/blocks :: meta}"></div>
 		</div>
 	</div>
 
-	<div th:replace="../elements/blocks :: footer"></div>
+	<div th:replace="~{../elements/blocks :: footer}"></div>
 </body>
 
 </html>

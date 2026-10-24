@@ -1,14 +1,14 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{quotes.list})" />
+<head th:replace="~{../elements/blocks :: header(title=#{quotes.list})}"></head>
 
 <body id="backend">
 	<div class="container">
-		<nav th:replace="../elements/navbar" />
-		<section th:replace="../elements/lists :: listQuotes(${page.content}, ${new String[] {'language', 'schedule', 'corpus', 'source', 'meta', 'locked'}}, ${new String[] {'id', 'language', 'schedule'}})" />
+		<nav th:replace="~{../elements/navbar}"></nav>
+		<section th:replace="~{../elements/lists :: listQuotes(${page.content}, ${#strings.arraySplit('language,schedule,corpus,source,meta,locked', ',')}, ${#strings.arraySplit('id,language,schedule', ',')})}"></section>
 	</div>
-	<footer th:replace="../elements/blocks :: footer" />
+	<footer th:replace="~{../elements/blocks :: footer}"></footer>
 </body>
 
 </html>

@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityManager;
-import javax.servlet.http.HttpSession;
+import jakarta.persistence.EntityManager;
+import jakarta.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.wikidata.wdtk.wikibaseapi.apierrors.NoSuchEntityErrorException;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import tiwolij.domain.Author;
 import tiwolij.domain.Locale;
 import tiwolij.domain.Quote;
@@ -41,6 +38,8 @@ import tiwolij.service.tsv.TSVServiceImpl;
 import tiwolij.service.wikidata.WikidataService;
 import tiwolij.service.work.WorkService;
 import tiwolij.util.Heideltimer;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 @Controller
 @RequestMapping("/tiwolij/data/import")
@@ -69,6 +68,9 @@ public class Import {
 
 	@Autowired
 	private TSVServiceImpl tsv;
+
+	@Autowired
+	private JsonMapper mapper;
 
 	@GetMapping({ "", "/" })
 	public ModelAndView root() {
@@ -162,7 +164,6 @@ public class Import {
 		}
 
 		AtomicInteger key = new AtomicInteger();
-		ObjectMapper mapper = new ObjectMapper();
 
 		session.setAttribute("progress", "json");
 		List<Quote> list = mapper.readValue(file.getBytes(), new TypeReference<List<Quote>>() {

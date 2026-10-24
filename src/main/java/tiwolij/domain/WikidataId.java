@@ -1,17 +1,18 @@
 package tiwolij.domain;
 
 import java.io.Serializable;
+import java.sql.SQLIntegrityConstraintViolationException;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 @Entity
 @Table(name = "wikidataids")
@@ -20,7 +21,7 @@ public class WikidataId implements Serializable {
 	private static final long serialVersionUID = 8407720903534196950L;
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonIgnore
 	private Integer id;
 
@@ -74,7 +75,7 @@ public class WikidataId implements Serializable {
 
 	public WikidataId setAuthor(Author author) throws Exception {
 		if (work != null) {
-			throw new MySQLIntegrityConstraintViolationException();
+			throw new SQLIntegrityConstraintViolationException();
 		}
 
 		this.author = author;
@@ -83,7 +84,7 @@ public class WikidataId implements Serializable {
 
 	public WikidataId setWork(Work work) throws Exception {
 		if (author != null) {
-			throw new MySQLIntegrityConstraintViolationException();
+			throw new SQLIntegrityConstraintViolationException();
 		}
 
 		this.work = work;

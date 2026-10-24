@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +17,14 @@ public class TiwoliChirp {
 	@Autowired
 	private MessageSource messages;
 
-	public String generateTwees(List<Quote> quotes, String baseUrl) {
+	// public URL for links in exports; empty = derive from the request
+	@Value("${tiwolij.baseurl:}")
+	private String publicBaseUrl;
+
+	public String generateTweets(List<Quote> quotes, String baseUrl) {
 		StringBuffer sb = new StringBuffer();
 		String text, date, time, imgUrl;
+		baseUrl = publicBaseUrl(baseUrl);
 
 		for (Quote i : quotes) {
 			imgUrl = baseUrl + "/image/flashcard?id=" + i.getId() + "&lang=" + i.getLanguage();
@@ -33,6 +39,33 @@ public class TiwoliChirp {
 		}
 
 		return sb.toString();
+	}
+	
+	public String generateMastodonPosts(List<Quote> quotes, String baseUrl) {
+		StringBuffer sb = new StringBuffer();
+		String text, date, time, imgUrl, picDesc;
+		baseUrl = publicBaseUrl(baseUrl);
+
+		for (Quote i : quotes) {
+			imgUrl = baseUrl + "/image/flashcard?id=" + i.getId() + "&lang=" + i.getLanguage();
+
+			text = getTweetContent(i, baseUrl);
+			time = (i.getTime() == null) ? TimeRandomizer.getRandomizedTime() : i.getTime();
+			date = (i.getYear() == null)
+					? i.getSchedule().replace("-", ".") + "." + Calendar.getInstance().get(Calendar.YEAR)
+					: i.getSchedule().replace("-", ".") + "." + i.getYear();
+			
+			picDesc = i.getCorpus().replaceAll("<[^>]*>", "");
+
+			sb.append(date + "\t" + time + "\t" + text + "\t" + imgUrl + "\tQuote: " + picDesc + "\n");
+		}
+
+		return sb.toString();
+	}
+	
+
+	private String publicBaseUrl(String requestBaseUrl) {
+		return (publicBaseUrl.isEmpty()) ? requestBaseUrl : publicBaseUrl.replaceAll("/+$", "");
 	}
 
 	private String getTweetContent(Quote quote, String baseUrl) {

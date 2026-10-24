@@ -1,35 +1,35 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{data.import.tsv})" />
+<head th:replace="~{../elements/blocks :: header(title=#{data.import.tsv})}"></head>
 
 <body id="backend">
 	<div class="container">
-		<nav th:replace="../elements/navbar" />
+		<nav th:replace="~{../elements/navbar}"></nav>
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="#{data.import.tsv}" class="panel-heading" />
+					<div th:text="#{data.import.tsv}" class="panel-heading"></div>
 					<form enctype="multipart/form-data" class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: fieldInput('file', true, 'file', '', '')" />
-							<div th:replace="../elements/fields :: fieldSelect('encoding', true, ${encodings}, '', '')" />
-							<div th:replace="../elements/fields :: fieldSelect('format', true, ${formats}, '', '')" />
-							<div th:replace="../elements/fields :: fieldCheckbox('wikidata')" />
-							<div th:replace="../elements/fields :: fieldCheckbox('heideltag')" />
-							<div th:replace="../elements/fields :: fieldCheckbox('levensthein')" />
-							<div th:replace="../elements/fields :: fieldCheckbox('review')" />
-							<div th:replace="../elements/fields :: fieldSelect('forcelang', false, ${languages}, '', '')" />
+							<div th:replace="~{../elements/fields :: fieldInput('file', true, 'file', '', '')}"></div>
+							<div th:replace="~{../elements/fields :: fieldSelect('encoding', true, ${encodings}, '', '')}"></div>
+							<div th:replace="~{../elements/fields :: fieldSelect('format', true, ${formats}, '', '')}"></div>
+							<div th:replace="~{../elements/fields :: fieldCheckbox('wikidata')}"></div>
+							<div th:replace="~{../elements/fields :: fieldCheckbox('heideltag')}"></div>
+							<div th:replace="~{../elements/fields :: fieldCheckbox('levensthein')}"></div>
+							<div th:replace="~{../elements/fields :: fieldCheckbox('review')}"></div>
+							<div th:replace="~{../elements/fields :: fieldSelect('forcelang', false, ${languages}, '', '')}"></div>
 						</div>
 						<div class="panel-footer text-right">
-							<button th:text="#{data.import.tsv}" th:formaction="@{/tiwolij/data/import/tsv}" id="submit" type="submit" class="btn btn-sm btn-success" />
+							<button th:text="#{data.import.tsv}" th:formaction="@{/tiwolij/data/import/tsv}" id="submit" type="submit" class="btn btn-sm btn-success"></button>
 						</div>
 					</form>
 				</div>
 			</div>
 		</section>
 	</div>
-	<footer th:replace="../elements/blocks :: footer" />
+	<footer th:replace="~{../elements/blocks :: footer}"></footer>
 </body>
 
 </html>

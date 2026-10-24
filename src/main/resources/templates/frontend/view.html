@@ -1,52 +1,52 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{frontend.qotd})" />
+<head th:replace="~{../elements/blocks :: header(title=#{frontend.qotd})}"></head>
 
 <body id="frontend">
 	<div id="wrapper">
 		<div id="inner" class="card">
 			<div id="head">
-				<a th:if="${prev}" th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag" /></a>
+				<a th:if="${prev}" th:href="@{/view(id=${prev}, lang=${lang})}">&laquo; <span th:text="#{frontend.prev}" th:remove="tag"></span></a>
 				<h1 th:with="date=${#strings.arraySplit(schedule, '-')}">
-					<span th:text="#{frontend.qotd}" th:remove="tag" />
-					(<span th:text="#{'day.' + ${date[0]}} + #{months.delim} + #{'months.' + ${date[1]}}" th:remove="tag" />)
+					<span th:text="#{frontend.qotd}" th:remove="tag"></span>
+					(<span th:text="#{'day.' + ${date[0]}} + #{months.delim} + #{'months.' + ${date[1]}}" th:remove="tag"></span>)
 				 </h1>
-				<a th:if="${next}" th:href="@{/view(id=${next}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag" /> &raquo;</a>
+				<a th:if="${next}" th:href="@{/view(id=${next}, lang=${lang})}"><span th:text="#{frontend.next}" th:remove="tag"></span> &raquo;</a>
 			</div>
 			<div th:if="${quote}" id="view">
 				<div class="image">
 					<img th:src="@{/image/author(id=${author.author.id})}" th:alt="${author.name}" />
 					<div th:unless="${#lists.isEmpty(author.author.image)}" class="attribution">
-						<a th:href="${author.href}" th:text="${author.name}" target="_blank" /><br />
-						<span th:text="#{fields.imageAttribution} + ': ' + ${author.author.imageAttribution}" th:remove="tag" />
+						<a th:href="${author.href}" th:text="${author.name}" target="_blank"></a><br />
+						<span th:text="#{fields.imageAttribution} + ': ' + ${author.author.imageAttribution}" th:remove="tag"></span>
 					</div>
 				</div>
 				<div class="corpus">
 					<div class="source">
-						<a target="_blank" th:href="${author.href}" th:text="${author.name}" />:
-						<a target="_blank" th:href="${work.href}" th:text="${work.name}" />
+						<a target="_blank" th:href="${author.href}" th:text="${author.name}"></a>:
+						<a target="_blank" th:href="${work.href}" th:text="${work.name}"></a>
 						<div th:unless="${#strings.isEmpty(quote.href)}" th:remove="tag">
-							(<a th:text="#{fields.source}" th:href="${quote.href}" target="_blank" /><span th:unless="${#strings.isEmpty(quote.meta)}" th:text="', ' + ${quote.meta}" />)
+							(<a th:text="#{fields.source}" th:href="${quote.href}" target="_blank"></a><span th:unless="${#strings.isEmpty(quote.meta)}" th:text="', ' + ${quote.meta}"></span>)
 						</div>
 					</div>
-					<p th:utext="${quote.corpus}" />
-					<p><a th:text="#{frontend.readmore} + ' &raquo;'" th:href="${quote.href}" target="_blank" /></p>
+					<p th:utext="${quote.corpus}"></p>
+					<p><a th:text="#{frontend.readmore} + ' &raquo;'" th:href="${quote.href}" target="_blank"></a></p>
 					<div th:unless="${#lists.isEmpty(list)}" class="today">
-						<span th:text="#{frontend.qotds} + ':'" th:remove="tag" />
+						<span th:text="#{frontend.qotds} + ':'" th:remove="tag"></span>
 						<div th:each="sibling, i : ${list}" th:remove="tag">
-							<span th:if="${sibling} == ${quote}" th:text="'#' + ${i.count}" class="current" />
-							<a th:unless="${sibling} == ${quote}" th:text="'#' + ${i.count}" th:href="@{/view(id=${sibling.id}, lang=${lang})}" />
+							<span th:if="${sibling} == ${quote}" th:text="'#' + ${i.count}" class="current"></span>
+							<a th:unless="${sibling} == ${quote}" th:text="'#' + ${i.count}" th:href="@{/view(id=${sibling.id}, lang=${lang})}"></a>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div th:unless="${quote}" th:text="#{frontend.empty}" class="empty" />
-			<div th:replace="../elements/blocks :: meta"></div>
+			<div th:unless="${quote}" th:text="#{frontend.empty}" class="empty"></div>
+			<div th:replace="~{../elements/blocks :: meta}"></div>
 		</div>
 	</div>
 
-	<div th:replace="../elements/blocks :: footer"></div>
+	<div th:replace="~{../elements/blocks :: footer}"></div>
 </body>
 
 </html>

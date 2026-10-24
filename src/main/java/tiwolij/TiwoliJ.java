@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Locale.LanguageRange;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -18,19 +18,21 @@ import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import org.springframework.web.util.WebUtils;
 
 @SpringBootApplication
 @EnableTransactionManagement
-public class TiwoliJ extends WebMvcConfigurerAdapter {
+public class TiwoliJ implements WebMvcConfigurer {
 
 	@Autowired
 	private Environment env;
 
 	public static void main(String[] args) {
+		// Wikimedia rejects the default "Java/<version>" user agent with 403
+		System.setProperty("http.agent", "TiwoliJ (https://github.com/DH-Cologne/tiwolij)");
 		SpringApplication.run(TiwoliJ.class, args);
 	}
 

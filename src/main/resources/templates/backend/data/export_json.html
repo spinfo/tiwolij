@@ -1,30 +1,30 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{data.export.json})" />
+<head th:replace="~{../elements/blocks :: header(title=#{data.export.json})}"></head>
 
 <body id="backend">
 	<div class="container">
-		<nav th:replace="../elements/navbar" />
+		<nav th:replace="~{../elements/navbar}"></nav>
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="#{data.export.json}" class="panel-heading" />
+					<div th:text="#{data.export.json}" class="panel-heading"></div>
 					<form class="form-horizontal" method="post">
 						<div class="panel-body">
-							<div th:replace="../elements/fields :: fieldCheckbox('onlyfinal')" />
-							<div th:replace="../elements/fields :: fieldSelect('onlylang', false, ${languages}, '', '')" />
-							<div th:replace="../elements/fields :: fieldSelect('onlymonth', false, ${months}, 'key', 'value')" />
+							<div th:replace="~{../elements/fields :: fieldCheckbox('onlyfinal')}"></div>
+							<div th:replace="~{../elements/fields :: fieldSelect('onlylang', false, ${languages}, '', '')}"></div>
+							<div th:replace="~{../elements/fields :: fieldSelect('onlymonth', false, ${months}, 'key', 'value')}"></div>
 						</div>
 						<div class="panel-footer text-right">
-							<button th:text="#{data.export.json}" th:formaction="@{/tiwolij/data/export/json}" type="submit" class="btn btn-sm btn-success" />
+							<button th:text="#{data.export.json}" th:formaction="@{/tiwolij/data/export/json}" type="submit" class="btn btn-sm btn-success"></button>
 						</div>
 					</form>
 				</div>
 			</div>
 		</section>
 	</div>
-	<footer th:replace="../elements/blocks :: footer" />
+	<footer th:replace="~{../elements/blocks :: footer}"></footer>
 </body>
 
 </html>

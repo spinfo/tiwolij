@@ -36,7 +36,7 @@ public class WorkServiceImpl implements WorkService {
 
 	@Override
 	public void delete(Integer workId) {
-		works.delete(workId);
+		works.deleteById(workId);
 	}
 
 	@Override

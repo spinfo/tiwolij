@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import tiwolij.domain.Work;
 
-public interface WorkRepository extends PagingAndSortingRepository<Work, Integer> {
+public interface WorkRepository extends JpaRepository<Work, Integer> {
 
 	public Long countByAuthorId(Integer authorId);
 

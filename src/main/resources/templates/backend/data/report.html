@@ -1,50 +1,50 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{data.import.report})" />
+<head th:replace="~{../elements/blocks :: header(title=#{data.import.report})}"></head>
 
 <body id="backend">
 	<div class="container">
-		<nav th:replace="../elements/navbar" />
+		<nav th:replace="~{../elements/navbar}"></nav>
 		<section class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<span th:remove="tag" th:text="#{data.import.report}" />
-						<a th:text="#{data.clear}" th:href="@{/tiwolij/data/import/clear}" class="pull-right btn btn-xs btn-danger" />
+						<span th:remove="tag" th:text="#{data.import.report}"></span>
+						<a th:text="#{data.clear}" th:href="@{/tiwolij/data/import/clear}" class="pull-right btn btn-xs btn-danger"></a>
 					</div>
 				</div>
 			</div>
 		</section>
-		<section th:replace="../elements/lists :: listErrors(${errors})" />
+		<section th:replace="~{../elements/lists :: listErrors(${errors})}"></section>
 		<section th:unless="${#maps.isEmpty(results)}" class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div th:text="#{fields.quotes}" class="panel-heading" />
+					<div th:text="#{fields.quotes}" class="panel-heading"></div>
 					<form class="form-horizontal" method="post">
 						<table class="table table-hover">
 							<thead>
 								<tr>
-									<th th:text="#{fields.line}" />
-									<th th:text="#{fields.language}" />
-									<th th:text="#{fields.schedule}" />
-									<th th:text="#{fields.author}" />
-									<th th:text="#{fields.work}" />
-									<th th:text="#{fields.corpus}" />
-									<th th:text="#{fields.source}" class="text-center" />
-									<th th:text="#{fields.meta}" />
+									<th th:text="#{fields.line}"></th>
+									<th th:text="#{fields.language}"></th>
+									<th th:text="#{fields.schedule}"></th>
+									<th th:text="#{fields.author}"></th>
+									<th th:text="#{fields.work}"></th>
+									<th th:text="#{fields.corpus}"></th>
+									<th th:text="#{fields.source}" class="text-center"></th>
+									<th th:text="#{fields.meta}"></th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="element : ${results}" th:with="line=${element.key}, quote=${element.value}, work=${element.value.work}, workName=${#strings.abbreviate(element.value.work.slug, 25)}, author=${element.value.work.author}, authorName=${#strings.abbreviate(element.value.work.author.slug, 25)}, year=${#strings.isEmpty(element.value.year)} ? '' : '-' + ${element.value.year}, time=${#strings.isEmpty(element.value.time)} ? '' : ' ' + ${element.value.time}">
-									<td th:text="${line}" />
-									<td th:text="${quote.language}" />
-									<td th:text="${quote.schedule} + ${year} + ${time}" />
-									<td><a th:remove="${#strings.isEmpty(author.wikidataId)} ? tag" th:href="@{https://www.wikidata.org/wiki/Q} + ${author.wikidataId}" th:text="${authorName}" target="_blank" /></td>
-									<td><a th:remove="${#strings.isEmpty(work.wikidataId)} ? tag" th:href="@{https://www.wikidata.org/wiki/Q} + ${work.wikidataId}" th:text="${workName}" target="_blank" /></td>
-									<td th:text="${#strings.abbreviate(quote.corpus, 25)}" />
-									<td class="text-center"><a th:unless="${#strings.isEmpty(quote.href)}" th:text="#{actions.view}" th:href="${quote.href}" target="_blank" /></td>
-									<td th:text="${quote.meta}" />
+									<td th:text="${line}"></td>
+									<td th:text="${quote.language}"></td>
+									<td th:text="${quote.schedule} + ${year} + ${time}"></td>
+									<td><a th:remove="${#strings.isEmpty(author.wikidataId)} ? tag" th:href="@{https://www.wikidata.org/wiki/Q} + ${author.wikidataId}" th:text="${authorName}" target="_blank"></a></td>
+									<td><a th:remove="${#strings.isEmpty(work.wikidataId)} ? tag" th:href="@{https://www.wikidata.org/wiki/Q} + ${work.wikidataId}" th:text="${workName}" target="_blank"></a></td>
+									<td th:text="${#strings.abbreviate(quote.corpus, 25)}"></td>
+									<td class="text-center"><a th:unless="${#strings.isEmpty(quote.href)}" th:text="#{actions.view}" th:href="${quote.href}" target="_blank"></a></td>
+									<td th:text="${quote.meta}"></td>
 								</tr>
 							</tbody>
 						</table>
@@ -53,7 +53,7 @@
 			</div>
 		</section>
 	</div>
-	<footer th:replace="../elements/blocks :: footer" />
+	<footer th:replace="~{../elements/blocks :: footer}"></footer>
 </body>
 
 </html>

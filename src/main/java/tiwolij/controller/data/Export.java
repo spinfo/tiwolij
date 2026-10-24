@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,11 +127,58 @@ public class Export {
 		if (!onlymonth.isEmpty()) {
 			list = list.stream().filter(i -> i.getMonth().equals(onlymonth)).collect(Collectors.toList());
 		}
-
-		String tweets = chirper.generateTwees(list, baseUrl);
+		
+		String tweets = chirper.generateTweets(list, baseUrl);
 
 		response.setContentType("application/tsv");
-		response.setHeader("Content-Disposition", "attachment; filename=tweets.tsv");
+		response.setHeader("Content-Disposition", "attachment; filename=posts.tsv");
+		response.getOutputStream().write(tweets.getBytes("UTF-8"));
+		response.getOutputStream().close();
+	}
+	@GetMapping("/posts")
+	public ModelAndView posts() {
+		ModelAndView mv = new ModelAndView("backend/data/export_posts");
+		Locale locale = LocaleContextHolder.getLocale();
+
+		List<Pair<String, String>> months = new ArrayList<Pair<String, String>>();
+		for (Integer i = 1; i <= 12; i++) {
+			months.add(Pair.of(String.format("%02d", i),
+					messages.getMessage("months." + String.format("%02d", i), null, locale)));
+		}
+
+		mv.addObject("months", months);
+		mv.addObject("languages", env.getProperty("tiwolij.locales.allowed", String[].class));
+		return mv;
+	}
+
+	@PostMapping("/posts")
+	public void posts(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(name = "onlyfinal", defaultValue = "false") Boolean onlyfinal,
+			@RequestParam(name = "onlylang", defaultValue = "") String onlylang,
+			@RequestParam(name = "onlymonth", defaultValue = "") String onlymonth) throws Exception {
+
+		List<Quote> list = quotes.getAll();
+		String baseUrl = ServletUriComponentsBuilder.fromContextPath(request).build().toString();
+
+		if (onlyfinal) {
+			list = list.stream().filter(i -> i.getLocked()).collect(Collectors.toList());
+		}
+
+		if (!onlylang.isEmpty()) {
+			list = list.stream().filter(i -> i.getLanguage().equals(onlylang)).collect(Collectors.toList());
+		}
+
+		if (!onlymonth.isEmpty()) {
+			list = list.stream().filter(i -> i.getMonth().equals(onlymonth)).collect(Collectors.toList());
+		}
+
+		String tweets = chirper.generateMastodonPosts(list, baseUrl);
+		
+		//todo set exportFileName
+		//String exportFileName = "posts_" + onlylang + "_" + onlymonth + ".tsv";
+
+		response.setContentType("application/tsv");
+		response.setHeader("Content-Disposition", "attachment; filename=posts_db.tsv");
 		response.getOutputStream().write(tweets.getBytes("UTF-8"));
 		response.getOutputStream().close();
 	}

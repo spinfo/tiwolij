@@ -1,87 +1,87 @@
 <!doctype html>
 <html class="no-js" lang="en">
 
-<head th:replace="../elements/blocks :: header(title=#{backend.title})" />
+<head th:replace="~{../elements/blocks :: header(title=#{backend.title})}"></head>
 
 <body id="backend">
 	<div class="container">
-		<nav th:replace="../elements/navbar" />
+		<nav th:replace="~{../elements/navbar}"></nav>
 		<section class="row">
 			<div class="col-md-4">
 				<div class="panel panel-default">
-					<div th:text="#{authors.summary}" class="panel-heading" />
+					<div th:text="#{authors.summary}" class="panel-heading"></div>
 					<div class="panel-body form-horizontal">
 						<div class="form-group">
-							<label th:text="#{fields.authors}" class="col-sm-8 control-label" />
+							<label th:text="#{fields.authors}" class="col-sm-8 control-label"></label>
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/authors/list(page=0, sort=id)}" th:text="${authors}" />
+									<a th:href="@{/tiwolij/authors/list(page=0, sort=id)}" th:text="${authors}"></a>
 								</p>
 							</div>
 						</div>
 						<div class="form-group">
-							<label th:text="#{fields.locales}" class="col-sm-8 control-label" />
+							<label th:text="#{fields.locales}" class="col-sm-8 control-label"></label>
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/locales/list(page=0, sort=id)}" th:text="${authorLocales}" />
+									<a th:href="@{/tiwolij/locales/list(page=0, sort=id)}" th:text="${authorLocales}"></a>
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="panel-footer text-right">
-						<a th:text="#{authors.create}" th:href="@{/tiwolij/authors/create}" class="btn btn-sm btn-success" />
-						<a th:text="#{locales.create}" th:href="@{/tiwolij/locales/create(authorId=)}" class="btn btn-sm btn-success" />
+						<a th:text="#{authors.create}" th:href="@{/tiwolij/authors/create}" class="btn btn-sm btn-success"></a>
+						<a th:text="#{locales.create}" th:href="@{/tiwolij/locales/create(authorId=)}" class="btn btn-sm btn-success"></a>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="panel panel-default">
-					<div th:text="#{works.summary}" class="panel-heading" />
+					<div th:text="#{works.summary}" class="panel-heading"></div>
 					<div class="panel-body form-horizontal">
 						<div class="form-group">
-							<label th:text="#{fields.works}" class="col-sm-8 control-label" />
+							<label th:text="#{fields.works}" class="col-sm-8 control-label"></label>
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/works/list(page=0, sort=id)}" th:text="${works}" />
+									<a th:href="@{/tiwolij/works/list(page=0, sort=id)}" th:text="${works}"></a>
 								</p>
 							</div>
 						</div>
 						<div class="form-group">
-							<label th:text="#{fields.locales}" class="col-sm-8 control-label" />
+							<label th:text="#{fields.locales}" class="col-sm-8 control-label"></label>
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/locales/list(page=0, sort=id)}" th:text="${workLocales}" />
+									<a th:href="@{/tiwolij/locales/list(page=0, sort=id)}" th:text="${workLocales}"></a>
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="panel-footer text-right">
-						<a th:text="#{works.create}" th:href="@{/tiwolij/works/create}" class="btn btn-sm btn-success" />
-						<a th:text="#{locales.create}" th:href="@{/tiwolij/locales/create(workId=)}" class="btn btn-sm btn-success" />
+						<a th:text="#{works.create}" th:href="@{/tiwolij/works/create}" class="btn btn-sm btn-success"></a>
+						<a th:text="#{locales.create}" th:href="@{/tiwolij/locales/create(workId=)}" class="btn btn-sm btn-success"></a>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-4">
 				<div class="panel panel-default">
-					<div th:text="#{quotes.summary}" class="panel-heading" />
+					<div th:text="#{quotes.summary}" class="panel-heading"></div>
 					<div class="panel-body form-horizontal">
 						<div class="form-group">
-							<label th:text="#{fields.quotes}" class="col-sm-8 control-label" />
+							<label th:text="#{fields.quotes}" class="col-sm-8 control-label"></label>
 							<div class="col-sm-4">
 								<p class="form-control-static">
-									<a th:href="@{/tiwolij/quotes/list(page=0, sort=id)}" th:text="${quotes}" />
+									<a th:href="@{/tiwolij/quotes/list(page=0, sort=id)}" th:text="${quotes}"></a>
 								</p>
 							</div>
 						</div>
 					</div>
 					<div class="panel-footer text-right">
-						<a th:text="#{quotes.create}" th:href="@{/tiwolij/quotes/create}" class="btn btn-sm btn-success" />
+						<a th:text="#{quotes.create}" th:href="@{/tiwolij/quotes/create}" class="btn btn-sm btn-success"></a>
 					</div>
 				</div>
 			</div>
 		</section>
 	</div>
-	<footer th:replace="../elements/blocks :: footer" />
+	<footer th:replace="~{../elements/blocks :: footer}"></footer>
 </body>
 
 </html>
